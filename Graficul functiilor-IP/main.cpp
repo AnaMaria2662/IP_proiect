@@ -22,7 +22,7 @@ Evaluator:
 #include <winbgim.h>
 using namespace std;
 //Ana-Maria
-void click(int &coordxclick, int &coordyclick )
+void click(int &coordxclick, int &coordyclick )//functie prin care observam daca se apasa click stanga de la mouse
 {
     int x, y;
     while(!ismouseclick(WM_LBUTTONDOWN))
@@ -30,48 +30,50 @@ void click(int &coordxclick, int &coordyclick )
     getmouseclick(WM_LBUTTONDOWN, x, y);
     coordxclick=x;
     coordyclick=y;
-}
+}//Ana-Maria
 int main()
 {
     //Ana-Maria Ursache
-    int coordx, coordy;
-    initwindow(800,800);
-    readimagefile("image1_1.jpg",0,0,800,800);
+    int coordx, coordy;//coordonate unui punct in care se va face click
+    initwindow(800,800);//fereastra
+    readimagefile("image1_1.jpg",0,0,800,800);//imagine de fundal
 
-    setcolor(WHITE);
-    settextstyle(5, HORIZ_DIR, 6);
-    outtextxy(200,190,"Graficul functiei");
-    rectangle(180,180,590,260);
+    setcolor(WHITE); //culoare text
+    settextstyle(5, HORIZ_DIR, 6);//fontul si stilul textului
+    outtextxy(200,190,"Graficul functiei");//text
+    rectangle(180,180,590,260);//dreptunghi
 
-    setcolor(WHITE);
-    settextstyle(7, HORIZ_DIR, 3);
-    outtextxy(355,340,"Grafic");
-    rectangle(339,330,440,370);
+    setcolor(WHITE);//culoare text
+    settextstyle(7, HORIZ_DIR, 3);//fontul si stilul textului
+    outtextxy(355,340,"Grafic");//text
+    rectangle(339,330,440,370);//dreptunghi
 
-    setcolor(WHITE);
-    settextstyle(7, HORIZ_DIR, 3);
-    outtextxy(350,440,"Contact");
-    rectangle(330,430,460,470);
+    setcolor(WHITE);//culoare text
+    settextstyle(7, HORIZ_DIR, 3);//fontul si stilul textului
+    outtextxy(350,440,"Contact");//text
+    rectangle(330,430,460,470);//dreptunghi
 
-    click(coordx,coordy);
-    if(coordx>=339&&coordx<=440&&coordy>=330&&coordy<=370)
+    click(coordx,coordy);//click
+    if(coordx>=339&&coordx<=440&&coordy>=330&&coordy<=370)//daca se apasa pe "Grafic"
         {
-            initwindow(800,800);
-            ....//de facut urmatoarea fereastra
+            initwindow(800,800);//Ana-Maria
+            //Emilia
+            ...
+            //Emilia
             getch();
             closegraph();
         }
-        else if(coordx>=330&&coordx<=460&&coordy>=430&&coordy<=470)
+        else if(coordx>=330&&coordx<=460&&coordy>=430&&coordy<=470)//daca se apasa pe "Contact"
             {
                 initwindow(800,800);
-                settextstyle(7, HORIZ_DIR, 5);
-                outtextxy(100,200,"Proiectul a fost realizat de:");
-                settextstyle(7, HORIZ_DIR, 4);
-                outtextxy(200,350,"Ursache Ana-Maria");
-                settextstyle(7, HORIZ_DIR, 3);
-                outtextxy(380,400,"si");
-                settextstyle(7, HORIZ_DIR, 4);
-                outtextxy(250,450,"Galatanu Emilia");
+                settextstyle(7, HORIZ_DIR, 5);//fontul si stilul textului
+                outtextxy(100,200,"Proiectul a fost realizat de:");//text
+                settextstyle(7, HORIZ_DIR, 4);//fontul si stilul textului
+                outtextxy(200,350,"Ursache Ana-Maria");//text
+                settextstyle(7, HORIZ_DIR, 3);//fontul si stilul textului
+                outtextxy(380,400,"si");//text
+                settextstyle(7, HORIZ_DIR, 4);//fontul si stilul textului
+                outtextxy(250,450,"Galatanu Emilia");//text
                 getch();
                 closegraph();
             }
