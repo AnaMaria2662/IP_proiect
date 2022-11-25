@@ -57,7 +57,6 @@ int main()
     if(coordx>=339&&coordx<=440&&coordy>=330&&coordy<=370)
         {
             initwindow(800,800);
-            readimagefile("image1_1.jpg",0,0,800,800);
             ....//de facut urmatoarea fereastra
             getch();
             closegraph();
@@ -65,7 +64,6 @@ int main()
         else if(coordx>=330&&coordx<=460&&coordy>=430&&coordy<=470)
             {
                 initwindow(800,800);
-                readimagefile("image1_1.jpg",0,0,800,800);
                 settextstyle(7, HORIZ_DIR, 5);
                 outtextxy(100,200,"Proiectul a fost realizat de:");
                 settextstyle(7, HORIZ_DIR, 4);
