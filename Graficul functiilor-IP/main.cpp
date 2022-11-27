@@ -1,9 +1,7 @@
 /*
 Plan:
--transformare in plan complet/full screen
--poza de la zona cu functia si evaluatorul
 -limba
--sunet
+-sunet??
 -poate integrala, zoom, stanga dreapta
 Grafic:
 -punct minim
@@ -18,11 +16,12 @@ Evaluator:
 -stive?
 */
 #include<iostream>
+#include<windows.h>
+#include<mmsystem.h>
 #include <graphics.h>
 #include <winbgim.h>
 using namespace std;
-//Ana-Maria
-void click(int &coordxclick, int &coordyclick )//functie prin care observam daca se apasa click stanga de la mouse
+void click(int &coordxclick, int &coordyclick )
 {
     int x, y;
     while(!ismouseclick(WM_LBUTTONDOWN))
@@ -30,53 +29,79 @@ void click(int &coordxclick, int &coordyclick )//functie prin care observam daca
     getmouseclick(WM_LBUTTONDOWN, x, y);
     coordxclick=x;
     coordyclick=y;
-}//Ana-Maria
+}
 int main()
 {
-    //Ana-Maria Ursache
-    int coordx, coordy;//coordonate unui punct in care se va face click
-    initwindow(800,800);//fereastra
-    readimagefile("image1_1.jpg",0,0,800,800);//imagine de fundal
+    int coordx, coordy, height, width;
 
-    setcolor(WHITE); //culoare text
-    settextstyle(5, HORIZ_DIR, 6);//fontul si stilul textului
-    outtextxy(200,190,"Graficul functiei");//text
-    rectangle(180,180,590,260);//dreptunghi
+    //window initialization
+    height=GetSystemMetrics(SM_CYSCREEN);
+    width=GetSystemMetrics(SM_CXSCREEN);
+    initwindow(width,height);
 
-    setcolor(WHITE);//culoare text
-    settextstyle(7, HORIZ_DIR, 3);//fontul si stilul textului
-    outtextxy(355,340,"Grafic");//text
-    rectangle(339,330,440,370);//dreptunghi
+    //sunet
+    //PlaySound(TEXT("sound2.wav"),NULL,SND_ASYNC);
 
-    setcolor(WHITE);//culoare text
-    settextstyle(7, HORIZ_DIR, 3);//fontul si stilul textului
-    outtextxy(350,440,"Contact");//text
-    rectangle(330,430,460,470);//dreptunghi
+    //background image
+    readimagefile("image1_1.jpg",0,0,width,height);
 
-    click(coordx,coordy);//click
-    if(coordx>=339&&coordx<=440&&coordy>=330&&coordy<=370)//daca se apasa pe "Grafic"
+    //imagine pt limba romana
+    readimagefile("romana.jpg",width-80,(height/5-140),width-30,(height/5-115));
+
+    //text
+    setcolor(WHITE);
+    settextstyle(8, HORIZ_DIR, 8 );
+    settextjustify(CENTER_TEXT,CENTER_TEXT);
+    outtextxy(width/2,height/4,"Graficul functiei");
+    rectangle(width/2-428,height/2-253,width/2+425,height/2-172);
+
+    settextstyle(8, HORIZ_DIR, 6);
+    outtextxy(width/2,height/2,"Grafic");
+    rectangle(width/2-100,height/2-40,width/2+98,height/2+12);
+
+    settextstyle(8, HORIZ_DIR, 6);
+    outtextxy(width/2,height/2+150,"Contact");
+    rectangle(width/2-119,height/2+110,width/2+117,height/2+165);
+
+    //buttons
+    click(coordx,coordy);
+    if(coordx>=(width/2-100)&&coordx<=(width/2+98)&&
+                    coordy>=(height/2-40)&&coordy<=(height/2+12))
         {
-            initwindow(800,800);//Ana-Maria
-            //Emilia
-            ...
-            //Emilia
+            initwindow(width,height);
+            readimagefile("image1_1.jpg",0,0,width,height);
+            settextstyle(8, HORIZ_DIR, 6 );
+            settextjustify(CENTER_TEXT,CENTER_TEXT);
+            outtextxy(width/2,height/4-10,"Introduceti functia aici:");
+            rectangle(width/2-379,height/3-10,width/2+376,height/4+15);
+            settextstyle(8, HORIZ_DIR, 5 );
+            settextjustify(CENTER_TEXT,CENTER_TEXT);
+            outtextxy(width/2,height/2-20,"Evaluator functie");
+            rectangle(width/2-379,height/2+20,width/2+376,height/2+250);
             getch();
             closegraph();
         }
-        else if(coordx>=330&&coordx<=460&&coordy>=430&&coordy<=470)//daca se apasa pe "Contact"
+        else if(coordx>=(width/2-119)&&coordx<=(width/2+117)&&
+                    coordy>=(height/2+110)&&coordy<=(height/2+165))
             {
-                initwindow(800,800);
-                settextstyle(7, HORIZ_DIR, 5);//fontul si stilul textului
-                outtextxy(100,200,"Proiectul a fost realizat de:");//text
-                settextstyle(7, HORIZ_DIR, 4);//fontul si stilul textului
-                outtextxy(200,350,"Ursache Ana-Maria");//text
-                settextstyle(7, HORIZ_DIR, 3);//fontul si stilul textului
-                outtextxy(380,400,"si");//text
-                settextstyle(7, HORIZ_DIR, 4);//fontul si stilul textului
-                outtextxy(250,450,"Galatanu Emilia");//text
+                initwindow(width,height);
+                readimagefile("image1_1.jpg",0,0,width,height);
+                settextstyle(8, HORIZ_DIR, 5);
+                outtextxy(width/2-350,height/2-200,"Proiectul a fost realizat de:");
+                settextstyle(8, HORIZ_DIR, 4);
+                outtextxy(width/2-180,height/2-70,"Ursache Ana-Maria");
+                settextstyle(8, HORIZ_DIR, 4);
+                outtextxy(width/2-30,height/2+8,"si");
+                settextstyle(8, HORIZ_DIR, 4);
+                outtextxy(width/2-160,height/2+80,"Galatanu Emilia");
                 getch();
                 closegraph();
             }
+                //pentru limba engleza
+                else if(coordx>=(width-80)&&coordx<=(width-30)&&
+                            coordy>=(height/5-140)&&coordy<=(height/5-115))
+                        readimagefile("engleza.jpg",width-80,(height/5-140),width-30,(height/5-115));
+
     getch();
     closegraph();
     return 0;
