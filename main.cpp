@@ -1,7 +1,8 @@
 /*
 Plan:
--exit button
 -limba
+-interval
+-text pe pag de functie
 -buton sunet
 -poate integrala, zoom, stanga dreapta
 Grafic:
@@ -19,8 +20,9 @@ Evaluator:
 #include<iostream>
 #include<windows.h>
 #include<mmsystem.h>
-#include <graphics.h>
-#include <winbgim.h>
+#include<graphics.h>
+#include<winbgim.h>
+#include<cstring>
 #define MIN 100000001
 #define STANGA 500
 #define DREAPTA 1000
@@ -81,8 +83,15 @@ void graficfunctie(int A, int B,int punctmax, int punctmin)
 
 int main()
 {
+    //Ana-Maria
+    char s[256];
+    int i;
+    if(strstr(s,"sin"))
+            for(i=0;i<=strlen(s)-1;i++)
+                {
+
+                }
     int A,B,coordx, coordy, height, width;
-    //interval Ana-Maria
     cout<<"Introduceti capetele intervalului in care doriti sa observati graficul functiei:";
     cin>>A>>B;
     cout<<"Intervalul este:"<<"["<<A<<","<<B<<"]";
@@ -117,11 +126,20 @@ int main()
     outtextxy(width/2,height/2+150,"Contact");
     rectangle(width/2-119,height/2+110,width/2+117,height/2+165);
 
+    //Emilia
+    settextstyle(8, HORIZ_DIR, 3 );
+    outtextxy(width/16,height/8,"Exit");
+    click(coordx,coordy);
+    if(coordx>=(width/16)&&coordx<=(width/10)&&coordy>=(height/5-140)&&coordy<=(height/5-115))
+        exit(1);
+
     //buttons Ana-Maria
     click(coordx,coordy);
     if(coordx>=(width/2-100)&&coordx<=(width/2+98)&&
-                    coordy>=(height/2-40)&&coordy<=(height/2+12))
-        {//Emilia
+                 coordy>=(height/2-40)&&coordy<=(height/2+12))
+        {   setcolor(YELLOW);
+            rectangle(width/2-100, height/2-40, width/2+98,height/2+12);
+            //Emilia
             initwindow(width,height);
             readimagefile("image1_1.jpg",0,0,width,height);
             settextstyle(8, HORIZ_DIR, 6 );
@@ -132,6 +150,29 @@ int main()
             settextjustify(CENTER_TEXT,CENTER_TEXT);
             outtextxy(width/2,height/2-20,"Evaluator functie");
             rectangle(width/2-379,height/2+20,width/2+376,height/2+250);
+
+            //Ana-Maria
+            clearmouseclick(WM_LBUTTONDOWN);
+            click(coordx,coordy);
+            if(coordx>=(width/2-379)&&coordx<=(width/2+376)&&
+                 coordy>=(height/2-10)&&coordy<=(height/2+15))
+                 {
+                    setcolor(YELLOW);
+                    rectangle(width/2-379,height/2-10,width/3+376,height/4+15);
+                    //aici trebuie sa facem caseta de text
+                 }
+                 else if(coordx>=(width/2-379)&&coordx<=(width/2+376)&&
+                                coordy>=(height/2+20)&&coordy<=(height/2+250))
+                        {
+                            setcolor(YELLOW);
+                            rectangle(width/2-379,height/2+20,width/2+376,height/2+250);
+                            //aici trebuie sa scriem ce tine de evaluator
+                        }
+            settextstyle(8, HORIZ_DIR, 3 );
+            outtextxy(width-141,height/16-5,"Exit");
+            click(coordx,coordy);
+            if(coordx>=(width/16)&&coordx<=(width/10)&&coordy>=(height/5-140)&&coordy<=(height/5-115))
+                exit(1);
             getch();
             closegraph();
         }
@@ -139,6 +180,8 @@ int main()
         else if(coordx>=(width/2-119)&&coordx<=(width/2+117)&&
                     coordy>=(height/2+110)&&coordy<=(height/2+165))
             {
+                setcolor(YELLOW);
+                rectangle(width/2-119, height/2+110, width/2+117,height/2+165);
                 initwindow(width,height);
                 readimagefile("image1_1.jpg",0,0,width,height);
                 settextstyle(8, HORIZ_DIR, 5);
@@ -149,6 +192,11 @@ int main()
                 outtextxy(width/2-30,height/2+8,"si");
                 settextstyle(8, HORIZ_DIR, 4);
                 outtextxy(width/2-160,height/2+80,"Galatanu Emilia");
+                settextstyle(8, HORIZ_DIR, 3 );
+                outtextxy(width-1410,height/16-5,"Exit");
+                click(coordx,coordy);
+                if(coordx>=(width/16)&&coordx<=(width/10)&&coordy>=(height/5-140)&&coordy<=(height/5-115))
+                        exit(1);
                 getch();
                 closegraph();
             }
@@ -156,7 +204,6 @@ int main()
                 else if(coordx>=(width-80)&&coordx<=(width-30)&&
                             coordy>=(height/5-140)&&coordy<=(height/5-115))
                         readimagefile("engleza.jpg",width-80,(height/5-140),width-30,(height/5-115));
-
     getch();
     closegraph();
     return 0;
