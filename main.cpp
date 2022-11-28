@@ -83,21 +83,19 @@ void graficfunctie(int A, int B,int punctmax, int punctmin)
 
 int main()
 {
+    int coordx, coordy;
     //Ana-Maria
     char s[256];
-    int i;
+    int i,A,B;
     if(strstr(s,"sin"))
-            for(i=0;i<=strlen(s)-1;i++)
+            for(i=0;i<=strlen(s)-1;i++)//citire functii
                 {
-
+                    i++;
                 }
-    int A,B,coordx, coordy, height, width;
-    cout<<"Introduceti capetele intervalului in care doriti sa observati graficul functiei:";
     cin>>A>>B;
-    cout<<"Intervalul este:"<<"["<<A<<","<<B<<"]";
-    delay(500);
 
     //window initialization Emilia
+    int height, width;
     height=GetSystemMetrics(SM_CYSCREEN);
     width=GetSystemMetrics(SM_CXSCREEN);
     initwindow(width,height);
@@ -129,18 +127,12 @@ int main()
     //Emilia
     settextstyle(8, HORIZ_DIR, 3 );
     outtextxy(width/16,height/8,"Exit");
-    click(coordx,coordy);
-    if(coordx>=(width/16)&&coordx<=(width/10)&&coordy>=(height/5-140)&&coordy<=(height/5-115))
-        exit(1);
 
     //buttons Ana-Maria
     click(coordx,coordy);
     if(coordx>=(width/2-100)&&coordx<=(width/2+98)&&
                  coordy>=(height/2-40)&&coordy<=(height/2+12))
         {   //exit
-            setcolor(WHITE);
-            settextstyle(8, HORIZ_DIR, 3 );
-            outtextxy(width-141,height/16-5,"Exit");
             setcolor(YELLOW);
             rectangle(width/2-100, height/2-40, width/2+98,height/2+12);
             //Emilia
@@ -148,12 +140,15 @@ int main()
             readimagefile("image1_1.jpg",0,0,width,height);
             settextstyle(8, HORIZ_DIR, 6 );
             settextjustify(CENTER_TEXT,CENTER_TEXT);
-            outtextxy(width/2,height/4-10,"Introduceti functia aici:");
-            rectangle(width/2-379,height/3-10,width/2+376,height/4+15);
+            outtextxy(width/4,height/4-10,"Introduceti functia aici:");
+            rectangle(width/4-379,height/3-10,width/4+376,height/4+15);
             settextstyle(8, HORIZ_DIR, 5 );
             settextjustify(CENTER_TEXT,CENTER_TEXT);
             outtextxy(width/2,height/2-20,"Evaluator functie");
             rectangle(width/2-379,height/2+20,width/2+376,height/2+250);
+            setcolor(WHITE);
+            settextstyle(8, HORIZ_DIR, 3 );
+            outtextxy(width-141,height/16-5,"Exit");
             //Ana-Maria
             clearmouseclick(WM_LBUTTONUP);
             click(coordx,coordy);
@@ -204,6 +199,8 @@ int main()
                 else if(coordx>=(width-80)&&coordx<=(width-30)&&
                             coordy>=(height/5-140)&&coordy<=(height/5-115))
                         readimagefile("engleza.jpg",width-80,(height/5-140),width-30,(height/5-115));
+                        else if(coordx>=(width/16)&&coordx<=(width/10)&&coordy>=(height/5-140)&&coordy<=(height/5-115))
+                                exit(1);
     getch();
     closegraph();
     return 0;
