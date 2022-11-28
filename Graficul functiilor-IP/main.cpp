@@ -41,7 +41,7 @@ void click(int &coordxclick, int &coordyclick )
 int f(int x)
 {
     if(x!=0)
-        return  ;//functia noastra
+        return  0;//functia noastra
     else return 0;
 }
 //aflare min si max Ana-Maria
