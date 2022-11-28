@@ -16,15 +16,15 @@ Evaluator:
 -stive?
 */
 #include<iostream>
-//#include<windows.h>
-//#include<mmsystem.h>
+#include<windows.h>
+#include<mmsystem.h>
 #include <graphics.h>
 #include <winbgim.h>
 #define MIN 100000001
-#define STANGA width/2-500
-#define DREAPTA width/2+500
-#define TOP height/5+100
-#define BOTTOM height/2+200
+#define STANGA 500
+#define DREAPTA 1000
+#define TOP 0
+#define BOTTOM 0
 using namespace std;
 //click Ana-Maria
 void click(int &coordxclick, int &coordyclick )
@@ -36,20 +36,20 @@ void click(int &coordxclick, int &coordyclick )
     coordxclick=x;
     coordyclick=y;
 }
-//functia sinus neterminata Ana-Maria
-int sinus(int x)
+//functia  neterminata Ana-Maria
+int f(int x)
 {
     if(x!=0)
         return 1;//functia noastra
     else return 0;
 }
 //aflare min si max Ana-Maria
-void aflareminsimax()
+void aflareminsimax(int A, int B)
 {
     int i,x,y,punctmin,punctmax;
     for(i=0;i<=(DREAPTA-STANGA);i++)
     {
-        x=A+i*(B-A)/DREAPTA-STANGA);
+        x=A+i*(B-A)/(DREAPTA-STANGA);
         y=f(x);
         if((-1)*MIN>y)punctmax=(-1)*MIN;
                 else punctmax=y;
@@ -57,25 +57,27 @@ void aflareminsimax()
                 else punctmin=y;
     }
 }
+
 //trasare graficul functiei introduse Ana-Maria
-void graficfunctie()
+void graficfunctie(int A, int B,int punctmax, int punctmin)
 {
     int x,y,xecran,yecran,xpunctactual,ypunctactual,i;
     x=A;
     y=f(x);
-    aflareminsimax();
-    xecran=(DREAPTA-STANGA)*x/(B-A))+(B*STANGA-A*Dreapta)/(B-A);
-    yecran=(BOTTOM-TOP)*y/(punctmax-punctmin))+(PUNCTMAX*TOP-punctmin*BOTTOM)/(punctmax-punctmin);
+    aflareminsimax(A,B);
+    xecran=((DREAPTA-STANGA)*x/(B-A))+(B*STANGA-A*DREAPTA)/(B-A);
+    yecran=((BOTTOM-TOP)*y/(punctmax-punctmin))+(punctmax*TOP-punctmin*BOTTOM)/(punctmax-punctmin);
     for(i=0;i<=DREAPTA-STANGA;i++)
     {
         x=A+i*(B-A)/(DREAPTA-STANGA);
         xpunctactual=(int)((DREAPTA-STANGA)*x/(B-A)+(B*STANGA-A*DREAPTA)/(B-A));
         ypunctactual=(int)((BOTTOM-TOP)*y/(punctmax-punctmin)+(punctmax*TOP-punctmin*BOTTOM)/(punctmax-punctmin));
-        line(xecran,yecran,xpunctactual,ypunctctual);
+        line(xecran,yecran,xpunctactual,ypunctactual);
         xecran=xpunctactual;
         yecran=ypunctactual;
     }
 }
+
 int main()
 {
     int A,B,coordx, coordy, height, width;
@@ -91,7 +93,7 @@ int main()
     initwindow(width,height);
 
     //sunet Ana-Maria
-    //PlaySound(TEXT("sound2.wav"),NULL,SND_ASYNC);
+    PlaySound("sound2.wav",NULL,SND_ASYNC);
 
     //background image Ana-Maria
     readimagefile("image1_1.jpg",0,0,width,height);
