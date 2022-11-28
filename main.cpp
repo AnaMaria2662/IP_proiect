@@ -137,7 +137,11 @@ int main()
     click(coordx,coordy);
     if(coordx>=(width/2-100)&&coordx<=(width/2+98)&&
                  coordy>=(height/2-40)&&coordy<=(height/2+12))
-        {   setcolor(YELLOW);
+        {   //exit
+            setcolor(WHITE);
+            settextstyle(8, HORIZ_DIR, 3 );
+            outtextxy(width-141,height/16-5,"Exit");
+            setcolor(YELLOW);
             rectangle(width/2-100, height/2-40, width/2+98,height/2+12);
             //Emilia
             initwindow(width,height);
@@ -150,15 +154,14 @@ int main()
             settextjustify(CENTER_TEXT,CENTER_TEXT);
             outtextxy(width/2,height/2-20,"Evaluator functie");
             rectangle(width/2-379,height/2+20,width/2+376,height/2+250);
-
             //Ana-Maria
-            clearmouseclick(WM_LBUTTONDOWN);
+            clearmouseclick(WM_LBUTTONUP);
             click(coordx,coordy);
             if(coordx>=(width/2-379)&&coordx<=(width/2+376)&&
                  coordy>=(height/2-10)&&coordy<=(height/2+15))
                  {
                     setcolor(YELLOW);
-                    rectangle(width/2-379,height/2-10,width/3+376,height/4+15);
+                    rectangle(width/2-379,height/2-10,width/2+376,height/2+15);
                     //aici trebuie sa facem caseta de text
                  }
                  else if(coordx>=(width/2-379)&&coordx<=(width/2+376)&&
@@ -168,11 +171,8 @@ int main()
                             rectangle(width/2-379,height/2+20,width/2+376,height/2+250);
                             //aici trebuie sa scriem ce tine de evaluator
                         }
-            settextstyle(8, HORIZ_DIR, 3 );
-            outtextxy(width-141,height/16-5,"Exit");
-            click(coordx,coordy);
-            if(coordx>=(width/16)&&coordx<=(width/10)&&coordy>=(height/5-140)&&coordy<=(height/5-115))
-                exit(1);
+                        else if(coordx>=(width/16)&&coordx<=(width/10)&&coordy>=(height/5-140)&&coordy<=(height/5-115))
+                                    exit(1);
             getch();
             closegraph();
         }
