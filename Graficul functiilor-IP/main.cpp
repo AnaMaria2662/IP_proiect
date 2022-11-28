@@ -1,7 +1,8 @@
 /*
 Plan:
+-exit button
 -limba
--sunet??
+-buton sunet
 -poate integrala, zoom, stanga dreapta
 Grafic:
 -punct minim
@@ -40,7 +41,7 @@ void click(int &coordxclick, int &coordyclick )
 int f(int x)
 {
     if(x!=0)
-        return 1;//functia noastra
+        return  ;//functia noastra
     else return 0;
 }
 //aflare min si max Ana-Maria
