@@ -100,36 +100,37 @@ int main()
     if(strstr(s,"sin"))
             for(i=0;i<=strlen(s)-1;i++)
                 {
-                    return 1;
+                    return 1;/*trebuie continuat cu functia pentru cazul cu sin*/
                 }
         else if(strstr(s,"cos"))
         {
             for(i=0;i<=strlen(s)-1;i++)
                 {
-                    return 1;
+                    return 1;/*trebuie continuat cu functia pentru cazul cu cos*/
                 }
         }
-        else if(strstr(s,"tg"))
-        {
-            for(i=0;i<=strlen(s)-1;i++)
+            else if(strstr(s,"tg"))
+            {
+                for(i=0;i<=strlen(s)-1;i++)
+                    {
+                        return 1;/*trebuie continuat cu functia pentru cazul cu tg*/
+                    }
+            }
+                else if(strstr(s,"ctg"))
                 {
-                    return 1;
+                    for(i=0;i<=strlen(s)-1;i++)
+                        {
+                            return 1;/*trebuie continuat cu functia pentru cazul cu ctg*/
+                        }
                 }
-        }
-        else if(strstr(s,"ctg"))
-        {
-            for(i=0;i<=strlen(s)-1;i++)
-                {
-                    return 1;
-                }
-        }
-        else if(strstr(s,"log"))
-        {
-            for(i=0;i<=strlen(s)-1;i++)
-                {
-                    return 1;
-                }
-        }
+                    else if(strstr(s,"log"))
+                    {
+                        for(i=0;i<=strlen(s)-1;i++)
+                            {
+                                return 1;/*trebuie continuat cu functia pentru cazul cu log*/
+                            }
+                    }
+
     ///Emilia
     height=GetSystemMetrics(SM_CYSCREEN);
     width=GetSystemMetrics(SM_CXSCREEN);
