@@ -2,7 +2,6 @@
 Plan:
 -limba
 -interval
--text pe pag de functie
 -buton sunet
 -poate integrala, zoom, stanga dreapta
 Grafic:
@@ -40,11 +39,11 @@ void click(int &coordxclick, int &coordyclick )//functie pentru click
 int f(int x)//functia in care se va forma functia dupa ce este preluata ca sir de caractere
 {
     if(x!=0)
-        return  0;//ceva
+        return 1;//neterminata
     else return 0;
 }
 
-void aflareminsimax(int A, int B, int DREAPTA,int STANGA)//aflate min max
+void aflareminsimax(int A, int B, int DREAPTA,int STANGA)//aflare min max
 {
     int i,x,y,punctmin,punctmax;
     for(i=0;i<=(DREAPTA-STANGA);i++)
@@ -130,6 +129,14 @@ int main()
                                 return 1;/*trebuie continuat cu functia pentru cazul cu log*/
                             }
                     }
+                        else if(strstr(s,"rad"))
+                        {
+                            for(i=0;i<=strlen(s)-1;i++)
+                                {
+                                    return 1;/*trebuie continuat cu functia pentru cazul cu rad*/
+                                }
+                        }
+
 
     ///Emilia
     height=GetSystemMetrics(SM_CYSCREEN);
@@ -164,6 +171,7 @@ int main()
     ///Emilia
     settextstyle(8, HORIZ_DIR, 3 );
     outtextxy(width/16,height/8,"Exit");//setari pentru formare buton exit
+    /*dreptunghi exit*/
 
     ///Ana-Maria
     click(coordx,coordy);
@@ -196,6 +204,7 @@ int main()
             setcolor(WHITE);
             settextstyle(8, HORIZ_DIR, 3 );
             outtextxy(width-141,height/16-5,"Exit");//buton exit
+            /*dreptunghi exit*/
 
             ///Ana-Maria
             clearmouseclick(WM_LBUTTONUP);
@@ -205,7 +214,7 @@ int main()
                  {//daca se apasa caseta cu "Introduceti functia aici:"
                   //se schimba culoare dreptunghiului in galben la click
                     setcolor(YELLOW);
-                    rectangle(width/2-379,height/2-10,width/2+376,height/2+15);
+                    rectangle(width/2-320,height/3+70,width/4+655,height/3+130);
                     /*trebuie continuat cu o casuta de text*/
                  }
                  else if(coordx>=(width/2-379)&&coordx<=(width/2+376)&&
@@ -219,6 +228,7 @@ int main()
                         ///Emilia
                         else if(coordx>=(width/16)&&coordx<=(width/10)&&coordy>=(height/5-140)&&coordy<=(height/5-115))
                                     exit(1);//daca se apasa pe butonul de exit
+                                    /*dreptunghi exit*/
             getch();
             closegraph();
         }
@@ -249,8 +259,9 @@ int main()
                 ///Emilia
                 settextstyle(8, HORIZ_DIR, 3 );
                 outtextxy(width-1310,height/16-5,"Exit");//buton exit
+                /*dreptunghi exit*/
 
-                ///Ana-Maria
+                ///Emilia
                 clearmouseclick(WM_LBUTTONUP);
                 click(coordx,coordy);
                 if(coordx>=(width/16)&&coordx<=(width/10)&&coordy>=(height/5-140)&&coordy<=(height/5-115))
@@ -258,6 +269,7 @@ int main()
                 getch();
                 closegraph();
             }
+                ///Ana-Maria
                 else if(coordx>=(width-80)&&coordx<=(width-30)&&
                         coordy>=(height/5-140)&&coordy<=(height/5-115))//daca se apasa setarea de limba
                         readimagefile("engleza.jpg",width-80,(height/5-140),width-30,(height/5-115));//se schimba imaginea->engleza
@@ -265,6 +277,7 @@ int main()
                 else if(coordx>=(width/16)&&coordx<=(width/10)&&
                         coordy>=(height/5-140)&&coordy<=(height/5-115))
                                 exit(1);//daca se apasa exit
+                                /*dreptunghi exit*/
     getch();
     closegraph();
     return 0;
