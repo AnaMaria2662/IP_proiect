@@ -40,7 +40,7 @@ void click(int &coordxclick, int &coordyclick )//functie pentru click
 int f(int x)//functia in care se va forma functia dupa ce este preluata ca sir de caractere
 {
     if(x!=0)
-        return  0;
+        return  0;//ceva
     else return 0;
 }
 
@@ -77,7 +77,6 @@ void graficfunctie(int A,int B,int punctmax,
         yecran=ypunctactual;
     }
 }
-
 int main()
 {
     int A,B,STANGA,DREAPTA,TOP,BOTTOM;
@@ -94,8 +93,9 @@ int main()
     cout<<"Capatul din dreapta al intervalului este B, cu valoarea: ";
     cin>>B;
     cout<<endl;
-    cout<<"Scrie functia sub forma de sir de caractere:";
-    cin.getline(s,256);
+    cout<<"Scrie functia sub forma de sir de caractere: ";
+    cin.get();
+    cin.get(s,256);
 
     if(strstr(s,"sin"))
             for(i=0;i<=strlen(s)-1;i++)
@@ -136,7 +136,8 @@ int main()
     width=GetSystemMetrics(SM_CXSCREEN);
     initwindow(width,height);
 
-    ///Ana-Maria //coordonate ecran
+    ///Ana-Maria
+    //coordonate ecran
     STANGA=0;
     DREAPTA=width;
     TOP=0;
@@ -150,8 +151,7 @@ int main()
     setcolor(WHITE);
     settextstyle(8, HORIZ_DIR, 8 );
     settextjustify(CENTER_TEXT,CENTER_TEXT);
-    outtextxy(width/2,height/4,"Graficul functiei");
-    rectangle(width/2-428,height/2-253,width/2+425,height/2-172);//setari prima linie de text
+    outtextxy(width/2,height/4,"Graficul functiei");//setari titlu
 
     settextstyle(8, HORIZ_DIR, 6);
     outtextxy(width/2,height/2,"Grafic");
@@ -176,17 +176,23 @@ int main()
 
             readimagefile("image1_1.jpg",0,0,width,height);//poza fundal fereastra noua
 
-            ///Emilia
+            ///Emilia+Ana-Maria
             settextstyle(8, HORIZ_DIR, 4 );
             settextjustify(CENTER_TEXT,CENTER_TEXT);
-            outtextxy(width/4,height/4-10,"Introduceti functia aici:");
-            rectangle(width/3-379,height/3-10,width/4+376,height/4+15);//text 1
+            outtextxy(width/2+10,height/4-40,"Introduceti intervalul  aici:");
+            rectangle(width/2-320,height/4-10,width/4+655,height/4+50);//text 1
 
-            settextstyle(8, HORIZ_DIR, 5 );
+            settextstyle(8, HORIZ_DIR, 4 );
             settextjustify(CENTER_TEXT,CENTER_TEXT);
-            outtextxy(width/2,height/2-20,"Evaluator functie");
-            rectangle(width/2-379,height/2+20,width/2+376,height/2+250);//text 2
+            outtextxy(width/2,height/3+40,"Introduceti functia aici:");
+            rectangle(width/2-320,height/3+70,width/4+655,height/3+130);//text 2
 
+            settextstyle(8, HORIZ_DIR, 4);
+            settextjustify(CENTER_TEXT,CENTER_TEXT);
+            outtextxy(width/2,height/2+35,"Evaluator functie");
+            rectangle(width/2-379,height/2+70,width/2+376,height/2+250);//text 3
+
+            ///Emilia
             setcolor(WHITE);
             settextstyle(8, HORIZ_DIR, 3 );
             outtextxy(width-141,height/16-5,"Exit");//buton exit
