@@ -1,12 +1,9 @@
 /*
 Plan:
 -limba
--interval
 -buton sunet
 -poate integrala, zoom, stanga dreapta
 Grafic:
--punct minim
--punct maxim
 -asimptota verticala
 -asimptota orizontala
 -grafic efectiv cu linii
@@ -22,7 +19,7 @@ Evaluator:
 #include<graphics.h>
 #include<winbgim.h>
 #include<cstring>
-#define MIN 100000001
+#define MIN 100000001//ii dam lui min val cea mai mare ca mai apoi sa ajungem la minimul nostru
 
 using namespace std;
 
@@ -39,18 +36,20 @@ void click(int &coordxclick, int &coordyclick )//functie pentru click
 int f(int x)//functia in care se va forma functia dupa ce este preluata ca sir de caractere
 {
     if(x!=0)
-        return 1;//neterminata
+        return 1;//neterminata, in loc de 1 ar fi functia noastra citita->evaluator
     else return 0;
 }
 
-void aflareminsimax(int A, int B, int DREAPTA,int STANGA)//aflare min max
-{
+void aflareminsimax(int A, int B, int DREAPTA,int STANGA)
+{//aflare min(punctmin) max(punctmax)
     int i,x,y,punctmin,punctmax;
+    int MAX;
+    MAX=(-1)*MIN;//ii dam lui max cea mai mica val posibila->mai apoi sa ajungem la max nostru
     for(i=0;i<=(DREAPTA-STANGA);i++)
     {
         x=A+i*(B-A)/(DREAPTA-STANGA);
-        y=f(x);
-        if((-1)*MIN>y)punctmax=(-1)*MIN;
+        y=f(x);//functia introdusa de la la fereastra in casuta de text
+        if(MAX>y)punctmax=MAX;
                 else punctmax=y;
         if(MIN>y)punctmin=MIN;
                 else punctmin=y;
@@ -76,6 +75,7 @@ void graficfunctie(int A,int B,int punctmax,
         yecran=ypunctactual;
     }
 }
+
 int main()
 {
     int A,B,STANGA,DREAPTA,TOP,BOTTOM;
@@ -236,6 +236,7 @@ int main()
         else if(coordx>=(width/2-119)&&coordx<=(width/2+117)&&
                 coordy>=(height/2+110)&&coordy<=(height/2+165))
             {//daca se apasa butonul de "Contact"
+
             //se schimba culoare dreptunghiului in galben la click
                 setcolor(YELLOW);
                 rectangle(width/2-119, height/2+110, width/2+117,height/2+165);
@@ -271,7 +272,7 @@ int main()
             }
                 ///Ana-Maria
                 else if(coordx>=(width-80)&&coordx<=(width-30)&&
-                        coordy>=(height/5-140)&&coordy<=(height/5-115))//daca se apasa setarea de limba
+                        coordy>=(height/5-140)&&coordy<=(height/5-115))//steag-daca se apasa setarea de limba
                         readimagefile("engleza.jpg",width-80,(height/5-140),width-30,(height/5-115));//se schimba imaginea->engleza
 
                 else if(coordx>=(width/16)&&coordx<=(width/10)&&
