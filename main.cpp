@@ -15,12 +15,16 @@ Evaluator:
 */
 ///Ana-Maria
 #include<iostream>
+#include<stdlib.h>
+#include<stdio.h>
 #include<windows.h>
 #include<graphics.h>
 #include<winbgim.h>
 #include<cstring>
-#define MIN 100000001//ii dam lui min val cea mai mare ca mai apoi sa ajungem la minimul nostru
-
+#include<math.h>
+double A,B;
+double MIN,MAX;
+int STANGA=250, DREAPTA=1100, TOP=150, BOTTOM=600;
 using namespace std;
 
 void click(int &coordxclick, int &coordyclick )//functie pentru click
@@ -33,43 +37,43 @@ void click(int &coordxclick, int &coordyclick )//functie pentru click
     coordyclick=y;
 }
 
-int f(int x)//functia in care se va forma functia dupa ce este preluata ca sir de caractere
+double f(double x)//functia in care se va forma functia dupa ce este preluata ca sir de caractere
 {
     if(x!=0)
-        return 1;//neterminata, in loc de 1 ar fi functia noastra citita->evaluator
+        return x*sin(1.0*x);//neterminata, in loc de 1 ar fi functia noastra citita->evaluator
     else return 0;
 }
 
-void aflareminsimax(int A, int B, int DREAPTA,int STANGA)
-{//aflare min(punctmin) max(punctmax)
-    int i,x,y,punctmin,punctmax;
-    int MAX;
-    MAX=(-1)*MIN;//ii dam lui max cea mai mica val posibila->mai apoi sa ajungem la max nostru
+void aflareminsimax()
+{//aflare min max
+    int i;
+    double x,y;
+    MIN=100000001;
+    MAX=-MIN;
     for(i=0;i<=(DREAPTA-STANGA);i++)
     {
         x=A+i*(B-A)/(DREAPTA-STANGA);
         y=f(x);//functia introdusa de la la fereastra in casuta de text
-        if(MAX>y)punctmax=MAX;
-                else punctmax=y;
-        if(MIN>y)punctmin=MIN;
-                else punctmin=y;
+        MAX=max(MAX,y);//noul max
+        MIN=min(MIN,y);//noul min
     }
 }
 
-void graficfunctie(int A,int B,int punctmax,
-            int punctmin,int DREAPTA,int STANGA,int BOTTOM,int TOP)//trasare linie grafic pt toate punctele
+void graficfunctie()//trasare linie grafic pt toate punctele
 {
-    int x,y,xecran,yecran,xpunctactual,ypunctactual,i;
+    int i;
+    double x,y,xecran,yecran,xpunctactual,ypunctactual;
     x=A;
-    y=f(x);
-    aflareminsimax(A,B,DREAPTA,STANGA);
-    xecran=((DREAPTA-STANGA)*x/(B-A))+(B*STANGA-A*DREAPTA)/(B-A);
-    yecran=((BOTTOM-TOP)*y/(punctmax-punctmin))+(punctmax*TOP-punctmin*BOTTOM)/(punctmax-punctmin);
+    y=(int)(f(A));
+    aflareminsimax();
+    xecran=(DREAPTA-STANGA)*x/(B-A)+(B*STANGA-A*DREAPTA)/(B-A);
+    yecran=(BOTTOM-TOP)*y/(MAX-MIN)+(MAX*TOP-MIN*BOTTOM)/(MAX-MIN);
     for(i=0;i<=DREAPTA-STANGA;i++)
     {
         x=A+i*(B-A)/(DREAPTA-STANGA);
+        y=f(x);
         xpunctactual=(int)((DREAPTA-STANGA)*x/(B-A)+(B*STANGA-A*DREAPTA)/(B-A));
-        ypunctactual=(int)((BOTTOM-TOP)*y/(punctmax-punctmin)+(punctmax*TOP-punctmin*BOTTOM)/(punctmax-punctmin));
+        ypunctactual=(int)((BOTTOM-TOP)*y/(MAX-MIN)+(MAX*TOP-MIN*BOTTOM)/(MAX-MIN));
         line(xecran,yecran,xpunctactual,ypunctactual);
         xecran=xpunctactual;
         yecran=ypunctactual;
@@ -78,7 +82,6 @@ void graficfunctie(int A,int B,int punctmax,
 
 int main()
 {
-    int A,B,STANGA,DREAPTA,TOP,BOTTOM;
     int height, width;
     int coordx, coordy;
     int i;
@@ -91,49 +94,58 @@ int main()
     cout<<endl;
     cout<<"Capatul din dreapta al intervalului este B, cu valoarea: ";
     cin>>B;
-    cout<<endl;
-    cout<<"Scrie functia sub forma de sir de caractere: ";
-    cin.get();
-    cin.get(s,256);
+    //trasare grafic
+    height=GetSystemMetrics(SM_CYSCREEN);
+    width=GetSystemMetrics(SM_CXSCREEN);
 
+    initwindow(width,height);
+
+    setcolor(RED);
+    rectangle(STANGA,TOP,DREAPTA,BOTTOM);
+    line(STANGA,height/2,DREAPTA, height/2);//axa ox
+    line(width/2,TOP,width/2,BOTTOM);//axa oy
+
+    setcolor(YELLOW);
+    graficfunctie();
+    //trasare grafic
     if(strstr(s,"sin"))
             for(i=0;i<=strlen(s)-1;i++)
                 {
-                    return 1;/*trebuie continuat cu functia pentru cazul cu sin*/
+                    return 1;
                 }
         else if(strstr(s,"cos"))
         {
             for(i=0;i<=strlen(s)-1;i++)
                 {
-                    return 1;/*trebuie continuat cu functia pentru cazul cu cos*/
+                    return 1;
                 }
         }
             else if(strstr(s,"tg"))
             {
                 for(i=0;i<=strlen(s)-1;i++)
                     {
-                        return 1;/*trebuie continuat cu functia pentru cazul cu tg*/
+                        return 1;
                     }
             }
                 else if(strstr(s,"ctg"))
                 {
                     for(i=0;i<=strlen(s)-1;i++)
                         {
-                            return 1;/*trebuie continuat cu functia pentru cazul cu ctg*/
+                            return 1;
                         }
                 }
                     else if(strstr(s,"log"))
                     {
                         for(i=0;i<=strlen(s)-1;i++)
                             {
-                                return 1;/*trebuie continuat cu functia pentru cazul cu log*/
+                                return 1;
                             }
                     }
                         else if(strstr(s,"rad"))
                         {
                             for(i=0;i<=strlen(s)-1;i++)
                                 {
-                                    return 1;/*trebuie continuat cu functia pentru cazul cu rad*/
+                                    return 1;
                                 }
                         }
 
@@ -144,12 +156,6 @@ int main()
     initwindow(width,height);
 
     ///Ana-Maria
-    //coordonate ecran
-    STANGA=0;
-    DREAPTA=width;
-    TOP=0;
-    BOTTOM=height;
-
     PlaySound("sound2.wav",NULL,SND_ASYNC);//sunet de fundal
 
     readimagefile("image1_1.jpg",0,0,width,height);//imagine de fundal
@@ -171,7 +177,7 @@ int main()
     ///Emilia
     settextstyle(8, HORIZ_DIR, 3 );
     outtextxy(width/16,height/8,"Exit");//setari pentru formare buton exit
-    /*dreptunghi exit*/
+    //dreptunghi exit
 
     ///Ana-Maria
     click(coordx,coordy);
@@ -204,7 +210,7 @@ int main()
             setcolor(WHITE);
             settextstyle(8, HORIZ_DIR, 3 );
             outtextxy(width-141,height/16-5,"Exit");//buton exit
-            /*dreptunghi exit*/
+            //dreptunghi exit
 
             ///Ana-Maria
             clearmouseclick(WM_LBUTTONUP);
@@ -215,7 +221,7 @@ int main()
                   //se schimba culoare dreptunghiului in galben la click
                     setcolor(YELLOW);
                     rectangle(width/2-320,height/3+70,width/4+655,height/3+130);
-                    /*trebuie continuat cu o casuta de text*/
+                    //trebuie continuat cu o casuta de text
                  }
                  else if(coordx>=(width/2-379)&&coordx<=(width/2+376)&&
                          coordy>=(height/2+20)&&coordy<=(height/2+250))
@@ -223,12 +229,12 @@ int main()
                          //se schimba culoare dreptunghiului in galben la click
                             setcolor(YELLOW);
                             rectangle(width/2-379,height/2+20,width/2+376,height/2+250);
-                            /*trebuie continuat cu o casuta de text*/
+                            //trebuie continuat cu o casuta de text
                         }
                         ///Emilia
                         else if(coordx>=(width/16)&&coordx<=(width/10)&&coordy>=(height/5-140)&&coordy<=(height/5-115))
                                     exit(1);//daca se apasa pe butonul de exit
-                                    /*dreptunghi exit*/
+                                    //dreptunghi exit
             getch();
             closegraph();
         }
@@ -260,7 +266,7 @@ int main()
                 ///Emilia
                 settextstyle(8, HORIZ_DIR, 3 );
                 outtextxy(width-1310,height/16-5,"Exit");//buton exit
-                /*dreptunghi exit*/
+                //dreptunghi exit
 
                 ///Emilia
                 clearmouseclick(WM_LBUTTONUP);
@@ -278,7 +284,8 @@ int main()
                 else if(coordx>=(width/16)&&coordx<=(width/10)&&
                         coordy>=(height/5-140)&&coordy<=(height/5-115))
                                 exit(1);//daca se apasa exit
-                                /*dreptunghi exit*/
+                                    //dreptunghi exit
+    */
     getch();
     closegraph();
     return 0;
