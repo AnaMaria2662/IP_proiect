@@ -79,7 +79,21 @@ void graficfunctie()//trasare linie grafic pt toate punctele
         yecran=ypunctactual;
     }
 }
+void desenarefunctie()
+{
+    int height, width;
+    height=GetSystemMetrics(SM_CYSCREEN);
+    width=GetSystemMetrics(SM_CXSCREEN);
+    initwindow(width,height);
 
+    setcolor(RED);
+    rectangle(STANGA,TOP,DREAPTA,BOTTOM);
+    line(STANGA,height/2,DREAPTA, height/2);//axa ox
+    line(width/2,TOP,width/2,BOTTOM);//axa oy
+
+    setcolor(YELLOW);
+    graficfunctie();//graficul efectiv
+}
 int main()
 {
     int height, width;
@@ -94,20 +108,7 @@ int main()
     cout<<endl;
     cout<<"Capatul din dreapta al intervalului este B, cu valoarea: ";
     cin>>B;
-    //trasare grafic
-    height=GetSystemMetrics(SM_CYSCREEN);
-    width=GetSystemMetrics(SM_CXSCREEN);
-
-    initwindow(width,height);
-
-    setcolor(RED);
-    rectangle(STANGA,TOP,DREAPTA,BOTTOM);
-    line(STANGA,height/2,DREAPTA, height/2);//axa ox
-    line(width/2,TOP,width/2,BOTTOM);//axa oy
-
-    setcolor(YELLOW);
-    graficfunctie();
-    //trasare grafic
+    
     if(strstr(s,"sin"))
             for(i=0;i<=strlen(s)-1;i++)
                 {
@@ -148,8 +149,7 @@ int main()
                                     return 1;
                                 }
                         }
-
-
+    
     ///Emilia
     height=GetSystemMetrics(SM_CYSCREEN);
     width=GetSystemMetrics(SM_CXSCREEN);
@@ -285,7 +285,6 @@ int main()
                         coordy>=(height/5-140)&&coordy<=(height/5-115))
                                 exit(1);//daca se apasa exit
                                     //dreptunghi exit
-    */
     getch();
     closegraph();
     return 0;
