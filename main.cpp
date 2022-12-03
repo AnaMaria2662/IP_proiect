@@ -209,14 +209,9 @@ void fereastraContact(int width, int height)
     buton_iesire(width, height);
 }
 
-void clickpeGrafic(int width, int height)
+void clickpeGrafic(int width, int height,int a, int b, int c, int d, int window1)
 {
-    int a,b,c,d;
-    int coordx,coordy;
-    int window1;
-    a=width/2-100; b=height/2-40; c=width/2+98; d=height/2+12;
-    schimbareculoarebuton(a,b,c,d);
-    schimbaresunet();
+    int coordx, coordy;
     clearmouseclick(WM_LBUTTONUP);
     click(coordx,coordy);
 
@@ -265,6 +260,31 @@ else if(coordx>=(width/2-379)&&coordx<=(width/2+376)&&coordy>=(height/2+70)&&coo
     getch();
     closegraph();
 }
+
+void clickpeContact(int width, int height,int a, int b, int c, int d, int window1)
+{
+    int coordx, coordy;
+    clearmouseclick(WM_LBUTTONUP);
+    click(coordx,coordy);
+    if(coordx>=width/10+10&&coordx<=width/10+90&&coordy>=height/5-145&&coordy<=height/5-114)//back
+        {
+            a=width/10+10; b=height/5-145; c=width/10+90; d=height/5-114;
+            schimbareculoarebuton(a,b,c,d);
+            schimbaresunet();
+            closegraph(window1);
+            setcurrentwindow(window1);
+        }
+else if(coordx>=width/16-31&&coordx<=width/10&&coordy>=height/5-145&&coordy<=height/5-114)//exit
+        {
+            a=width/16-31; b=height/5-145; c=width/10; d=height/5-114;
+            schimbareculoarebuton(a,b,c,d);
+            schimbaresunet();
+            exit(1);
+        }
+        getch();
+        closegraph();
+}
+
 int main()
 {
     int height, width;
@@ -324,11 +344,12 @@ int main()
 */
     fullscreen(width, height);
     fereastraprincipala(width, height);
-    while(true)
-    {
+
     click(coordx,coordy);
     if(coordx>=width/16-31&&coordx<=width/10&&coordy>=height/5-145&&coordy<=height/5-114)//click pe exit
         {
+            clearmouseclick(WM_LBUTTONUP);
+            click(coordx,coordy);
             a=width/16-31; b=height/5-145; c=width/10; d=height/5-114;
             schimbareculoarebuton(a,b,c,d);
             rectangle(a,b,c,d);
@@ -340,9 +361,10 @@ int main()
                 a=width/2-100; b=height/2-40; c=width/2+98; d=height/2+12;
                 schimbareculoarebuton(a,b,c,d);
                 schimbaresunet();
+                clearmouseclick(WM_LBUTTONUP);
                 fereastraGrafic(width, height);
                 clearmouseclick(WM_LBUTTONUP);
-                clickpeGrafic(width,height);
+                clickpeGrafic(width,height,a,b,c,d,window1);
             }
         ///Ana-Maria
     else if(coordx>=(width/2-119)&&coordx<=(width/2+117)&&
@@ -354,38 +376,16 @@ int main()
                 schimbareculoarebuton(a,b,c,d);
                 schimbaresunet();
                 fereastraContact(width, height);
-                clearmouseclick(WM_LBUTTONUP);
-                click(coordx,coordy);
-
-                if(coordx>=width/10+10&&coordx<=width/10+90&&
-                   coordy>=height/5-145&&coordy<=height/5-114)//back
-                    {
-                        a=width/10+10; b=height/5-145; c=width/10+90; d=height/5-114;
-                        schimbareculoarebuton(a,b,c,d);
-                        schimbaresunet();
-                        closegraph(window1);
-                        setcurrentwindow(window1);
-                    }
-                else if(coordx>=width/16-31&&coordx<=width/10&&
-                        coordy>=height/5-145&&coordy<=height/5-114)//exit
-                        {
-                            a=width/16-31; b=height/5-145; c=width/10; d=height/5-114;
-                            schimbareculoarebuton(a,b,c,d);
-                            schimbaresunet();
-                            exit(1);
-                }
-                getch();
-                closegraph();
+                clickpeContact(width,height,a,b,c,d,window1);
             }
                 ///Ana-Maria
-                else if(coordx>=(width-80)&&coordx<=(width-30)&&
-                        coordy>=(height/5-145)&&coordy<=(height/5-115))//steag-daca se apasa setarea de limba
-                        {
-                            schimbaresunet();
-                            readimagefile("engleza.jpg",width-80,(height/5-145),width-30,(height/5-115));//se schimba imaginea->engleza
-                        }
+    else if(coordx>=(width-80)&&coordx<=(width-30)&&
+                    coordy>=(height/5-145)&&coordy<=(height/5-115))//steag-daca se apasa setarea de limba
+            {
+                schimbaresunet();
+                readimagefile("engleza.jpg",width-80,(height/5-145),width-30,(height/5-115));//se schimba imaginea->engleza
+            }
 
-    }
     getch();
     closegraph();
     return 0;
