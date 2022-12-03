@@ -221,6 +221,7 @@ void clickpeGrafic(int width, int height,int a, int b, int c, int d, int window1
             schimbareculoarebuton(a,b,c,d);
             schimbaresunet();
             closegraph(window1);
+            fereastraprincipala(width, height);
         }
 else if(coordx>=width/16-31&&coordx<=width/10&&coordy>=height/5-145&&coordy<=height/5-114)//exit
         {
@@ -272,7 +273,7 @@ void clickpeContact(int width, int height,int a, int b, int c, int d, int window
             schimbareculoarebuton(a,b,c,d);
             schimbaresunet();
             closegraph(window1);
-            setcurrentwindow(window1);
+            fereastraprincipala(width, height);
         }
 else if(coordx>=width/16-31&&coordx<=width/10&&coordy>=height/5-145&&coordy<=height/5-114)//exit
         {
@@ -344,7 +345,6 @@ int main()
 */
     fullscreen(width, height);
     fereastraprincipala(width, height);
-
     click(coordx,coordy);
     if(coordx>=width/16-31&&coordx<=width/10&&coordy>=height/5-145&&coordy<=height/5-114)//click pe exit
         {
