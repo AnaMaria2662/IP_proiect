@@ -54,6 +54,7 @@ void clickpeGrafic(int width, int height,int a, int b, int c, int d);
 void clickpeContact(int width, int height,int a, int b, int c, int d);
 void clickpefereastrapr();
 int prioritati(char a[]);
+void transformarefunctie(char *functie, Coada infixata);
 void transformaredininfixinpostifx();
 
 ///Emilia
@@ -94,7 +95,7 @@ void eliminare(Coada C)
 
 void inserare(Coada C, element)
 {
-    
+
 }
 
 ///Ana-Maria
