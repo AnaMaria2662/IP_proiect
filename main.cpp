@@ -647,9 +647,9 @@ void transformaredininfixinpostifx(Stiva postfixata)
 
 int prioritatecaracter(char a[])
 {
-    if(strchr(a,'(')||strchr(a,')'))return 5;
-    if(strchr("sclt",a[0]))return 4;
-    if(strchr(a,'^')return 3;
-    if(strchr(a,'*')||strchr(a,'/'))return 2;
     if(strchr(a,'+')||strchr(a,'-'))return 1;
+        else if(strchr(a,'*')||strchr(a,'/'))return 2;
+                else if(strchr(a,'^')return 3;
+                        else if(strchr("sclt",a[0]))return 4;
+                                else if(strchr(a,'(')||strchr(a,')'))return 5;
 }
