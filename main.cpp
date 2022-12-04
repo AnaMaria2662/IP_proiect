@@ -1,7 +1,7 @@
 /*
 Plan:
+-initializare cozi si stive cu 0
 -limba
--goto
 -click
 -buton de sunet
 -inchis deschis sunet
@@ -25,10 +25,151 @@ Evaluator:
 #include<winbgim.h>
 #include<cstring>
 #include<math.h>
+#define NMAX 200
 double A,B;
 double MIN,MAX;
 int STANGA=250, DREAPTA=1100, TOP=150, BOTTOM=600;
+
 using namespace std;
+
+///Ana-Maria
+void click(int &coordxclick, int &coordyclick );
+double f(double x);
+void aflareminsimax();
+void graficfunctie();
+void desenarefunctie();
+
+///Emilia
+void buton_iesire(int width, int height);
+void buton_inapoi(int width, int height);
+
+///Ana-Maria
+void fereastraprincipala(int width, int height);
+void fullscreen(int &width, int &height);
+void schimbaresunet();
+void schimbareculoarebuton(int a, int b, int c, int d);
+void fereastraGrafic(int width, int height);
+void fereastraContact(int width, int height);
+void clickpeGrafic(int width, int height,int a, int b, int c, int d);
+void clickpeContact(int width, int height,int a, int b, int c, int d);
+void clickpefereastrapr();
+int prioritati(char a[]);
+void transformaredininfixinpostifx();
+
+///Emilia
+void esteVidaS(Stiva St)
+{
+
+}
+
+void esteVidaC(Coada C)
+{
+
+}
+
+void StivaVida(Stiva St)
+{
+
+}
+
+void push(Stiva St, element)
+{
+
+}
+
+void pop(Stiva St)
+{
+
+}
+
+void top(Stiva St)
+{
+
+}
+
+void eliminare(Coada C)
+{
+
+}
+
+void inserare(Coada C, element)
+{
+    
+}
+
+///Ana-Maria
+struct nod{
+    int valoare;
+    nod* succ;
+};
+
+struct Stiva{
+    nod* prim;
+};
+
+struct Coada{
+    nod* prim;
+    nod* ultim;
+};
+
+int main()
+{
+    int height, width;
+    int coordx, coordy;
+    int i,a,b,c,d;
+    char s[256];
+    Coada infixata;
+    Stiva postfixata;
+    Stiva S;
+    /*
+    if(strstr(s,"sin"))
+            for(i=0;i<=strlen(s)-1;i++)
+                {
+                    return 1;
+                }
+        else if(strstr(s,"cos"))
+        {
+            for(i=0;i<=strlen(s)-1;i++)
+                {
+                    return 1;
+                }
+        }
+            else if(strstr(s,"tg"))
+            {
+                for(i=0;i<=strlen(s)-1;i++)
+                    {
+                        return 1;
+                    }
+            }
+                else if(strstr(s,"ctg"))
+                {
+                    for(i=0;i<=strlen(s)-1;i++)
+                        {
+                            return 1;
+                        }
+                }
+                    else if(strstr(s,"log"))
+                    {
+                        for(i=0;i<=strlen(s)-1;i++)
+                            {
+                                return 1;
+                            }
+                    }
+                        else if(strstr(s,"rad"))
+                        {
+                            for(i=0;i<=strlen(s)-1;i++)
+                                {
+                                    return 1;
+                                }
+                        }
+*/
+    fullscreen(width, height);
+    fereastraprincipala(width, height);
+    clickpefereastrapr();
+    getch();
+    closegraph();
+    return 0;
+}
 
 void click(int &coordxclick, int &coordyclick )
 {//functie pentru click
@@ -118,8 +259,8 @@ void buton_inapoi(int width, int height)
 void fereastraprincipala(int width, int height)
 {//fereastra 1
     ///Emilia
-    int window1=initwindow(width,height,"Fereastra principala",-4,-4);
-    setcurrentwindow(window1);
+    initwindow(width,height,"Fereastra principala",-4,-4);
+
     ///Ana-Maria
     PlaySound("sound2.wav",NULL,SND_ASYNC);//sunet de fundal
     readimagefile("image1_1.jpg",0,0,width,height);//imagine de fundal
@@ -137,6 +278,8 @@ void fereastraprincipala(int width, int height)
     settextstyle(8, HORIZ_DIR, 6);
     outtextxy(width/2,height/2+150,"Contact");
     rectangle(width/2-119,height/2+110,width/2+117,height/2+165);//setari a treia linie de text
+
+    readimagefile("sunetdeschis1.jpeg",width/16-31,height/5-100,width/16,height/5-70);//sunet
 
     ///Emilia
     buton_iesire(width, height);
@@ -171,17 +314,28 @@ void fereastraGrafic(int width, int height)
     settextstyle(8, HORIZ_DIR, 4 );
     settextjustify(CENTER_TEXT,CENTER_TEXT);
     outtextxy(width/2+10,height/4-40,"Introduceti intervalul  aici:");
+    setfillstyle(0,BLACK);
+    bar(width/2-320,height/4-10,width/4+655,height/4+50);//text 1
+    setcolor(WHITE);
     rectangle(width/2-320,height/4-10,width/4+655,height/4+50);//text 1
 
     settextstyle(8, HORIZ_DIR, 4 );
     settextjustify(CENTER_TEXT,CENTER_TEXT);
     outtextxy(width/2,height/3+40,"Introduceti functia aici:");
+    setfillstyle(0,BLACK);
+    bar(width/2-320,height/3+70,width/4+655,height/3+130);//text 2
+    setcolor(WHITE);
     rectangle(width/2-320,height/3+70,width/4+655,height/3+130);//text 2
 
     settextstyle(8, HORIZ_DIR, 4);
     settextjustify(CENTER_TEXT,CENTER_TEXT);
     outtextxy(width/2,height/2+35,"Evaluator functie");
+    setfillstyle(0,BLACK);
+    bar(width/2-379,height/2+70,width/2+376,height/2+250);//text 3
+    setcolor(WHITE);
     rectangle(width/2-379,height/2+70,width/2+376,height/2+250);//text 3
+
+    readimagefile("sunetdeschis1.jpeg",width/16-31,height/5-100,width/16,height/5-70);//sunet
 
     setcolor(WHITE);
     buton_inapoi(width, height);
@@ -206,13 +360,12 @@ void fereastraContact(int width, int height)
     settextstyle(8, HORIZ_DIR, 4);
     outtextxy(width/2-160,height/2+80,"Galatanu Emilia");//text 4
 
+    readimagefile("sunetdeschis1.jpeg",width/16-31,height/5-100,width/16,height/5-70);//sunet
+
     setcolor(WHITE);
     buton_inapoi(width, height);
     buton_iesire(width, height);
 }
-
-void clickpeGrafic(int width, int height,int a, int b, int c, int d);
-void clickpeContact(int width, int height,int a, int b, int c, int d);
 
 void clickpefereastrapr()
 {
@@ -259,13 +412,18 @@ void clickpefereastrapr()
                 schimbaresunet();
                 readimagefile("engleza.jpg",width-80,(height/5-145),width-30,(height/5-115));//se schimba imaginea->engleza
             }
-
+    else if(coordx>=(width/16-31)&&coordx<=(width/16)&&
+                    coordy>=(height/5-100)&&coordy<=(height/5-70))
+            {
+                readimagefile("sunetinchis1.jpeg",width/16-31,height/5-100,width/16,height/5-70);
+                PlaySound(NULL,0,0);
+            }
 }
 
 void clickpeGrafic(int width, int height,int a, int b, int c, int d)
 {
     int coordx, coordy;
-    char car;
+    char car, sir[2];
     int x;
     clearmouseclick(WM_LBUTTONUP);
     click(coordx,coordy);
@@ -292,17 +450,26 @@ else if(coordx>=(width/2-320)&&coordx<=(width/4+655)&&coordy>=(height/4-10)&&coo
             a=width/2-320; b=height/4-10; c=width/4+655; d=height/4+50;
             schimbareculoarebuton(a,b,c,d);
             schimbaresunet();
-
             x=a+30;
             car = getch();
+            sir[0]=car;
+            sir[1]=NULL;
         while (car!=13)
             {
-            settextstyle(8, HORIZ_DIR, 4 );
-            outtextxy(x,b+30,&car);
-            x+=strlen(&car);
-            car = getch();
+            if(car!=8)
+                {
+                settextstyle(8, HORIZ_DIR, 4 );
+                outtextxy(x,b+30,&car);
+                x+=textwidth(sir);
+                car = getch();
+                }
+            else{
+                settextstyle(8, HORIZ_DIR, 4 );
+                outtextxy(x,b+30,&car);
+                x-=textwidth(sir);
+                car = getch();
+                }
             }
-
         }
 else if(coordx>=(width/2-320)&&coordx<=(width/4+655)&&coordy>=(height/3+70)&&coordy<=(height/3+130))
         {
@@ -311,7 +478,26 @@ else if(coordx>=(width/2-320)&&coordx<=(width/4+655)&&coordy>=(height/3+70)&&coo
             a=width/2-320; b=height/3+70; c=width/4+655; d=height/3+130;
             schimbareculoarebuton(a,b,c,d);
             schimbaresunet();
-            //trebuie continuat cu o casuta de text
+            x=a+30;
+            car = getch();
+            sir[0]=car;
+            sir[1]=NULL;
+        while (car!=13)
+            {
+            if(car!=8)
+                {
+                settextstyle(8, HORIZ_DIR, 4 );
+                outtextxy(x,b+30,&car);
+                x+=textwidth(sir);
+                car = getch();
+                }
+            else{
+                settextstyle(8, HORIZ_DIR, 4 );
+                outtextxy(x,b+30,&car);
+                x-=textwidth(sir);
+                car = getch();
+                }
+            }
         }
 else if(coordx>=(width/2-379)&&coordx<=(width/2+376)&&coordy>=(height/2+70)&&coordy<=(height/2+250))
         {
@@ -320,11 +506,34 @@ else if(coordx>=(width/2-379)&&coordx<=(width/2+376)&&coordy>=(height/2+70)&&coo
             a=width/2-379; b=height/2+70; c=width/2+376; d=height/2+250;
             schimbareculoarebuton(a,b,c,d);
             schimbaresunet();
-            //trebuie continuat cu o casuta de text
-        }
+            x=a+30;
+            car = getch();
+            sir[0]=car;
+            sir[1]=NULL;
+        while (car!=13)
+            {
+            if(car!=8)
+                {
+                settextstyle(8, HORIZ_DIR, 4 );
+                outtextxy(x,b+30,&car);
+                x+=textwidth(sir);
+                car = getch();
+                }
+            else{
+                settextstyle(8, HORIZ_DIR, 4 );
+                outtextxy(x,b+30,&car);
+                x-=textwidth(sir);
+                car = getch();
+                }
+            }
 
-    getch();
-    closegraph();
+    }
+    else if(coordx>=(width/16-31)&&coordx<=(width/16)&&
+                    coordy>=(height/5-100)&&coordy<=(height/5-70))
+            {
+                readimagefile("sunetinchis1.jpeg",width/16-31,height/5-100,width/16,height/5-70);
+                PlaySound(NULL,0,0);
+            }
 }
 
 void clickpeContact(int width, int height,int a, int b, int c, int d)
@@ -348,72 +557,98 @@ else if(coordx>=width/16-31&&coordx<=width/10&&coordy>=height/5-145&&coordy<=hei
             schimbaresunet();
             exit(1);
         }
-}
-
-
-
-int main()
-{
-    int height, width;
-    int coordx, coordy;
-    int i,a,b,c,d;
-    int window1;
-    char s[256];
-/*
-    cout<<"Introduce valorile intervalului in care doresti sa observi reprezentarea graficului:"<<endl;
-    cout<<endl;
-    cout<<"Capatul din stanga al intervalului este A, cu valoarea: ";
-    cin>>A;
-    cout<<endl;
-    cout<<"Capatul din dreapta al intervalului este B, cu valoarea: ";
-    cin>>B;
-
-    if(strstr(s,"sin"))
-            for(i=0;i<=strlen(s)-1;i++)
-                {
-                    return 1;
-                }
-        else if(strstr(s,"cos"))
-        {
-            for(i=0;i<=strlen(s)-1;i++)
-                {
-                    return 1;
-                }
-        }
-            else if(strstr(s,"tg"))
+else if(coordx>=(width/16-31)&&coordx<=(width/16)&&
+                    coordy>=(height/5-100)&&coordy<=(height/5-70))
             {
-                for(i=0;i<=strlen(s)-1;i++)
-                    {
-                        return 1;
-                    }
+                readimagefile("sunetinchis1.jpeg",width/16-31,height/5-100,width/16,height/5-70);
+                PlaySound(NULL,0,0);
             }
-                else if(strstr(s,"ctg"))
-                {
-                    for(i=0;i<=strlen(s)-1;i++)
-                        {
-                            return 1;
-                        }
-                }
-                    else if(strstr(s,"log"))
-                    {
-                        for(i=0;i<=strlen(s)-1;i++)
-                            {
-                                return 1;
-                            }
-                    }
-                        else if(strstr(s,"rad"))
-                        {
-                            for(i=0;i<=strlen(s)-1;i++)
-                                {
-                                    return 1;
-                                }
-                        }
-*/
-    fullscreen(width, height);
-    fereastraprincipala(width, height);
-    clickpefereastrapr();
-    getch();
-    closegraph();
-    return 0;
 }
 
+void transformarefunctie(char *functie, Coada infixata)
+{
+    char fposibile[][20]={"sin","cos","ln","tg","ctg","rad"};
+    char matrice[NMAX][NMAX];
+    int i,j,nr=0,nr2;
+    int ok=0;
+    for(i=0;i<=strlen(functie)-1;i++)
+    {
+        matrice[nr][0]=0;
+        nr2=0;
+        if(isdigit(functie[i])!=0)
+        {
+            while(isdigit(functie[i]!=0))
+            {
+                matrice[nr][nr2]=functie[i];
+                i++;
+                nr2++;
+            }
+            matrice[nr][nr2]=0;
+            i--;
+        }
+        else if(strchr("+-*/^xe()",functie[i]))
+                {
+                    matrice[nr][nr2]=functie[i];
+                    nr2++;
+                    matrice[nr][nr2]=0;
+                }
+        else for(j=0;j<6;j++)
+            if(ok==0)
+                if(strstr(functie+1,fposibile[j])==functie+i)
+                    {
+                        strcpy(matrice[nr],fposibile[j]);
+                        i=i+strlen(fposibile[j])-1;
+                        ok=1;
+                    }
+        inserare(infixata,matrice[nr]);
+        nr++;
+    }
+}
+
+void transformaredininfixinpostifx(Stiva postfixata)
+{
+    int i,nr=0;
+    char sirdetransfer[NMAX][NMAX];
+    char operatori[]="+-*/^x()sclt";
+    bool ok;
+    while(esteVida(infixata)==0)
+    {
+        ok=0;
+        strcpy(sirdetransfer[nr],infixata.prim->valoare);
+        eliminare(infixata);
+        for(i=0;ok!=0&&operatori[i];i++)
+            if(strchr(sirdetransfer[nr],operatori[i]))ok=1;
+        if(ok==0)push(postfixata,sirdetransfer[nr]);
+        if(ok!=0)
+            {
+                if(strchr(sirdetransfer[nr],')'))
+                {
+                    while(strchr(top(S),'('))
+                    {
+                        push(postfixata,top(S));
+                        pop(S);
+                    }
+                    pop(S);
+                }
+            else {
+                     while(esteVida(S)==0&&strchr(top(S)'(')&&
+                                prioritati(top(S))>=prioritate(sirdetransfer[nr]))
+                        {
+                            push(postfixata,top(S));
+                            pop(S);
+                        }
+                    push(S,sirdetransfer[nr]);
+                  }
+            }
+        nr++;
+    }
+}
+
+int prioritati(char a[])
+{
+    if(strchr(a,'(')||strchr(a,')'))return 5;
+    if(strchr("sclt",a[0]))return 4;
+    if(strchr(a,'^')return 3;
+    if(strchr(a,'*')||strchr(a,'/'))return 2;
+    if(strchr(a,'+')||strchr(a,'-'))return 1;
+}
