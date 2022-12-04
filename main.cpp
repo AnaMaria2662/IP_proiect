@@ -265,6 +265,8 @@ void clickpefereastrapr()
 void clickpeGrafic(int width, int height,int a, int b, int c, int d)
 {
     int coordx, coordy;
+    char car;
+    int x;
     clearmouseclick(WM_LBUTTONUP);
     click(coordx,coordy);
     if(coordx>=width/10+10&&coordx<=width/10+90&&coordy>=height/5-145&&coordy<=height/5-114)//back
@@ -290,7 +292,17 @@ else if(coordx>=(width/2-320)&&coordx<=(width/4+655)&&coordy>=(height/4-10)&&coo
             a=width/2-320; b=height/4-10; c=width/4+655; d=height/4+50;
             schimbareculoarebuton(a,b,c,d);
             schimbaresunet();
-            //trebuie continuat cu o casuta de text
+
+            x=a+30;
+            car = getch();
+        while (car!=13)
+            {
+            settextstyle(8, HORIZ_DIR, 4 );
+            outtextxy(x,b+30,&car);
+            x+=strlen(&car);
+            car = getch();
+            }
+
         }
 else if(coordx>=(width/2-320)&&coordx<=(width/4+655)&&coordy>=(height/3+70)&&coordy<=(height/3+130))
         {
@@ -404,3 +416,4 @@ int main()
     closegraph();
     return 0;
 }
+
