@@ -53,7 +53,7 @@ void fereastraContact(int width, int height);
 void clickpeGrafic(int width, int height,int a, int b, int c, int d);
 void clickpeContact(int width, int height,int a, int b, int c, int d);
 void clickpefereastrapr();
-int prioritati(char a[]);
+int prioritatecaracter(char a[]);
 void transformarefunctie(char *functie, Coada infixata);
 void transformaredininfixinpostifx();
 
@@ -633,7 +633,7 @@ void transformaredininfixinpostifx(Stiva postfixata)
                 }
             else {
                      while(esteVida(S)==0&&strchr(top(S)'(')&&
-                                prioritati(top(S))>=prioritate(sirdetransfer[nr]))
+                                prioritatecaracter(top(S))>=prioritatecaracter(sirdetransfer[nr]))
                         {
                             push(postfixata,top(S));
                             pop(S);
@@ -645,7 +645,7 @@ void transformaredininfixinpostifx(Stiva postfixata)
     }
 }
 
-int prioritati(char a[])
+int prioritatecaracter(char a[])
 {
     if(strchr(a,'(')||strchr(a,')'))return 5;
     if(strchr("sclt",a[0]))return 4;
