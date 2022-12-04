@@ -58,12 +58,12 @@ void transformarefunctie(char *functie, Coada infixata);
 void transformaredininfixinpostifx();
 
 ///Emilia
-void esteVidaS(Stiva St)
+void esteVidaS()//stiva
 {
 
 }
 
-void esteVidaC(Coada C)
+void esteVidaC()//coada
 {
 
 }
@@ -120,8 +120,11 @@ int main()
     int i,a,b,c,d;
     char s[256];
     Coada infixata;
+    infixata=esteVidaC();
     Stiva postfixata;
+    postfixata=esteVidaS();
     Stiva S;
+    S=esteVidaS();
     /*
     if(strstr(s,"sin"))
             for(i=0;i<=strlen(s)-1;i++)
