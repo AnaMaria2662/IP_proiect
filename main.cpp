@@ -1,9 +1,8 @@
 /*
 Plan:
--initializare cozi si stive cu 0
 -limba
 -click
--buton de sunet
+-sunet
 -inchis deschis sunet
 -poate integrala, zoom, stanga dreapta
 Grafic:
@@ -44,68 +43,39 @@ void buton_iesire(int width, int height);
 void buton_inapoi(int width, int height);
 
 ///Ana-Maria
-void fereastraprincipala(int width, int height);
+void fereastraalegeri(int width, int height);
+void fereastraprincipala(int width, int height,int ok);
 void fullscreen(int &width, int &height);
-void schimbaresunet();
+void schimbaresunet(int ok);
 void schimbareculoarebuton(int a, int b, int c, int d);
-void fereastraGrafic(int width, int height);
-void fereastraContact(int width, int height);
+void fereastraGrafic(int width, int height,int ok);
+void fereastraContact(int width, int height,int ok);
 void clickpeGrafic(int width, int height,int a, int b, int c, int d);
 void clickpeContact(int width, int height,int a, int b, int c, int d);
 void clickpefereastrapr();
+void clickpefereastraalegeri(int &ok);
 int prioritatecaracter(char a[]);
 void transformarefunctie(char *functie, Coada infixata);
 void transformaredininfixinpostifx();
 
-///Emilia
-void esteVidaS()//stiva
-{
+///Emilia+ Ana-Maria
+char top(Stiva S);
+bool esteVidaS(Stiva S);
+bool esteVidaC(Coada C);
+void StivaVida(Stiva S);
+void push(Stiva &S, char element);
+void pop(Stiva &S);
+void inserare(Coada C, char element);
+void eliminare(Coada C);
 
-}
-
-void esteVidaC()//coada
-{
-
-}
-
-void StivaVida(Stiva St)
-{
-
-}
-
-void push(Stiva St, element)
-{
-
-}
-
-void pop(Stiva St)
-{
-
-}
-
-void top(Stiva St)
-{
-
-}
-
-void eliminare(Coada C)
-{
-
-}
-
-void inserare(Coada C, element)
-{
-
-}
-
-///Ana-Maria
+//Ana-Maria
 struct nod{
-    int valoare;
+    char valoare;
     nod* succ;
 };
 
 struct Stiva{
-    nod* prim;
+    nod* varf;
 };
 
 struct Coada{
@@ -119,60 +89,215 @@ int main()
     int coordx, coordy;
     int i,a,b,c,d;
     char s[256];
+    int ok=1;
+
     Coada infixata;
-    infixata=esteVidaC();
+    infixata=new Coada;
+    infixata=esteVidaC(infixata);
     Stiva postfixata;
-    postfixata=esteVidaS();
+    postfixata=new Stiva;
+    postfixata=esteVidaS(postfixata);
     Stiva S;
-    S=esteVidaS();
-    /*
-    if(strstr(s,"sin"))
-            for(i=0;i<=strlen(s)-1;i++)
-                {
-                    return 1;
-                }
-        else if(strstr(s,"cos"))
-        {
-            for(i=0;i<=strlen(s)-1;i++)
-                {
-                    return 1;
-                }
-        }
-            else if(strstr(s,"tg"))
-            {
-                for(i=0;i<=strlen(s)-1;i++)
-                    {
-                        return 1;
-                    }
-            }
-                else if(strstr(s,"ctg"))
-                {
-                    for(i=0;i<=strlen(s)-1;i++)
-                        {
-                            return 1;
-                        }
-                }
-                    else if(strstr(s,"log"))
-                    {
-                        for(i=0;i<=strlen(s)-1;i++)
-                            {
-                                return 1;
-                            }
-                    }
-                        else if(strstr(s,"rad"))
-                        {
-                            for(i=0;i<=strlen(s)-1;i++)
-                                {
-                                    return 1;
-                                }
-                        }
-*/
+    S=new Stiva;
+    S=esteVidaS(S);
+
     fullscreen(width, height);
-    fereastraprincipala(width, height);
-    clickpefereastrapr();
+    fereastraalegeri(width,height);
+    clickpefereastraalegeri(ok);
     getch();
     closegraph();
     return 0;
+}
+bool esteVidaS(Stiva S)
+{
+    if(top(S)==NULL)
+        return 1;
+    else
+        return 0;
+}
+
+bool esteVidaC(Coada C)
+{
+    if(C.prim==NULL && C.ultim==NULL)
+        return 1;
+    else
+        return 0;
+}
+
+void StivaVida(Stiva S)
+{
+    S.varf=NULL;
+}
+
+void push(Stiva &S, char element)
+{
+    nod *q;
+    q=new nod;
+    q->valoare=element;
+    q->succ=S;
+    S=q;
+}
+
+void pop(Stiva &S)
+{
+    nod *q;
+    q=new nod;
+    q=S;
+    S=S->succ;
+    delete q;
+}
+
+char top(Stiva S)
+{
+    char element;
+    if(S.varf!=NULL)
+        element=S.varf->valoare;
+    return element;
+}
+
+void eliminare(Coada C)
+{
+    nod *q;
+    q=new nod;
+    q=C.prim;
+    C.prim=C.prim->succ;
+    delete q;
+    if(esteVidaC(C))
+        C.ultim=NULL;
+}
+
+void inserare(Coada C, char element)
+{
+    nod *q;
+    q=new nod;
+    q->valoare=element;
+    q->succ=NULL;
+    if(C.ultim==NULL)
+        {
+            C.ultim=q;
+            C.prim=q;
+        }
+    else
+        {
+            C.ultim->succ=q;
+            C.ultim=q;
+        }
+}
+
+void fereastraalegeri(int width, int height)
+{
+    initwindow(width,height,"Fereastra principala",-4,-4);
+    ///Ana-Maria
+    readimagefile("image1_1.jpg",0,0,width,height);//imagine de fundal
+
+    setcolor(WHITE);
+    settextstyle(8, HORIZ_DIR, 8 );
+    settextjustify(CENTER_TEXT,CENTER_TEXT);
+    outtextxy(width/2,height/4," Alegeti:");
+
+    buton_iesire(width, height);
+
+    setfillstyle(0,BLACK);
+    bar(width/10+200,height/3,width/10+400,height/3+200);//fundal
+    readimagefile("image1_1.jpg",width/10+250,height/3+10,width/10+350,height/3+80);//imagine de fundal
+    readimagefile("Backgrf.jpg",width/10+250,height/3+110,width/10+350,height/3+180);//imagine de fundal
+    setcolor(WHITE);
+    settextstyle(8, HORIZ_DIR, 2 );
+    settextjustify(CENTER_TEXT,CENTER_TEXT);
+    outtextxy(width/10+300,height/3+230,"Poza fundal");
+
+    bar(width/10+640,height/3,width/10+840,height/3+200);//limba
+    setcolor(WHITE);
+    settextstyle(8, HORIZ_DIR, 3 );
+    settextjustify(CENTER_TEXT,CENTER_TEXT);
+    outtextxy(width/10+740,height/3+60,"Romana");
+
+    setcolor(WHITE);
+    settextstyle(8, HORIZ_DIR, 3 );
+    settextjustify(CENTER_TEXT,CENTER_TEXT);
+    outtextxy(width/10+740,height/3+140,"English");
+
+    setcolor(WHITE);
+    settextstyle(8, HORIZ_DIR, 3 );
+    settextjustify(CENTER_TEXT,CENTER_TEXT);
+    outtextxy(width/10+745,height/3+230,"Limba");
+
+    bar(width/10+420,height/3,width/10+620,height/3+200);//sunet
+    setcolor(WHITE);
+    settextstyle(8, HORIZ_DIR, 2 );
+    settextjustify(CENTER_TEXT,CENTER_TEXT);
+    outtextxy(width/10+515,height/3+60," Sunet inchis");
+    rectangle(width/10+445,height/3+40,width/10+600,height/3+70);
+
+    setcolor(WHITE);
+    settextstyle(8, HORIZ_DIR, 2 );
+    settextjustify(CENTER_TEXT,CENTER_TEXT);
+    outtextxy(width/10+519,height/3+140,"Sunet deschis");
+    rectangle(width/10+440,height/3+120,width/10+600,height/3+150);
+
+    setcolor(WHITE);
+    settextstyle(8, HORIZ_DIR, 3 );
+    settextjustify(CENTER_TEXT,CENTER_TEXT);
+    outtextxy(width/10+510,height/3+230,"Sunet");
+
+    setcolor(WHITE);
+    settextstyle(8, HORIZ_DIR, 4 );
+    settextjustify(CENTER_TEXT,CENTER_TEXT);
+    outtextxy(width/2-30,height/2+250," OK! ");
+    rectangle(width/2-82,height/2+226,width/2+20,height/2+260);
+
+    buton_iesire(width, height);
+}
+
+void clickpefereastraalegeri(int &ok)
+{
+    int coordx, coordy;
+    int a,b,c,d;
+    int height, width;
+    fullscreen(width,height);
+
+    while(true)
+    {
+
+    click(coordx,coordy);
+    if(coordx>=(width/2-82)&&coordx<=(width/2+20)&&coordy>=(height/2+226)&&coordy<=(height/2+260))//click pe ok
+        {
+            a=width/2-82; b=height/2+226; c=width/2+20; d=height/2+260;
+            schimbareculoarebuton(a,b,c,d);
+            rectangle(a,b,c,d);
+            schimbaresunet();
+            closegraph();
+            fereastraprincipala(width,height);
+            clickpefereastrapr();
+        }
+    else if(coordx>=width/16-31&&coordx<=width/10&&coordy>=height/5-145&&coordy<=height/5-114)//click pe exit
+        {
+            a=width/16-31; b=height/5-145; c=width/10; d=height/5-114;
+            schimbareculoarebuton(a,b,c,d);
+            rectangle(a,b,c,d);
+            schimbaresunet();
+            exit(1);
+        }
+    else if(coordx>=(width/10+445)&&coordx<=(width/10+600)&&coordy>=(height/3+40)&&coordy<=(height/3+70))
+        {//sunet inchis
+            a=width/10+445; b=height/3+40; c=width/10+600; d=height/3+70;
+            schimbareculoarebuton(a,b,c,d);
+            rectangle(a,b,c,d);
+            schimbaresunet();
+            PlaySound(NULL,0,0);
+            ok=0;
+        }
+     else if(coordx>=(width/10+440)&&coordx<=(width/10+600)&&coordy>=(height/3+120)&&coordy<=(height/3+150))
+        {//sunet deschis
+            a=width/10+440; b=height/3+120; c=width/10+600; d=height/3+150;
+            schimbareculoarebuton(a,b,c,d);
+            rectangle(a,b,c,d);
+            schimbaresunet();
+            PlaySound("sound2.wav",NULL,SND_ASYNC);//sunet de fundal
+            ok=1;
+        }
+    //de continuat cu toate butoanele
+    }
 }
 
 void click(int &coordxclick, int &coordyclick )
@@ -260,13 +385,16 @@ void buton_inapoi(int width, int height)
     rectangle(width/10+10,height/5-145,width/10+90,height/5-114);
 }
 
-void fereastraprincipala(int width, int height)
+void fereastraprincipala(int width, int height,int ok)
 {//fereastra 1
     ///Emilia
     initwindow(width,height,"Fereastra principala",-4,-4);
 
     ///Ana-Maria
-    PlaySound("sound2.wav",NULL,SND_ASYNC);//sunet de fundal
+    if(ok==1)
+        PlaySound("sound2.wav",NULL,SND_ASYNC);//sunet de fundal
+    else PlaySound(NULL,0,0);
+
     readimagefile("image1_1.jpg",0,0,width,height);//imagine de fundal
     readimagefile("romana.jpg",width-80,height/5-145,width-30,(height/5-115));//steag->romana
 
@@ -286,6 +414,7 @@ void fereastraprincipala(int width, int height)
     readimagefile("sunetdeschis1.jpeg",width/16-31,height/5-100,width/16,height/5-70);//sunet
 
     ///Emilia
+    buton_inapoi(width, height);
     buton_iesire(width, height);
 }
 
@@ -295,11 +424,11 @@ void fullscreen(int &width, int &height)
     width=GetSystemMetrics(SM_CXSCREEN);
 }
 
-void schimbaresunet()
+void schimbaresunet(int ok)
 {//sunet buton->sunet fundal
     PlaySound("sunet_buton.wav",NULL,SND_ASYNC);
     delay(100);
-    PlaySound("sound2.wav",NULL,SND_ASYNC);
+    if(ok==1)PlaySound("sound2.wav",NULL,SND_ASYNC);
 }
 
 void schimbareculoarebuton(int a, int b, int c, int d)
@@ -311,8 +440,13 @@ void schimbareculoarebuton(int a, int b, int c, int d)
     rectangle(a,b,c,d);
 }
 
-void fereastraGrafic(int width, int height)
+void fereastraGrafic(int width, int height,int ok)
 {//fereastra 2
+
+    if(ok==1)
+        PlaySound("sound2.wav",NULL,SND_ASYNC);//sunet de fundal
+    else PlaySound(NULL,0,0);
+
     initwindow(width,height,"Fereastra",-4,-4);
     readimagefile("image1_1.jpg",0,0,width,height);//poza fundal fereastra noua
     settextstyle(8, HORIZ_DIR, 4 );
@@ -339,16 +473,18 @@ void fereastraGrafic(int width, int height)
     setcolor(WHITE);
     rectangle(width/2-379,height/2+70,width/2+376,height/2+250);//text 3
 
-    readimagefile("sunetdeschis1.jpeg",width/16-31,height/5-100,width/16,height/5-70);//sunet
-
     setcolor(WHITE);
     buton_inapoi(width, height);
     buton_iesire(width, height);
 }
 
-void fereastraContact(int width, int height)
+void fereastraContact(int width, int height,int ok)
 {//fereastra 3
     initwindow(width,height,"Fereastra",-4,-4);
+
+    if(ok==1)
+        PlaySound("sound2.wav",NULL,SND_ASYNC);//sunet de fundal
+    else PlaySound(NULL,0,0);
 
     readimagefile("image1_1.jpg",0,0,width,height);//imagine fundal
 
@@ -364,8 +500,6 @@ void fereastraContact(int width, int height)
     settextstyle(8, HORIZ_DIR, 4);
     outtextxy(width/2-160,height/2+80,"Galatanu Emilia");//text 4
 
-    readimagefile("sunetdeschis1.jpeg",width/16-31,height/5-100,width/16,height/5-70);//sunet
-
     setcolor(WHITE);
     buton_inapoi(width, height);
     buton_iesire(width, height);
@@ -377,11 +511,13 @@ void clickpefereastrapr()
     int a,b,c,d;
     int height, width;
     fullscreen(width,height);
+
+    while(true)
+    {
+
     click(coordx,coordy);
     if(coordx>=width/16-31&&coordx<=width/10&&coordy>=height/5-145&&coordy<=height/5-114)//click pe exit
         {
-            clearmouseclick(WM_LBUTTONUP);
-            click(coordx,coordy);
             a=width/16-31; b=height/5-145; c=width/10; d=height/5-114;
             schimbareculoarebuton(a,b,c,d);
             rectangle(a,b,c,d);
@@ -422,6 +558,7 @@ void clickpefereastrapr()
                 readimagefile("sunetinchis1.jpeg",width/16-31,height/5-100,width/16,height/5-70);
                 PlaySound(NULL,0,0);
             }
+    }
 }
 
 void clickpeGrafic(int width, int height,int a, int b, int c, int d)
@@ -429,7 +566,11 @@ void clickpeGrafic(int width, int height,int a, int b, int c, int d)
     int coordx, coordy;
     char car, sir[2];
     int x;
-    clearmouseclick(WM_LBUTTONUP);
+    fullscreen(width,height);
+
+    while(true)
+    {
+
     click(coordx,coordy);
     if(coordx>=width/10+10&&coordx<=width/10+90&&coordy>=height/5-145&&coordy<=height/5-114)//back
         {
@@ -538,12 +679,18 @@ else if(coordx>=(width/2-379)&&coordx<=(width/2+376)&&coordy>=(height/2+70)&&coo
                 readimagefile("sunetinchis1.jpeg",width/16-31,height/5-100,width/16,height/5-70);
                 PlaySound(NULL,0,0);
             }
+    }
 }
 
 void clickpeContact(int width, int height,int a, int b, int c, int d)
 {
     int coordx, coordy;
-    clearmouseclick(WM_LBUTTONUP);
+    int a,b,c,d;
+    fullscreen(width, height);
+
+    while(true)
+    {
+
     click(coordx,coordy);
     if(coordx>=width/10+10&&coordx<=width/10+90&&coordy>=height/5-145&&coordy<=height/5-114)//back
         {
@@ -567,6 +714,7 @@ else if(coordx>=(width/16-31)&&coordx<=(width/16)&&
                 readimagefile("sunetinchis1.jpeg",width/16-31,height/5-100,width/16,height/5-70);
                 PlaySound(NULL,0,0);
             }
+    }
 }
 
 void transformarefunctie(char *functie, Coada infixata)
@@ -590,7 +738,7 @@ void transformarefunctie(char *functie, Coada infixata)
             matrice[nr][nr2]=0;
             i--;
         }
-        else if(strchr("+-*/^xe()",functie[i]))
+        else if(strchr("+-*^xe()",functie[i]))
                 {
                     matrice[nr][nr2]=functie[i];
                     nr2++;
@@ -613,7 +761,7 @@ void transformaredininfixinpostifx(Stiva postfixata)
 {
     int i,nr=0;
     char sirdetransfer[NMAX][NMAX];
-    char operatori[]="+-*/^x()sclt";
+    char operatori[]="+-*^x()sclt";
     bool ok;
     while(esteVida(infixata)==0)
     {
@@ -635,7 +783,7 @@ void transformaredininfixinpostifx(Stiva postfixata)
                     pop(S);
                 }
             else {
-                     while(esteVida(S)==0&&strchr(top(S)'(')&&
+                     while(esteVidaS(S)==0&&strchr(top(S)'(')&&
                                 prioritatecaracter(top(S))>=prioritatecaracter(sirdetransfer[nr]))
                         {
                             push(postfixata,top(S));
