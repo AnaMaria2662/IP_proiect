@@ -2,8 +2,7 @@
 Plan:
 -limba
 -click
--sunet
--inchis deschis sunet
+-sunet dechis in functie de ok
 -poate integrala, zoom, stanga dreapta
 Grafic:
 -asimptota verticala
@@ -50,10 +49,11 @@ void schimbaresunet(int ok);
 void schimbareculoarebuton(int a, int b, int c, int d);
 void fereastraGrafic(int width, int height,int ok);
 void fereastraContact(int width, int height,int ok);
-void clickpeGrafic(int width, int height,int a, int b, int c, int d);
-void clickpeContact(int width, int height,int a, int b, int c, int d);
-void clickpefereastrapr();
+void clickpeGrafic(int width, int height,int ok);
+void clickpeContact(int width, int height,int ok);
+void clickpefereastrapr(int ok);
 void clickpefereastraalegeri(int &ok);
+
 int prioritatecaracter(char a[]);
 void transformarefunctie(char *functie, Coada infixata);
 void transformaredininfixinpostifx();
@@ -108,6 +108,7 @@ int main()
     closegraph();
     return 0;
 }
+
 bool esteVidaS(Stiva S)
 {
     if(top(S)==NULL)
@@ -265,17 +266,17 @@ void clickpefereastraalegeri(int &ok)
             a=width/2-82; b=height/2+226; c=width/2+20; d=height/2+260;
             schimbareculoarebuton(a,b,c,d);
             rectangle(a,b,c,d);
-            schimbaresunet();
+            schimbaresunet(ok);
             closegraph();
-            fereastraprincipala(width,height);
-            clickpefereastrapr();
+            fereastraprincipala(width,height,ok);
+            clickpefereastrapr(ok);
         }
     else if(coordx>=width/16-31&&coordx<=width/10&&coordy>=height/5-145&&coordy<=height/5-114)//click pe exit
         {
             a=width/16-31; b=height/5-145; c=width/10; d=height/5-114;
             schimbareculoarebuton(a,b,c,d);
             rectangle(a,b,c,d);
-            schimbaresunet();
+            schimbaresunet(ok);
             exit(1);
         }
     else if(coordx>=(width/10+445)&&coordx<=(width/10+600)&&coordy>=(height/3+40)&&coordy<=(height/3+70))
@@ -283,7 +284,7 @@ void clickpefereastraalegeri(int &ok)
             a=width/10+445; b=height/3+40; c=width/10+600; d=height/3+70;
             schimbareculoarebuton(a,b,c,d);
             rectangle(a,b,c,d);
-            schimbaresunet();
+            schimbaresunet(ok);
             PlaySound(NULL,0,0);
             ok=0;
         }
@@ -292,7 +293,7 @@ void clickpefereastraalegeri(int &ok)
             a=width/10+440; b=height/3+120; c=width/10+600; d=height/3+150;
             schimbareculoarebuton(a,b,c,d);
             rectangle(a,b,c,d);
-            schimbaresunet();
+            schimbaresunet(ok);
             PlaySound("sound2.wav",NULL,SND_ASYNC);//sunet de fundal
             ok=1;
         }
@@ -505,7 +506,7 @@ void fereastraContact(int width, int height,int ok)
     buton_iesire(width, height);
 }
 
-void clickpefereastrapr()
+void clickpefereastrapr(int ok)
 {
     int coordx, coordy;
     int a,b,c,d;
@@ -521,17 +522,17 @@ void clickpefereastrapr()
             a=width/16-31; b=height/5-145; c=width/10; d=height/5-114;
             schimbareculoarebuton(a,b,c,d);
             rectangle(a,b,c,d);
-            schimbaresunet();
+            schimbaresunet(ok);
             exit(1);
         }
     else if(coordx>=(width/2-100)&&coordx<=(width/2+98)&&coordy>=(height/2-40)&&coordy<=(height/2+12))
             {//daca se face click pe primul buton: "Grafic"
                 a=width/2-100; b=height/2-40; c=width/2+98; d=height/2+12;
                 schimbareculoarebuton(a,b,c,d);
-                schimbaresunet();
+                schimbaresunet(ok);
                 clearmouseclick(WM_LBUTTONUP);
-                fereastraGrafic(width, height);
-                clickpeGrafic(width,height,a,b,c,d);
+                fereastraGrafic(width, height,ok);
+                clickpeGrafic(width,height,ok);
             }
         ///Ana-Maria
     else if(coordx>=(width/2-119)&&coordx<=(width/2+117)&&
@@ -541,15 +542,15 @@ void clickpefereastrapr()
             //se schimba culoare dreptunghiului in galben la click
                 a=width/2-119; b=height/2+110; c=width/2+117; d=height/2+165;
                 schimbareculoarebuton(a,b,c,d);
-                schimbaresunet();
-                fereastraContact(width, height);
-                clickpeContact(width,height,a,b,c,d);
+                schimbaresunet(ok);
+                fereastraContact(width, height,ok);
+                clickpeContact(width,height,ok);
             }
                 ///Ana-Maria
     else if(coordx>=(width-80)&&coordx<=(width-30)&&
                     coordy>=(height/5-145)&&coordy<=(height/5-115))//steag-daca se apasa setarea de limba
             {
-                schimbaresunet();
+                schimbaresunet(ok);
                 readimagefile("engleza.jpg",width-80,(height/5-145),width-30,(height/5-115));//se schimba imaginea->engleza
             }
     else if(coordx>=(width/16-31)&&coordx<=(width/16)&&
@@ -561,9 +562,10 @@ void clickpefereastrapr()
     }
 }
 
-void clickpeGrafic(int width, int height,int a, int b, int c, int d)
+void clickpeGrafic(int width, int height,int ok)
 {
     int coordx, coordy;
+    int a,b,c,d;
     char car, sir[2];
     int x;
     fullscreen(width,height);
@@ -576,16 +578,16 @@ void clickpeGrafic(int width, int height,int a, int b, int c, int d)
         {
             a=width/10+10; b=height/5-145; c=width/10+90; d=height/5-114;
             schimbareculoarebuton(a,b,c,d);
-            schimbaresunet();
+            schimbaresunet(ok);
             closegraph();
-            fereastraprincipala(width, height);
-            clickpefereastrapr();
+            fereastraprincipala(width, height,ok);
+            clickpefereastrapr(ok);
         }
 else if(coordx>=width/16-31&&coordx<=width/10&&coordy>=height/5-145&&coordy<=height/5-114)//exit
         {
             a=width/16-31; b=height/5-145; c=width/10; d=height/5-114;
             schimbareculoarebuton(a,b,c,d);
-            schimbaresunet();
+            schimbaresunet(ok);
             exit(1);
         }
 else if(coordx>=(width/2-320)&&coordx<=(width/4+655)&&coordy>=(height/4-10)&&coordy<=(height/4+50))
@@ -594,7 +596,7 @@ else if(coordx>=(width/2-320)&&coordx<=(width/4+655)&&coordy>=(height/4-10)&&coo
             //se schimba culoare dreptunghiului in galben la click
             a=width/2-320; b=height/4-10; c=width/4+655; d=height/4+50;
             schimbareculoarebuton(a,b,c,d);
-            schimbaresunet();
+            schimbaresunet(ok);
             x=a+30;
             car = getch();
             sir[0]=car;
@@ -622,7 +624,7 @@ else if(coordx>=(width/2-320)&&coordx<=(width/4+655)&&coordy>=(height/3+70)&&coo
             //se schimba culoare dreptunghiului in galben la click
             a=width/2-320; b=height/3+70; c=width/4+655; d=height/3+130;
             schimbareculoarebuton(a,b,c,d);
-            schimbaresunet();
+            schimbaresunet(ok);
             x=a+30;
             car = getch();
             sir[0]=car;
@@ -650,7 +652,7 @@ else if(coordx>=(width/2-379)&&coordx<=(width/2+376)&&coordy>=(height/2+70)&&coo
             //se schimba culoare dreptunghiului in galben la click
             a=width/2-379; b=height/2+70; c=width/2+376; d=height/2+250;
             schimbareculoarebuton(a,b,c,d);
-            schimbaresunet();
+            schimbaresunet(ok);
             x=a+30;
             car = getch();
             sir[0]=car;
@@ -682,12 +684,11 @@ else if(coordx>=(width/2-379)&&coordx<=(width/2+376)&&coordy>=(height/2+70)&&coo
     }
 }
 
-void clickpeContact(int width, int height,int a, int b, int c, int d)
+void clickpeContact(int width, int height,int ok)
 {
     int coordx, coordy;
     int a,b,c,d;
     fullscreen(width, height);
-
     while(true)
     {
 
@@ -696,16 +697,16 @@ void clickpeContact(int width, int height,int a, int b, int c, int d)
         {
             a=width/10+10; b=height/5-145; c=width/10+90; d=height/5-114;
             schimbareculoarebuton(a,b,c,d);
-            schimbaresunet();
+            schimbaresunet(ok);
             closegraph();
-            fereastraprincipala(width, height);
-            clickpefereastrapr();
+            fereastraprincipala(width, height,ok);
+            clickpefereastrapr(ok);
         }
 else if(coordx>=width/16-31&&coordx<=width/10&&coordy>=height/5-145&&coordy<=height/5-114)//exit
         {
             a=width/16-31; b=height/5-145; c=width/10; d=height/5-114;
             schimbareculoarebuton(a,b,c,d);
-            schimbaresunet();
+            schimbaresunet(ok);
             exit(1);
         }
 else if(coordx>=(width/16-31)&&coordx<=(width/16)&&
