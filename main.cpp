@@ -2,7 +2,8 @@
 Plan:
 -limba
 -click
--sunet dechis in functie de ok
+-sunet
+-inchis deschis sunet
 -poate integrala, zoom, stanga dreapta
 Grafic:
 -asimptota verticala
@@ -43,17 +44,17 @@ void buton_inapoi(int width, int height);
 
 ///Ana-Maria
 void fereastraalegeri(int width, int height);
-void fereastraprincipala(int width, int height,int ok);
+void fereastraprincipala(int width, int height,int ok,int poza);
 void fullscreen(int &width, int &height);
 void schimbaresunet(int ok);
 void schimbareculoarebuton(int a, int b, int c, int d);
-void fereastraGrafic(int width, int height,int ok);
-void fereastraContact(int width, int height,int ok);
-void clickpeGrafic(int width, int height,int ok);
-void clickpeContact(int width, int height,int ok);
-void clickpefereastrapr(int ok);
-void clickpefereastraalegeri(int &ok);
-
+void fereastraGrafic(int width, int height,int ok,int poza);
+void fereastraContact(int width, int height,int ok,int poza);
+void clickpeGrafic(int width, int height,int ok,int poza);
+void clickpeContact(int width, int height,int ok,int poza);
+void clickpefereastrapr(int ok, int poza);
+void clickpefereastraalegeri(int &ok, int &poza);
+/*
 int prioritatecaracter(char a[]);
 void transformarefunctie(char *functie, Coada infixata);
 void transformaredininfixinpostifx();
@@ -82,7 +83,7 @@ struct Coada{
     nod* prim;
     nod* ultim;
 };
-
+*/
 int main()
 {
     int height, width;
@@ -90,7 +91,9 @@ int main()
     int i,a,b,c,d;
     char s[256];
     int ok=1;
-
+    int poza=1;
+    cin>>A>>B;
+/*
     Coada infixata;
     infixata=new Coada;
     infixata=esteVidaC(infixata);
@@ -100,15 +103,15 @@ int main()
     Stiva S;
     S=new Stiva;
     S=esteVidaS(S);
-
+*/
     fullscreen(width, height);
     fereastraalegeri(width,height);
-    clickpefereastraalegeri(ok);
+    clickpefereastraalegeri(ok,poza);
     getch();
     closegraph();
     return 0;
 }
-
+/*
 bool esteVidaS(Stiva S)
 {
     if(top(S)==NULL)
@@ -184,7 +187,7 @@ void inserare(Coada C, char element)
             C.ultim=q;
         }
 }
-
+*/
 void fereastraalegeri(int width, int height)
 {
     initwindow(width,height,"Fereastra principala",-4,-4);
@@ -250,7 +253,7 @@ void fereastraalegeri(int width, int height)
     buton_iesire(width, height);
 }
 
-void clickpefereastraalegeri(int &ok)
+void clickpefereastraalegeri(int &ok, int &poza)
 {
     int coordx, coordy;
     int a,b,c,d;
@@ -268,8 +271,8 @@ void clickpefereastraalegeri(int &ok)
             rectangle(a,b,c,d);
             schimbaresunet(ok);
             closegraph();
-            fereastraprincipala(width,height,ok);
-            clickpefereastrapr(ok);
+            fereastraprincipala(width,height,ok,poza);
+            clickpefereastrapr(ok,poza);
         }
     else if(coordx>=width/16-31&&coordx<=width/10&&coordy>=height/5-145&&coordy<=height/5-114)//click pe exit
         {
@@ -297,7 +300,19 @@ void clickpefereastraalegeri(int &ok)
             PlaySound("sound2.wav",NULL,SND_ASYNC);//sunet de fundal
             ok=1;
         }
-    //de continuat cu toate butoanele
+    else if(coordx>=(width/10+250)&&coordx<=(width/10+350)&&coordy>=(height/3+10)&&coordy<=(height/3+80))
+        {
+            a=width/10+250; b=height/3+10; c=width/10+350; d=height/3+80;
+            schimbaresunet(ok);
+            poza=1;
+        }
+    else if(coordx>=(width/10+250)&&coordx<=(width/10+350)&&coordy>=(height/3+110)&&coordy<=(height/3+180))
+        {
+            a=width/10+250; b=height/3+110; c=width/10+350; d=height/3+180;
+            schimbaresunet(ok);
+            poza=0;
+        }
+    //de continuat cu toate butoanele de limba
     }
 }
 
@@ -368,6 +383,21 @@ void desenarefunctie()
 
     setcolor(YELLOW);
     graficfunctie();//graficul efectiv
+
+    setcolor(WHITE);
+    settextstyle(8, HORIZ_DIR, 4 );
+    settextjustify(CENTER_TEXT,CENTER_TEXT);
+    outtextxy(width/2,height/4-50,"Reprezentarea functiei:");
+
+    setcolor(WHITE);
+    settextstyle(8, HORIZ_DIR, 3 );
+    settextjustify(CENTER_TEXT,CENTER_TEXT);
+    outtextxy(width/4+50,height-100,"Integrala in xmin:");
+
+    setcolor(WHITE);
+    settextstyle(8, HORIZ_DIR, 3 );
+    settextjustify(CENTER_TEXT,CENTER_TEXT);
+    outtextxy(width/2+210,height-100,"Integrala in xmax:");
 }
 
 void buton_iesire(int width, int height)
@@ -386,7 +416,7 @@ void buton_inapoi(int width, int height)
     rectangle(width/10+10,height/5-145,width/10+90,height/5-114);
 }
 
-void fereastraprincipala(int width, int height,int ok)
+void fereastraprincipala(int width, int height,int ok, int poza)
 {//fereastra 1
     ///Emilia
     initwindow(width,height,"Fereastra principala",-4,-4);
@@ -396,7 +426,11 @@ void fereastraprincipala(int width, int height,int ok)
         PlaySound("sound2.wav",NULL,SND_ASYNC);//sunet de fundal
     else PlaySound(NULL,0,0);
 
-    readimagefile("image1_1.jpg",0,0,width,height);//imagine de fundal
+    if(poza==1)
+        readimagefile("image1_1.jpg",0,0,width,height);//imagine de fundal
+    else
+        readimagefile("Backgrf.jpg",0,0,width,height);//imagine de fundal
+
     readimagefile("romana.jpg",width-80,height/5-145,width-30,(height/5-115));//steag->romana
 
     setcolor(WHITE);
@@ -441,7 +475,7 @@ void schimbareculoarebuton(int a, int b, int c, int d)
     rectangle(a,b,c,d);
 }
 
-void fereastraGrafic(int width, int height,int ok)
+void fereastraGrafic(int width, int height,int ok,int poza)
 {//fereastra 2
 
     if(ok==1)
@@ -449,7 +483,12 @@ void fereastraGrafic(int width, int height,int ok)
     else PlaySound(NULL,0,0);
 
     initwindow(width,height,"Fereastra",-4,-4);
-    readimagefile("image1_1.jpg",0,0,width,height);//poza fundal fereastra noua
+
+    if(poza==1)
+        readimagefile("image1_1.jpg",0,0,width,height);//imagine de fundal
+    else
+        readimagefile("Backgrf.jpg",0,0,width,height);//imagine de fundal
+
     settextstyle(8, HORIZ_DIR, 4 );
     settextjustify(CENTER_TEXT,CENTER_TEXT);
     outtextxy(width/2+10,height/4-40,"Introduceti intervalul  aici:");
@@ -474,12 +513,18 @@ void fereastraGrafic(int width, int height,int ok)
     setcolor(WHITE);
     rectangle(width/2-379,height/2+70,width/2+376,height/2+250);//text 3
 
+    settextstyle(8, HORIZ_DIR, 3);
+    settextjustify(CENTER_TEXT,CENTER_TEXT);
+    outtextxy(width/2+500,height/2," OK! ");//buton spre functie
+    setcolor(WHITE);
+    rectangle(width/2+460,height/2-18,width/2+540,height/2+7);
+
     setcolor(WHITE);
     buton_inapoi(width, height);
     buton_iesire(width, height);
 }
 
-void fereastraContact(int width, int height,int ok)
+void fereastraContact(int width, int height,int ok,int poza)
 {//fereastra 3
     initwindow(width,height,"Fereastra",-4,-4);
 
@@ -487,7 +532,10 @@ void fereastraContact(int width, int height,int ok)
         PlaySound("sound2.wav",NULL,SND_ASYNC);//sunet de fundal
     else PlaySound(NULL,0,0);
 
-    readimagefile("image1_1.jpg",0,0,width,height);//imagine fundal
+    if(poza==1)
+        readimagefile("image1_1.jpg",0,0,width,height);//imagine de fundal
+    else
+        readimagefile("Backgrf.jpg",0,0,width,height);//imagine de fundal
 
     settextstyle(8, HORIZ_DIR, 5);
     outtextxy(width/2-350,height/2-200,"Proiectul a fost realizat de:");//text 1
@@ -506,7 +554,7 @@ void fereastraContact(int width, int height,int ok)
     buton_iesire(width, height);
 }
 
-void clickpefereastrapr(int ok)
+void clickpefereastrapr(int ok, int poza)
 {
     int coordx, coordy;
     int a,b,c,d;
@@ -531,8 +579,8 @@ void clickpefereastrapr(int ok)
                 schimbareculoarebuton(a,b,c,d);
                 schimbaresunet(ok);
                 clearmouseclick(WM_LBUTTONUP);
-                fereastraGrafic(width, height,ok);
-                clickpeGrafic(width,height,ok);
+                fereastraGrafic(width,height,ok,poza);
+                clickpeGrafic(width,height,ok,poza);
             }
         ///Ana-Maria
     else if(coordx>=(width/2-119)&&coordx<=(width/2+117)&&
@@ -543,8 +591,8 @@ void clickpefereastrapr(int ok)
                 a=width/2-119; b=height/2+110; c=width/2+117; d=height/2+165;
                 schimbareculoarebuton(a,b,c,d);
                 schimbaresunet(ok);
-                fereastraContact(width, height,ok);
-                clickpeContact(width,height,ok);
+                fereastraContact(width, height,ok,poza);
+                clickpeContact(width,height,ok,poza);
             }
                 ///Ana-Maria
     else if(coordx>=(width-80)&&coordx<=(width-30)&&
@@ -562,7 +610,7 @@ void clickpefereastrapr(int ok)
     }
 }
 
-void clickpeGrafic(int width, int height,int ok)
+void clickpeGrafic(int width, int height,int ok,int poza)
 {
     int coordx, coordy;
     int a,b,c,d;
@@ -580,8 +628,8 @@ void clickpeGrafic(int width, int height,int ok)
             schimbareculoarebuton(a,b,c,d);
             schimbaresunet(ok);
             closegraph();
-            fereastraprincipala(width, height,ok);
-            clickpefereastrapr(ok);
+            fereastraprincipala(width, height,ok,poza);
+            clickpefereastrapr(ok,poza);
         }
 else if(coordx>=width/16-31&&coordx<=width/10&&coordy>=height/5-145&&coordy<=height/5-114)//exit
         {
@@ -681,10 +729,18 @@ else if(coordx>=(width/2-379)&&coordx<=(width/2+376)&&coordy>=(height/2+70)&&coo
                 readimagefile("sunetinchis1.jpeg",width/16-31,height/5-100,width/16,height/5-70);
                 PlaySound(NULL,0,0);
             }
+    else if(coordx>=(width/2+460)&&coordx<=(width/2+540)&&coordy>=(height/2-18)&&coordy<=(height/2+7))//buton spre functie
+        {
+            a=width/2+460; b=height/2-18; c=width/2+540; d=height/2+7;
+            schimbareculoarebuton(a,b,c,d);
+            schimbaresunet(ok);
+            closegraph();
+            desenarefunctie();
+        }
     }
 }
 
-void clickpeContact(int width, int height,int ok)
+void clickpeContact(int width, int height,int ok,int poza)
 {
     int coordx, coordy;
     int a,b,c,d;
@@ -699,8 +755,8 @@ void clickpeContact(int width, int height,int ok)
             schimbareculoarebuton(a,b,c,d);
             schimbaresunet(ok);
             closegraph();
-            fereastraprincipala(width, height,ok);
-            clickpefereastrapr(ok);
+            fereastraprincipala(width, height,ok,poza);
+            clickpefereastrapr(ok,poza);
         }
 else if(coordx>=width/16-31&&coordx<=width/10&&coordy>=height/5-145&&coordy<=height/5-114)//exit
         {
@@ -715,9 +771,10 @@ else if(coordx>=(width/16-31)&&coordx<=(width/16)&&
                 readimagefile("sunetinchis1.jpeg",width/16-31,height/5-100,width/16,height/5-70);
                 PlaySound(NULL,0,0);
             }
+
     }
 }
-
+/*
 void transformarefunctie(char *functie, Coada infixata)
 {
     char fposibile[][20]={"sin","cos","ln","tg","ctg","rad"};
@@ -805,3 +862,4 @@ int prioritatecaracter(char a[])
                         else if(strchr("sclt",a[0]))return 4;
                                 else if(strchr(a,'(')||strchr(a,')'))return 5;
 }
+*/
