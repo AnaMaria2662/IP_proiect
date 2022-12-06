@@ -421,7 +421,11 @@ void fereastraprincipala(int width, int height,int ok, int poza)
     ///Emilia
     initwindow(width,height,"Fereastra principala",-4,-4);
 
-    ///Ana-Maria
+    if(poza==1)
+        readimagefile("image1_1.jpg",0,0,width,height);//imagine de fundal
+    else
+        readimagefile("Backgrf.jpg",0,0,width,height);//imagine de fundal
+
     if(ok==1)
     {
         readimagefile("sunetdeschis1.jpeg",width/16-31,height/5-100,width/16,height/5-70);//sunet
@@ -432,11 +436,6 @@ void fereastraprincipala(int width, int height,int ok, int poza)
         readimagefile("sunetinchis1.jpeg",width/16-31,height/5-100,width/16,height/5-70);
         PlaySound(NULL,0,0);
     }
-
-    if(poza==1)
-        readimagefile("image1_1.jpg",0,0,width,height);//imagine de fundal
-    else
-        readimagefile("Backgrf.jpg",0,0,width,height);//imagine de fundal
 
     readimagefile("romana.jpg",width-80,height/5-145,width-30,(height/5-115));//steag->romana
 
@@ -484,6 +483,13 @@ void schimbareculoarebuton(int a, int b, int c, int d)
 void fereastraGrafic(int width, int height,int ok,int poza)
 {//fereastra 2
 
+    initwindow(width,height,"Fereastra",-4,-4);
+
+    if(poza==1)
+        readimagefile("image1_1.jpg",0,0,width,height);//imagine de fundal
+    else
+        readimagefile("Backgrf.jpg",0,0,width,height);//imagine de fundal
+
     if(ok==1)
     {
         readimagefile("sunetdeschis1.jpeg",width/16-31,height/5-100,width/16,height/5-70);//sunet
@@ -494,13 +500,6 @@ void fereastraGrafic(int width, int height,int ok,int poza)
         readimagefile("sunetinchis1.jpeg",width/16-31,height/5-100,width/16,height/5-70);
         PlaySound(NULL,0,0);
     }
-
-    initwindow(width,height,"Fereastra",-4,-4);
-
-    if(poza==1)
-        readimagefile("image1_1.jpg",0,0,width,height);//imagine de fundal
-    else
-        readimagefile("Backgrf.jpg",0,0,width,height);//imagine de fundal
 
     settextstyle(8, HORIZ_DIR, 4 );
     settextjustify(CENTER_TEXT,CENTER_TEXT);
@@ -541,6 +540,11 @@ void fereastraContact(int width, int height,int ok,int poza)
 {//fereastra 3
     initwindow(width,height,"Fereastra",-4,-4);
 
+    if(poza==1)
+        readimagefile("image1_1.jpg",0,0,width,height);//imagine de fundal
+    else
+        readimagefile("Backgrf.jpg",0,0,width,height);//imagine de fundal
+
     if(ok==1)
     {
         readimagefile("sunetdeschis1.jpeg",width/16-31,height/5-100,width/16,height/5-70);//sunet
@@ -551,11 +555,6 @@ void fereastraContact(int width, int height,int ok,int poza)
         readimagefile("sunetinchis1.jpeg",width/16-31,height/5-100,width/16,height/5-70);
         PlaySound(NULL,0,0);
     }
-
-    if(poza==1)
-        readimagefile("image1_1.jpg",0,0,width,height);//imagine de fundal
-    else
-        readimagefile("Backgrf.jpg",0,0,width,height);//imagine de fundal
 
     settextstyle(8, HORIZ_DIR, 5);
     outtextxy(width/2-350,height/2-200,"Proiectul a fost realizat de:");//text 1
