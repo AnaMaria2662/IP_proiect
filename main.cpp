@@ -116,7 +116,7 @@ int main()
     int height, width;
     int coordx, coordy;
     int i,a,b,c,d;
-    char fun[256],capatst[256],capatdr[256];
+    char fun[257],capatst[257],capatdr[257];
     int ok=1;
     int poza=1;
     cin>>A>>B;
@@ -676,7 +676,7 @@ void clickpeGrafic(int width, int height,int ok,int poza,char fun[256],char capa
 {
     int coordx, coordy;
     int a,b,c,d;
-    char car, sir[2];
+    char car, sir[256];
     int x;
     fun[0]=NULL;
     capatst[0]=NULL;
@@ -721,8 +721,8 @@ else if(coordx>=(width/2-320)&&coordx<=(width/4+655)&&coordy>=(height/3+70)&&coo
                 settextstyle(8, HORIZ_DIR, 4 );
                 outtextxy(x,b+30,&car);
                 x+=textwidth(sir);
-                car = getch();
                 strcat(fun,sir);
+                car = getch();
                 }
             else{
                 settextstyle(8, HORIZ_DIR, 4 );
@@ -773,8 +773,8 @@ else if(coordx>=(width/2-379)&&coordx<=(width/2+376)&&coordy>=(height/2+70)&&coo
                 settextstyle(8, HORIZ_DIR, 4 );
                 outtextxy(x,b+30,&car);
                 x+=textwidth(sir);
-                car = getch();
                 strcat(capatst,sir);
+                car = getch();
                 }
             else{
                 settextstyle(8, HORIZ_DIR, 4 );
@@ -801,8 +801,8 @@ else if(coordx>=(width/2-379)&&coordx<=(width/2+376)&&coordy>=(height/2+70)&&coo
                 settextstyle(8, HORIZ_DIR, 4 );
                 outtextxy(x,b+30,&car);
                 x+=textwidth(sir);
-                car = getch();
                 strcat(capatdr,sir);
+                car = getch();
                 }
             else{
                 settextstyle(8, HORIZ_DIR, 4 );
