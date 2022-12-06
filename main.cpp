@@ -59,31 +59,36 @@ int prioritatecaracter(char a[]);
 void transformarefunctie(char *functie, Coada infixata);
 void transformaredininfixinpostifx();
 
-///Emilia+ Ana-Maria
-char top(Stiva S);
-bool esteVidaS(Stiva S);
-bool esteVidaC(Coada C);
-void StivaVida(Stiva S);
-void push(Stiva &S, char element);
-void pop(Stiva &S);
-void inserare(Coada C, char element);
-void eliminare(Coada C);
-
-//Ana-Maria
-struct nod{
-    char valoare;
-    nod* succ;
-};
-
-struct Stiva{
-    nod* varf;
-};
-
-struct Coada{
-    nod* prim;
-    nod* ultim;
-};
 */
+///Emilia+ Ana-Maria
+char top(Stiva *&S);
+bool esteVidaS(Stiva *&S);
+bool esteVidaC(Coada *&C);
+void StivaVida(Stiva *&S);
+void push(Stiva *&S, char element);
+void pop(Stiva &*S);
+void inserare(Coada *&C, char element);
+void eliminare(Coada *&C);
+
+struct nod{
+    char inf;
+    nod* urm;
+
+};
+
+struct Coada
+{
+    nod*prim;
+    nod*ultim;
+}C;
+
+struct Stiva
+{
+    nod*varf;
+}S;
+
+
+
 int main()
 {
     int height, width;
@@ -93,7 +98,7 @@ int main()
     int ok=1;
     int poza=1;
     cin>>A>>B;
-/*
+
     Coada infixata;
     infixata=new Coada;
     infixata=esteVidaC(infixata);
@@ -103,7 +108,7 @@ int main()
     Stiva S;
     S=new Stiva;
     S=esteVidaS(S);
-*/
+
     fullscreen(width, height);
     fereastraalegeri(width,height);
     clickpefereastraalegeri(ok,poza);
@@ -111,8 +116,14 @@ int main()
     closegraph();
     return 0;
 }
-/*
-bool esteVidaS(Stiva S)
+bool esteVidaC(Coada *&C)//coada
+{
+    if(C->prim==NULL&&C->ultim==NULL)
+    return 1;
+else
+    return 0;
+}
+bool esteVidaS(Stiva *&S)
 {
     if(top(S)==NULL)
         return 1;
@@ -120,20 +131,13 @@ bool esteVidaS(Stiva S)
         return 0;
 }
 
-bool esteVidaC(Coada C)
+
+void StivaVida(Stiva *&S)
 {
-    if(C.prim==NULL && C.ultim==NULL)
-        return 1;
-    else
-        return 0;
+    S->varf=NULL;
 }
 
-void StivaVida(Stiva S)
-{
-    S.varf=NULL;
-}
-
-void push(Stiva &S, char element)
+void push(Stiva *&S, char element)
 {
     nod *q;
     q=new nod;
@@ -142,7 +146,7 @@ void push(Stiva &S, char element)
     S=q;
 }
 
-void pop(Stiva &S)
+void pop(Stiva *&S)
 {
     nod *q;
     q=new nod;
@@ -151,43 +155,43 @@ void pop(Stiva &S)
     delete q;
 }
 
-char top(Stiva S)
+char top(Stiva *&S)
 {
     char element;
-    if(S.varf!=NULL)
-        element=S.varf->valoare;
+    if(S->varf!=NULL)
+        element=S->varf->inf;
     return element;
 }
 
-void eliminare(Coada C)
+void eliminare(Coada *&C)
 {
     nod *q;
     q=new nod;
-    q=C.prim;
-    C.prim=C.prim->succ;
+    q=C->prim;
+    C->prim=C->prim->succ;
     delete q;
     if(esteVidaC(C))
-        C.ultim=NULL;
+        C->ultim=NULL;
 }
 
-void inserare(Coada C, char element)
+void inserare(Coada *&C, char element)
 {
     nod *q;
     q=new nod;
     q->valoare=element;
     q->succ=NULL;
-    if(C.ultim==NULL)
+    if(C->ultim==NULL)
         {
-            C.ultim=q;
-            C.prim=q;
+            C->ultim=q;
+            C->prim=q;
         }
     else
         {
-            C.ultim->succ=q;
-            C.ultim=q;
+            C->ultim->succ=q;
+            C->ultim=q;
         }
 }
-*/
+
 void fereastraalegeri(int width, int height)
 {
     initwindow(width,height,"Fereastra principala",-4,-4);
