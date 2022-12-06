@@ -2,8 +2,6 @@
 Plan:
 -limba
 -click
--sunet
--inchis deschis sunet
 -poate integrala, zoom, stanga dreapta
 Grafic:
 -asimptota verticala
@@ -50,17 +48,38 @@ void schimbaresunet(int ok);
 void schimbareculoarebuton(int a, int b, int c, int d);
 void fereastraGrafic(int width, int height,int ok,int poza);
 void fereastraContact(int width, int height,int ok,int poza);
-void clickpeGrafic(int width, int height,int ok,int poza);
-void clickpeContact(int width, int height,int ok,int poza);
-void clickpefereastrapr(int ok, int poza);
-void clickpefereastraalegeri(int &ok, int &poza);
+void clickpeGrafic(int width, int height,int ok,int poza, char fun[256],char capatst[256],char capatdr[256]);
+void clickpeContact(int width, int height,int ok,int poza,char fun[256],char capatst[256],char capatdr[256]);
+void clickpefereastrapr(int ok, int poza,char fun[256],char capatst[256],char capatdr[256]);
+void clickpefereastraalegeri(int &ok, int &poza,char fun[256],char capatst[256],char capatdr[256]);
 /*
 int prioritatecaracter(char a[]);
 void transformarefunctie(char *functie, Coada infixata);
 void transformaredininfixinpostifx();
 
 */
-///Emilia+ Ana-Maria
+struct lista{
+    int info;
+    char inf;
+    lista* urm;
+    lista*prim;
+    lista*ultim;
+    lista *varf;
+}nod;
+
+
+void push(lista *&varf, char element);
+void pop(lista *&varf );
+char top(lista *&varf);
+void eliminare(lista *&Coada);
+void inserare(lista *&prim, lista *&ultim, int element);
+char citeste(lista *&prim);
+bool esteVidaS(lista *&Stiva);
+bool esteVidaC(lista *&Coada);
+void coada_vida(lista *&Coada);
+void stiva_vida(lista *&Stiva);
+
+/*
 char top(Stiva *&S);
 bool esteVidaS(Stiva *&S);
 bool esteVidaC(Coada *&C);
@@ -88,17 +107,20 @@ struct Stiva
 }S;
 
 
+*/
+
+
 
 int main()
 {
     int height, width;
     int coordx, coordy;
     int i,a,b,c,d;
-    char s[256];
+    char fun[256],capatst[256],capatdr[256];
     int ok=1;
     int poza=1;
     cin>>A>>B;
-
+/*
     Coada infixata;
     infixata=new Coada;
     infixata=esteVidaC(infixata);
@@ -108,89 +130,97 @@ int main()
     Stiva S;
     S=new Stiva;
     S=esteVidaS(S);
-
+*/
     fullscreen(width, height);
     fereastraalegeri(width,height);
-    clickpefereastraalegeri(ok,poza);
+    clickpefereastraalegeri(ok,poza,fun,capatst,capatdr);
     getch();
     closegraph();
     return 0;
 }
-bool esteVidaC(Coada *&C)//coada
+
+
+void push(lista *&varf, char element)
 {
-    if(C->prim==NULL&&C->ultim==NULL)
+lista *Stiva;
+Stiva=new lista;
+Stiva->inf=element;
+Stiva->urm = varf;
+varf=Stiva;
+}
+
+void pop(lista *&varf )
+{
+    lista *Stiva=varf;
+    varf=varf->urm;
+    delete Stiva;
+
+}
+
+char top(lista *&varf)
+{
+    char element=varf->inf;
+    lista *Stiva=varf;
+    return element;
+}
+
+void eliminare(lista *&Coada)
+{  lista *q,*r;
+    q=new lista;
+    r=new lista;
+    q = q->urm;
+    delete q;
+    if(!Coada)
+        r=NULL;
+
+ }
+
+void inserare(lista *&prim, lista *&ultim, int element)
+{
+    lista *Coada;
+    Coada=new lista;
+    Coada->info=element;
+    Coada->urm=NULL;
+    if(ultim)
+        ultim->urm=Coada;
+    else
+        prim=Coada;
+    ultim=Coada;
+
+}
+char citeste(lista *&prim)
+{
+    int element=prim->info;
+    lista *Coada=prim;
+    return element;
+}
+
+
+bool esteVidaS(lista *&Stiva)//stiva
+{
+return top(Stiva);
+}
+
+bool esteVidaC(lista *&Coada)//coada
+{
+    if(Coada->prim==NULL&&Coada->ultim==NULL)
     return 1;
 else
     return 0;
 }
-bool esteVidaS(Stiva *&S)
+
+void coada_vida(lista *&Coada)
 {
-    if(top(S)==NULL)
-        return 1;
-    else
-        return 0;
+    Coada->prim=NULL;
+    Coada->ultim=NULL;
+}
+
+void stiva_vida(lista *&Stiva)
+{
+    Stiva->varf=NULL;
 }
 
 
-void StivaVida(Stiva *&S)
-{
-    S->varf=NULL;
-}
-
-void push(Stiva *&S, char element)
-{
-    nod *q;
-    q=new nod;
-    q->valoare=element;
-    q->succ=S;
-    S=q;
-}
-
-void pop(Stiva *&S)
-{
-    nod *q;
-    q=new nod;
-    q=S;
-    S=S->succ;
-    delete q;
-}
-
-char top(Stiva *&S)
-{
-    char element;
-    if(S->varf!=NULL)
-        element=S->varf->inf;
-    return element;
-}
-
-void eliminare(Coada *&C)
-{
-    nod *q;
-    q=new nod;
-    q=C->prim;
-    C->prim=C->prim->succ;
-    delete q;
-    if(esteVidaC(C))
-        C->ultim=NULL;
-}
-
-void inserare(Coada *&C, char element)
-{
-    nod *q;
-    q=new nod;
-    q->valoare=element;
-    q->succ=NULL;
-    if(C->ultim==NULL)
-        {
-            C->ultim=q;
-            C->prim=q;
-        }
-    else
-        {
-            C->ultim->succ=q;
-            C->ultim=q;
-        }
-}
 
 void fereastraalegeri(int width, int height)
 {
@@ -257,7 +287,7 @@ void fereastraalegeri(int width, int height)
     buton_iesire(width, height);
 }
 
-void clickpefereastraalegeri(int &ok, int &poza)
+void clickpefereastraalegeri(int &ok, int &poza,char fun[256],char capatst[256],char capatdr[256])
 {
     int coordx, coordy;
     int a,b,c,d;
@@ -276,7 +306,7 @@ void clickpefereastraalegeri(int &ok, int &poza)
             schimbaresunet(ok);
             closegraph();
             fereastraprincipala(width,height,ok,poza);
-            clickpefereastrapr(ok,poza);
+            clickpefereastrapr(ok,poza,fun,capatst,capatdr);
         }
     else if(coordx>=width/16-31&&coordx<=width/10&&coordy>=height/5-145&&coordy<=height/5-114)//click pe exit
         {
@@ -509,9 +539,18 @@ void fereastraGrafic(int width, int height,int ok,int poza)
     settextjustify(CENTER_TEXT,CENTER_TEXT);
     outtextxy(width/2+10,height/4-40,"Introduceti intervalul  aici:");
     setfillstyle(0,BLACK);
-    bar(width/2-320,height/4-10,width/4+655,height/4+50);//text 1
+    bar(width/2-320,height/4-10,width/4+320,height/4+50);//text 1
+    bar(width/4+340,height/4-10,width/4+655,height/4+50);
     setcolor(WHITE);
-    rectangle(width/2-320,height/4-10,width/4+655,height/4+50);//text 1
+    settextstyle(8, HORIZ_DIR, 4 );
+    settextjustify(CENTER_TEXT,CENTER_TEXT);
+    outtextxy(width/2-400,height/4+33,"Stanga:");
+    settextstyle(8, HORIZ_DIR, 4 );
+    settextjustify(CENTER_TEXT,CENTER_TEXT);
+    outtextxy(width/2+400,height/4+33,":Dreapta");
+    rectangle(width/2-320,height/4-10,width/4+320,height/4+50);//st
+    rectangle(width/4+340,height/4-10,width/4+655,height/4+50);//dr
+
 
     settextstyle(8, HORIZ_DIR, 4 );
     settextjustify(CENTER_TEXT,CENTER_TEXT);
@@ -577,7 +616,7 @@ void fereastraContact(int width, int height,int ok,int poza)
     buton_iesire(width, height);
 }
 
-void clickpefereastrapr(int ok, int poza)
+void clickpefereastrapr(int ok, int poza, char fun[256],char capatst[256],char capatdr[256])
 {
     int coordx, coordy;
     int a,b,c,d;
@@ -603,7 +642,7 @@ void clickpefereastrapr(int ok, int poza)
                 schimbaresunet(ok);
                 clearmouseclick(WM_LBUTTONUP);
                 fereastraGrafic(width,height,ok,poza);
-                clickpeGrafic(width,height,ok,poza);
+                clickpeGrafic(width,height,ok,poza,fun,capatst,capatdr);
             }
         ///Ana-Maria
     else if(coordx>=(width/2-119)&&coordx<=(width/2+117)&&
@@ -615,7 +654,7 @@ void clickpefereastrapr(int ok, int poza)
                 schimbareculoarebuton(a,b,c,d);
                 schimbaresunet(ok);
                 fereastraContact(width, height,ok,poza);
-                clickpeContact(width,height,ok,poza);
+                clickpeContact(width,height,ok,poza,fun,capatst,capatdr);
             }
                 ///Ana-Maria
     else if(coordx>=(width-80)&&coordx<=(width-30)&&
@@ -633,12 +672,15 @@ void clickpefereastrapr(int ok, int poza)
     }
 }
 
-void clickpeGrafic(int width, int height,int ok,int poza)
+void clickpeGrafic(int width, int height,int ok,int poza,char fun[256],char capatst[256],char capatdr[256])
 {
     int coordx, coordy;
     int a,b,c,d;
     char car, sir[2];
     int x;
+    fun[0]=NULL;
+    capatst[0]=NULL;
+    capatdr[0]=NULL;
     fullscreen(width,height);
 
     while(true)
@@ -652,7 +694,7 @@ void clickpeGrafic(int width, int height,int ok,int poza)
             schimbaresunet(ok);
             closegraph();
             fereastraprincipala(width, height,ok,poza);
-            clickpefereastrapr(ok,poza);
+            clickpefereastrapr(ok,poza,fun,capatst,capatdr);
         }
 else if(coordx>=width/16-31&&coordx<=width/10&&coordy>=height/5-145&&coordy<=height/5-114)//exit
         {
@@ -660,34 +702,6 @@ else if(coordx>=width/16-31&&coordx<=width/10&&coordy>=height/5-145&&coordy<=hei
             schimbareculoarebuton(a,b,c,d);
             schimbaresunet(ok);
             exit(1);
-        }
-else if(coordx>=(width/2-320)&&coordx<=(width/4+655)&&coordy>=(height/4-10)&&coordy<=(height/4+50))
-        {
-            //daca se apasa caseta cu "Introduceti intervalul aici:"
-            //se schimba culoare dreptunghiului in galben la click
-            a=width/2-320; b=height/4-10; c=width/4+655; d=height/4+50;
-            schimbareculoarebuton(a,b,c,d);
-            schimbaresunet(ok);
-            x=a+30;
-            car = getch();
-            sir[0]=car;
-            sir[1]=NULL;
-        while (car!=13)
-            {
-            if(car!=8)
-                {
-                settextstyle(8, HORIZ_DIR, 4 );
-                outtextxy(x,b+30,&car);
-                x+=textwidth(sir);
-                car = getch();
-                }
-            else{
-                settextstyle(8, HORIZ_DIR, 4 );
-                outtextxy(x,b+30,&car);
-                x-=textwidth(sir);
-                car = getch();
-                }
-            }
         }
 else if(coordx>=(width/2-320)&&coordx<=(width/4+655)&&coordy>=(height/3+70)&&coordy<=(height/3+130))
         {
@@ -708,6 +722,7 @@ else if(coordx>=(width/2-320)&&coordx<=(width/4+655)&&coordy>=(height/3+70)&&coo
                 outtextxy(x,b+30,&car);
                 x+=textwidth(sir);
                 car = getch();
+                strcat(fun,sir);
                 }
             else{
                 settextstyle(8, HORIZ_DIR, 4 );
@@ -724,26 +739,7 @@ else if(coordx>=(width/2-379)&&coordx<=(width/2+376)&&coordy>=(height/2+70)&&coo
             a=width/2-379; b=height/2+70; c=width/2+376; d=height/2+250;
             schimbareculoarebuton(a,b,c,d);
             schimbaresunet(ok);
-            x=a+30;
-            car = getch();
-            sir[0]=car;
-            sir[1]=NULL;
-        while (car!=13)
-            {
-            if(car!=8)
-                {
-                settextstyle(8, HORIZ_DIR, 4 );
-                outtextxy(x,b+30,&car);
-                x+=textwidth(sir);
-                car = getch();
-                }
-            else{
-                settextstyle(8, HORIZ_DIR, 4 );
-                outtextxy(x,b+30,&car);
-                x-=textwidth(sir);
-                car = getch();
-                }
-            }
+            //pus text
 
     }
     else if(coordx>=(width/16-31)&&coordx<=(width/16)&&
@@ -760,10 +756,66 @@ else if(coordx>=(width/2-379)&&coordx<=(width/2+376)&&coordy>=(height/2+70)&&coo
             closegraph();
             desenarefunctie();
         }
+    else if(coordx>=(width/2-320)&&coordx<=(width/4+320)&&coordy>=(height/4-10)&&coordy<=(height/4+50))
+        {
+
+            a=width/2-320; b=height/4-10; c=width/4+320; d=height/4+50;
+            schimbareculoarebuton(a,b,c,d);
+            schimbaresunet(ok);
+            x=a+30;
+            car = getch();
+            sir[0]=car;
+            sir[1]=NULL;
+        while (car!=13)
+            {
+            if(car!=8)
+                {
+                settextstyle(8, HORIZ_DIR, 4 );
+                outtextxy(x,b+30,&car);
+                x+=textwidth(sir);
+                car = getch();
+                strcat(capatst,sir);
+                }
+            else{
+                settextstyle(8, HORIZ_DIR, 4 );
+                outtextxy(x,b+30,&car);
+                x-=textwidth(sir);
+                car = getch();
+                }
+            }
+        }
+    else if(coordx>=(width/4+340)&&coordx<=(width/4+655)&&coordy>=(height/4-10)&&coordy<=(height/4+50))
+        {
+
+            a=width/4+340; b=height/4-10; c=width/4+655; d=height/4+50;
+            schimbareculoarebuton(a,b,c,d);
+            schimbaresunet(ok);
+            x=a+30;
+            car = getch();
+            sir[0]=car;
+            sir[1]=NULL;
+        while (car!=13)
+            {
+            if(car!=8)
+                {
+                settextstyle(8, HORIZ_DIR, 4 );
+                outtextxy(x,b+30,&car);
+                x+=textwidth(sir);
+                car = getch();
+                strcat(capatdr,sir);
+                }
+            else{
+                settextstyle(8, HORIZ_DIR, 4 );
+                outtextxy(x,b+30,&car);
+                x-=textwidth(sir);
+                car = getch();
+                }
+            }
+        }
     }
 }
 
-void clickpeContact(int width, int height,int ok,int poza)
+void clickpeContact(int width, int height,int ok,int poza,char fun[256],char capatst[256],char capatdr[256])
 {
     int coordx, coordy;
     int a,b,c,d;
@@ -779,7 +831,7 @@ void clickpeContact(int width, int height,int ok,int poza)
             schimbaresunet(ok);
             closegraph();
             fereastraprincipala(width, height,ok,poza);
-            clickpefereastrapr(ok,poza);
+            clickpefereastrapr(ok,poza,fun,capatst,capatdr);
         }
 else if(coordx>=width/16-31&&coordx<=width/10&&coordy>=height/5-145&&coordy<=height/5-114)//exit
         {
