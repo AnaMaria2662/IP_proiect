@@ -849,8 +849,8 @@ else if(coordx>=(width/16-31)&&coordx<=(width/16)&&
 
     }
 }
-/*
-void transformarefunctie(char *functie, Coada infixata)
+
+void transformarefunctie(char *functie, lista *&infixata)
 {
     char fposibile[][20]={"sin","cos","ln","tg","ctg","rad"};
     char matrice[NMAX][NMAX];
@@ -871,7 +871,7 @@ void transformarefunctie(char *functie, Coada infixata)
             matrice[nr][nr2]=0;
             i--;
         }
-        else if(strchr("+-*^xe()",functie[i]))
+        else if(strchr("+-*^/xe()",functie[i]))
                 {
                     matrice[nr][nr2]=functie[i];
                     nr2++;
@@ -885,7 +885,7 @@ void transformarefunctie(char *functie, Coada infixata)
                         i=i+strlen(fposibile[j])-1;
                         ok=1;
                     }
-        inserare(infixata,matrice[nr]);
+        push(infixata,matrice[nr]);
         nr++;
     }
 }
@@ -937,4 +937,4 @@ int prioritatecaracter(char a[])
                         else if(strchr("sclt",a[0]))return 4;
                                 else if(strchr(a,'(')||strchr(a,')'))return 5;
 }
-*/
+
