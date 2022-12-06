@@ -423,8 +423,15 @@ void fereastraprincipala(int width, int height,int ok, int poza)
 
     ///Ana-Maria
     if(ok==1)
+    {
+        readimagefile("sunetdeschis1.jpeg",width/16-31,height/5-100,width/16,height/5-70);//sunet
         PlaySound("sound2.wav",NULL,SND_ASYNC);//sunet de fundal
-    else PlaySound(NULL,0,0);
+    }
+    else
+    {
+        readimagefile("sunetinchis1.jpeg",width/16-31,height/5-100,width/16,height/5-70);
+        PlaySound(NULL,0,0);
+    }
 
     if(poza==1)
         readimagefile("image1_1.jpg",0,0,width,height);//imagine de fundal
@@ -446,7 +453,6 @@ void fereastraprincipala(int width, int height,int ok, int poza)
     outtextxy(width/2,height/2+150,"Contact");
     rectangle(width/2-119,height/2+110,width/2+117,height/2+165);//setari a treia linie de text
 
-    readimagefile("sunetdeschis1.jpeg",width/16-31,height/5-100,width/16,height/5-70);//sunet
 
     ///Emilia
     buton_inapoi(width, height);
@@ -479,8 +485,15 @@ void fereastraGrafic(int width, int height,int ok,int poza)
 {//fereastra 2
 
     if(ok==1)
+    {
+        readimagefile("sunetdeschis1.jpeg",width/16-31,height/5-100,width/16,height/5-70);//sunet
         PlaySound("sound2.wav",NULL,SND_ASYNC);//sunet de fundal
-    else PlaySound(NULL,0,0);
+    }
+    else
+    {
+        readimagefile("sunetinchis1.jpeg",width/16-31,height/5-100,width/16,height/5-70);
+        PlaySound(NULL,0,0);
+    }
 
     initwindow(width,height,"Fereastra",-4,-4);
 
@@ -529,8 +542,15 @@ void fereastraContact(int width, int height,int ok,int poza)
     initwindow(width,height,"Fereastra",-4,-4);
 
     if(ok==1)
+    {
+        readimagefile("sunetdeschis1.jpeg",width/16-31,height/5-100,width/16,height/5-70);//sunet
         PlaySound("sound2.wav",NULL,SND_ASYNC);//sunet de fundal
-    else PlaySound(NULL,0,0);
+    }
+    else
+    {
+        readimagefile("sunetinchis1.jpeg",width/16-31,height/5-100,width/16,height/5-70);
+        PlaySound(NULL,0,0);
+    }
 
     if(poza==1)
         readimagefile("image1_1.jpg",0,0,width,height);//imagine de fundal
