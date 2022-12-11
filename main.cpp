@@ -1,17 +1,15 @@
 /*
 Plan:
 -limba
--click
--poate integrala, zoom, stanga dreapta
-Grafic:
+-integrala
+-zoom
+-stanga
+-dreapta
 -asimptota verticala
 -asimptota orizontala
--grafic efectiv cu linii
--transformare sir caractere->functie
 -puncte de discontinuitate
 Evaluator:
 -restrictii fiecare semn
--stive?
 */
 ///Ana-Maria
 #include<iostream>
@@ -29,18 +27,14 @@ int STANGA=250, DREAPTA=1100, TOP=150, BOTTOM=600;
 
 using namespace std;
 
-///Ana-Maria
+
 void click(int &coordxclick, int &coordyclick );
 double f(double x);
 void aflareminsimax();
 void graficfunctie();
 void desenarefunctie();
-
-///Emilia
 void buton_iesire(int width, int height);
 void buton_inapoi(int width, int height);
-
-///Ana-Maria
 void fereastraalegeri(int width, int height);
 void fereastraprincipala(int width, int height,int ok,int poza);
 void fullscreen(int &width, int &height);
@@ -52,85 +46,37 @@ void clickpeGrafic(int width, int height,int ok,int poza, char fun[256],char cap
 void clickpeContact(int width, int height,int ok,int poza,char fun[256],char capatst[256],char capatdr[256]);
 void clickpefereastrapr(int ok, int poza,char fun[256],char capatst[256],char capatdr[256]);
 void clickpefereastraalegeri(int &ok, int &poza,char fun[256],char capatst[256],char capatdr[256]);
-/*
-int prioritatecaracter(char a[]);
-void transformarefunctie(char *functie, Coada infixata);
-void transformaredininfixinpostifx();
 
-*/
 struct lista{
-    int info;
+    char info;
     char inf;
-    lista* urm;
-    lista*prim;
-    lista*ultim;
+    lista *urm;
     lista *varf;
-}nod;
+}*nod;
+
+int prioritatecaracter(char a[]);
+void transformarefunctie(char *functie, lista *&infixata);
+void transformaredininfixinpostifx(lista *&infixata, lista*&value, lista*&operatori);
 
 
 void push(lista *&varf, char element);
 void pop(lista *&varf );
 char top(lista *&varf);
-void eliminare(lista *&Coada);
-void inserare(lista *&prim, lista *&ultim, int element);
-char citeste(lista *&prim);
 bool esteVidaS(lista *&Stiva);
-bool esteVidaC(lista *&Coada);
-void coada_vida(lista *&Coada);
 void stiva_vida(lista *&Stiva);
-
-/*
-char top(Stiva *&S);
-bool esteVidaS(Stiva *&S);
-bool esteVidaC(Coada *&C);
-void StivaVida(Stiva *&S);
-void push(Stiva *&S, char element);
-void pop(Stiva &*S);
-void inserare(Coada *&C, char element);
-void eliminare(Coada *&C);
-
-struct nod{
-    char inf;
-    nod* urm;
-
-};
-
-struct Coada
-{
-    nod*prim;
-    nod*ultim;
-}C;
-
-struct Stiva
-{
-    nod*varf;
-}S;
-
-
-*/
-
 
 
 int main()
 {
     int height, width;
-    int coordx, coordy;
-    int i,a,b,c,d;
     char fun[257],capatst[257],capatdr[257];
     int ok=1;
     int poza=1;
     cin>>A>>B;
-/*
-    Coada infixata;
-    infixata=new Coada;
-    infixata=esteVidaC(infixata);
-    Stiva postfixata;
-    postfixata=new Stiva;
-    postfixata=esteVidaS(postfixata);
-    Stiva S;
-    S=new Stiva;
-    S=esteVidaS(S);
-*/
+
+    lista *postfixata;
+    postfixata=new lista;
+    //stiva_vida(postfixata);
     fullscreen(width, height);
     fereastraalegeri(width,height);
     clickpefereastraalegeri(ok,poza,fun,capatst,capatdr);
@@ -138,7 +84,6 @@ int main()
     closegraph();
     return 0;
 }
-
 
 void push(lista *&varf, char element)
 {
@@ -164,55 +109,10 @@ char top(lista *&varf)
     return element;
 }
 
-void eliminare(lista *&Coada)
-{  lista *q,*r;
-    q=new lista;
-    r=new lista;
-    q = q->urm;
-    delete q;
-    if(!Coada)
-        r=NULL;
-
- }
-
-void inserare(lista *&prim, lista *&ultim, int element)
-{
-    lista *Coada;
-    Coada=new lista;
-    Coada->info=element;
-    Coada->urm=NULL;
-    if(ultim)
-        ultim->urm=Coada;
-    else
-        prim=Coada;
-    ultim=Coada;
-
-}
-char citeste(lista *&prim)
-{
-    int element=prim->info;
-    lista *Coada=prim;
-    return element;
-}
-
 
 bool esteVidaS(lista *&Stiva)//stiva
 {
 return top(Stiva);
-}
-
-bool esteVidaC(lista *&Coada)//coada
-{
-    if(Coada->prim==NULL&&Coada->ultim==NULL)
-    return 1;
-else
-    return 0;
-}
-
-void coada_vida(lista *&Coada)
-{
-    Coada->prim=NULL;
-    Coada->ultim=NULL;
 }
 
 void stiva_vida(lista *&Stiva)
@@ -220,12 +120,9 @@ void stiva_vida(lista *&Stiva)
     Stiva->varf=NULL;
 }
 
-
-
 void fereastraalegeri(int width, int height)
 {
     initwindow(width,height,"Fereastra principala",-4,-4);
-    ///Ana-Maria
     readimagefile("image1_1.jpg",0,0,width,height);//imagine de fundal
 
     setcolor(WHITE);
@@ -452,9 +349,8 @@ void buton_inapoi(int width, int height)
 
 void fereastraprincipala(int width, int height,int ok, int poza)
 {//fereastra 1
-    ///Emilia
-    initwindow(width,height,"Fereastra principala",-4,-4);
 
+    initwindow(width,height,"Fereastra principala",-4,-4);
     if(poza==1)
         readimagefile("image1_1.jpg",0,0,width,height);//imagine de fundal
     else
@@ -486,8 +382,6 @@ void fereastraprincipala(int width, int height,int ok, int poza)
     outtextxy(width/2,height/2+150,"Contact");
     rectangle(width/2-119,height/2+110,width/2+117,height/2+165);//setari a treia linie de text
 
-
-    ///Emilia
     buton_inapoi(width, height);
     buton_iesire(width, height);
 }
@@ -499,10 +393,11 @@ void fullscreen(int &width, int &height)
 }
 
 void schimbaresunet(int ok)
-{//sunet buton->sunet fundal
+{  /// sunet buton->sunet fundal
     PlaySound("sunet_buton.wav",NULL,SND_ASYNC);
     delay(100);
-    if(ok==1)PlaySound("sound2.wav",NULL,SND_ASYNC);
+    if(ok==1)
+        PlaySound("sound2.wav",NULL,SND_ASYNC);
 }
 
 void schimbareculoarebuton(int a, int b, int c, int d)
@@ -644,7 +539,6 @@ void clickpefereastrapr(int ok, int poza, char fun[256],char capatst[256],char c
                 fereastraGrafic(width,height,ok,poza);
                 clickpeGrafic(width,height,ok,poza,fun,capatst,capatdr);
             }
-        ///Ana-Maria
     else if(coordx>=(width/2-119)&&coordx<=(width/2+117)&&
                 coordy>=(height/2+110)&&coordy<=(height/2+165))
             {
@@ -656,7 +550,6 @@ void clickpefereastrapr(int ok, int poza, char fun[256],char capatst[256],char c
                 fereastraContact(width, height,ok,poza);
                 clickpeContact(width,height,ok,poza,fun,capatst,capatdr);
             }
-                ///Ana-Maria
     else if(coordx>=(width-80)&&coordx<=(width-30)&&
                     coordy>=(height/5-145)&&coordy<=(height/5-115))//steag-daca se apasa setarea de limba
             {
@@ -672,6 +565,7 @@ void clickpefereastrapr(int ok, int poza, char fun[256],char capatst[256],char c
     }
 }
 
+
 void clickpeGrafic(int width, int height,int ok,int poza,char fun[256],char capatst[256],char capatdr[256])
 {
     int coordx, coordy;
@@ -685,7 +579,6 @@ void clickpeGrafic(int width, int height,int ok,int poza,char fun[256],char capa
 
     while(true)
     {
-
     click(coordx,coordy);
     if(coordx>=width/10+10&&coordx<=width/10+90&&coordy>=height/5-145&&coordy<=height/5-114)//back
         {
@@ -703,6 +596,31 @@ else if(coordx>=width/16-31&&coordx<=width/10&&coordy>=height/5-145&&coordy<=hei
             schimbaresunet(ok);
             exit(1);
         }
+        else if(coordx>=(width/2-379)&&coordx<=(width/2+376)&&coordy>=(height/2+70)&&coordy<=(height/2+250))
+        {
+            //daca se apasa caseta cu "Evaluator functie"
+            //se schimba culoare dreptunghiului in galben la click
+            a=width/2-379; b=height/2+70; c=width/2+376; d=height/2+250;
+            schimbareculoarebuton(a,b,c,d);
+            schimbaresunet(ok);
+            //pus evaluator
+
+    }
+    else if(coordx>=(width/16-31)&&coordx<=(width/16)&&
+                    coordy>=(height/5-100)&&coordy<=(height/5-70))
+            {
+                readimagefile("sunetinchis1.jpeg",width/16-31,height/5-100,width/16,height/5-70);
+                PlaySound(NULL,0,0);
+            }
+    else if(coordx>=(width/2+460)&&coordx<=(width/2+540)&&coordy>=(height/2-18)&&coordy<=(height/2+7))//buton spre functie
+        {
+            a=width/2+460; b=height/2-18; c=width/2+540; d=height/2+7;
+            schimbareculoarebuton(a,b,c,d);
+            schimbaresunet(ok);
+            closegraph();
+            desenarefunctie();
+        }
+
 else if(coordx>=(width/2-320)&&coordx<=(width/4+655)&&coordy>=(height/3+70)&&coordy<=(height/3+130))
         {
             //daca se apasa caseta cu "Introduceti functia aici:"
@@ -721,7 +639,7 @@ else if(coordx>=(width/2-320)&&coordx<=(width/4+655)&&coordy>=(height/3+70)&&coo
                 settextstyle(8, HORIZ_DIR, 4 );
                 outtextxy(x,b+30,&car);
                 x+=textwidth(sir);
-                strcat(fun,sir);
+                strcat((char*)fun,(char*)car);
                 car = getch();
                 }
             else{
@@ -731,31 +649,10 @@ else if(coordx>=(width/2-320)&&coordx<=(width/4+655)&&coordy>=(height/3+70)&&coo
                 car = getch();
                 }
             }
+            cout<<fun;
+            clickpeGrafic(width,height,ok,poza,fun,capatst,capatdr);
         }
-else if(coordx>=(width/2-379)&&coordx<=(width/2+376)&&coordy>=(height/2+70)&&coordy<=(height/2+250))
-        {
-            //daca se apasa caseta cu "Evaluator functie"
-            //se schimba culoare dreptunghiului in galben la click
-            a=width/2-379; b=height/2+70; c=width/2+376; d=height/2+250;
-            schimbareculoarebuton(a,b,c,d);
-            schimbaresunet(ok);
-            //pus text
 
-    }
-    else if(coordx>=(width/16-31)&&coordx<=(width/16)&&
-                    coordy>=(height/5-100)&&coordy<=(height/5-70))
-            {
-                readimagefile("sunetinchis1.jpeg",width/16-31,height/5-100,width/16,height/5-70);
-                PlaySound(NULL,0,0);
-            }
-    else if(coordx>=(width/2+460)&&coordx<=(width/2+540)&&coordy>=(height/2-18)&&coordy<=(height/2+7))//buton spre functie
-        {
-            a=width/2+460; b=height/2-18; c=width/2+540; d=height/2+7;
-            schimbareculoarebuton(a,b,c,d);
-            schimbaresunet(ok);
-            closegraph();
-            desenarefunctie();
-        }
     else if(coordx>=(width/2-320)&&coordx<=(width/4+320)&&coordy>=(height/4-10)&&coordy<=(height/4+50))
         {
 
@@ -773,7 +670,7 @@ else if(coordx>=(width/2-379)&&coordx<=(width/2+376)&&coordy>=(height/2+70)&&coo
                 settextstyle(8, HORIZ_DIR, 4 );
                 outtextxy(x,b+30,&car);
                 x+=textwidth(sir);
-                strcat(capatst,sir);
+                strcat((char*)capatst,(char*)car);
                 car = getch();
                 }
             else{
@@ -783,6 +680,7 @@ else if(coordx>=(width/2-379)&&coordx<=(width/2+376)&&coordy>=(height/2+70)&&coo
                 car = getch();
                 }
             }
+        clickpeGrafic(width,height,ok,poza,fun,capatst,capatdr);
         }
     else if(coordx>=(width/4+340)&&coordx<=(width/4+655)&&coordy>=(height/4-10)&&coordy<=(height/4+50))
         {
@@ -801,7 +699,7 @@ else if(coordx>=(width/2-379)&&coordx<=(width/2+376)&&coordy>=(height/2+70)&&coo
                 settextstyle(8, HORIZ_DIR, 4 );
                 outtextxy(x,b+30,&car);
                 x+=textwidth(sir);
-                strcat(capatdr,sir);
+                strcat((char*)capatdr,(char*)car);
                 car = getch();
                 }
             else{
@@ -811,10 +709,10 @@ else if(coordx>=(width/2-379)&&coordx<=(width/2+376)&&coordy>=(height/2+70)&&coo
                 car = getch();
                 }
             }
+        clickpeGrafic(width,height,ok,poza,fun,capatst,capatdr);
         }
     }
 }
-
 void clickpeContact(int width, int height,int ok,int poza,char fun[256],char capatst[256],char capatdr[256])
 {
     int coordx, coordy;
@@ -850,10 +748,12 @@ else if(coordx>=(width/16-31)&&coordx<=(width/16)&&
     }
 }
 
+
+
 void transformarefunctie(char *functie, lista *&infixata)
 {
     char fposibile[][20]={"sin","cos","ln","tg","ctg","rad"};
-    char matrice[NMAX][NMAX];
+    char *matrice[NMAX][NMAX];
     int i,j,nr=0,nr2;
     int ok=0;
     for(i=0;i<=strlen(functie)-1;i++)
@@ -864,7 +764,7 @@ void transformarefunctie(char *functie, lista *&infixata)
         {
             while(isdigit(functie[i]!=0))
             {
-                matrice[nr][nr2]=functie[i];
+                matrice[nr][nr2]=(char*)functie[i];
                 i++;
                 nr2++;
             }
@@ -873,7 +773,7 @@ void transformarefunctie(char *functie, lista *&infixata)
         }
         else if(strchr("+-*^/xe()",functie[i]))
                 {
-                    matrice[nr][nr2]=functie[i];
+                    matrice[nr][nr2]=(char*)functie[i];
                     nr2++;
                     matrice[nr][nr2]=0;
                 }
@@ -881,60 +781,81 @@ void transformarefunctie(char *functie, lista *&infixata)
             if(ok==0)
                 if(strstr(functie+1,fposibile[j])==functie+i)
                     {
-                        strcpy(matrice[nr],fposibile[j]);
+                        strcpy((char*)matrice[nr],fposibile[j]);
                         i=i+strlen(fposibile[j])-1;
                         ok=1;
                     }
-        push(infixata,matrice[nr]);
+        //push(infixata,matrice[nr]);
         nr++;
     }
 }
 
-void transformaredininfixinpostifx(Stiva postfixata)
+void transformaredininfixinpostifx(lista *&infixata, lista *&value, lista *&operatori)
 {
-    int i,nr=0;
-    char sirdetransfer[NMAX][NMAX];
-    char operatori[]="+-*^x()sclt";
-    bool ok;
-    while(esteVida(infixata)==0)
+    char *c[256], *operator1[256];
+    c[0]=NULL;
+    while(esteVidaS(infixata)==0)
     {
-        ok=0;
-        strcpy(sirdetransfer[nr],infixata.prim->valoare);
-        eliminare(infixata);
-        for(i=0;ok!=0&&operatori[i];i++)
-            if(strchr(sirdetransfer[nr],operatori[i]))ok=1;
-        if(ok==0)push(postfixata,sirdetransfer[nr]);
-        if(ok!=0)
-            {
-                if(strchr(sirdetransfer[nr],')'))
-                {
-                    while(strchr(top(S),'('))
+        strcpy((char*)c,(char*)top(infixata));
+        if(isdigit(*c[0]))
+            push(value,*c[0]);
+        else
+            if(strchr("abcdefghijklmnopqrstuvwxyz",*c[0]))
+                push(value,*c[0]);
+            else
+                if(strchr("(",*c[0]))
+                   push(operatori,*c[0]);
+                else
+                    if(strchr(")",*c[0]))
                     {
-                        push(postfixata,top(S));
-                        pop(S);
-                    }
-                    pop(S);
-                }
-            else {
-                     while(esteVidaS(S)==0&&strchr(top(S)'(')&&
-                                prioritatecaracter(top(S))>=prioritatecaracter(sirdetransfer[nr]))
+
+                        while(top(operatori)!='(')
                         {
-                            push(postfixata,top(S));
-                            pop(S);
+                        operator1[0]=NULL;
+                        strcat(*operator1,(char*)top(*&value));
+                        pop(value);
+                        strcat(*operator1,(char*)top(*&operatori));
+                        pop(operatori);
+                        strcat(*operator1,(char*)top(*&value));
+                        pop(value);
+                        push(*&value,*(char*)operator1);
                         }
-                    push(S,sirdetransfer[nr]);
-                  }
-            }
-        nr++;
+                 pop(operatori);
+                 }
+                 else
+                    if(strchr("+-*^/sctl",*c[0]))
+                    //while(esteVidaS(*&operatori)==0&&prioritatecaracter(top(operatori))>=prioritatecaracter(*c))
+                    {
+                        operator1[0]=NULL;
+                        strcat(*operator1,(char*)top(value));
+                        pop(value);
+                        strcat(*operator1,(char*)top(operatori));
+                        pop(operatori);
+                        strcat(*operator1,(char*)top(value));
+                        pop(value);
+                        push(*&value,*(char*)operator1);
+                    }
     }
+    while(esteVidaS(operatori)==0)
+    {
+        operator1[0]=NULL;
+        strcat(*operator1,(char*)top(value));
+        pop(value);
+        strcat(*operator1,(char*)top(operatori));
+        pop(operatori);
+        strcat(*operator1,(char*)top(value));
+        pop(value);
+        push(*&value,*(char*)operator1);
+    }
+    //functia noastra este in top(value)
 }
 
-int prioritatecaracter(char a[])
+
+int prioritatecaracter(char *a[])
 {
-    if(strchr(a,'+')||strchr(a,'-'))return 1;
-        else if(strchr(a,'*')||strchr(a,'/'))return 2;
-                else if(strchr(a,'^')return 3;
-                        else if(strchr("sclt",a[0]))return 4;
-                                else if(strchr(a,'(')||strchr(a,')'))return 5;
+    if(strchr("+",*a[0])||strchr("-",*a[0]))return 1;
+        else if(strchr("*",*a[0])||strchr("/",*a[0]))return 2;
+                else if(strchr("^",*a[0]))return 3;
+                        else if(strchr("sclt",*a[0]))return 4;
+                                else if(strchr("(",*a[0])||strchr(")",*a[0]))return 5;
 }
-
