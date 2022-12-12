@@ -1,0 +1,16 @@
+# depslib dependency file v1.0
+1669370015 source:c:\users\ana maria\desktop\f\ip\l5\graficul functiei-ip\main.cpp
+	<iostream>
+	<graphics.h>
+	<winbgim.h>
+
+1670777660 source:c:\users\ana maria\desktop\f\ip\graficul functiilor-ip\main.cpp
+	<iostream>
+	<stdlib.h>
+	<stdio.h>
+	<windows.h>
+	<graphics.h>
+	<winbgim.h>
+	<cstring>
+	<math.h>
+
