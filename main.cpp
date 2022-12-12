@@ -32,6 +32,7 @@ void click(int &coordxclick, int &coordyclick );
 double f(double x);
 void aflareminsimax();
 void graficfunctie();
+void graficnou(int widget,int height);
 void desenarefunctie();
 void buton_iesire(int width, int height);
 void buton_inapoi(int width, int height);
@@ -54,7 +55,7 @@ struct lista{
     lista *varf;
 }*nod;
 
-int prioritatecaracter(char a[]);
+int prioritatecaracter(char *a[]);
 void transformarefunctie(char *functie, lista *&infixata);
 void transformaredininfixinpostifx(lista *&infixata, lista*&value, lista*&operatori);
 
@@ -300,21 +301,10 @@ void graficfunctie()
     }
 }
 
-void desenarefunctie()
-{//desenare grafic
-    int height, width;
-    height=GetSystemMetrics(SM_CYSCREEN);
-    width=GetSystemMetrics(SM_CXSCREEN);
-    initwindow(width,height,"Fereastra",-4,-4);
-
-    setcolor(RED);
-    rectangle(STANGA,TOP,DREAPTA,BOTTOM);
-    line(STANGA,height/2,DREAPTA, height/2);//axa ox
-    line(width/2,TOP,width/2,BOTTOM);//axa oy
-
+void graficnou(int width, int height)
+{
     setcolor(YELLOW);
-    graficfunctie();//graficul efectiv
-
+    graficfunctie();
     setcolor(WHITE);
     settextstyle(8, HORIZ_DIR, 4 );
     settextjustify(CENTER_TEXT,CENTER_TEXT);
@@ -329,6 +319,75 @@ void desenarefunctie()
     settextstyle(8, HORIZ_DIR, 3 );
     settextjustify(CENTER_TEXT,CENTER_TEXT);
     outtextxy(width/2+210,height-100,"Integrala in xmax:");
+    char car;
+    do
+        {
+            car = getch();
+            if(car==KEY_RIGHT||car=='d')//dr
+                {
+                    setcolor(BLACK);
+                    graficfunctie();
+                    A+=50;
+                    B+=50;
+
+                    setcolor(WHITE);
+                    settextstyle(8, HORIZ_DIR, 4 );
+                    settextjustify(CENTER_TEXT,CENTER_TEXT);
+                    outtextxy(width/2,height/4-50,"Reprezentarea functiei:");
+
+                    setcolor(WHITE);
+                    settextstyle(8, HORIZ_DIR, 3 );
+                    settextjustify(CENTER_TEXT,CENTER_TEXT);
+                    outtextxy(width/4+50,height-100,"Integrala in xmin:");
+
+                    setcolor(WHITE);
+                    settextstyle(8, HORIZ_DIR, 3 );
+                    settextjustify(CENTER_TEXT,CENTER_TEXT);
+                    outtextxy(width/2+210,height-100,"Integrala in xmax:");
+                    setcolor(YELLOW);
+                    graficfunctie();
+                }
+            else if(car==KEY_LEFT||car=='a')//st
+            {
+                setcolor(BLACK);
+                graficfunctie();
+                A-=50;
+                B-=50;
+                setcolor(WHITE);
+                settextstyle(8, HORIZ_DIR, 4 );
+                settextjustify(CENTER_TEXT,CENTER_TEXT);
+                outtextxy(width/2,height/4-50,"Reprezentarea functiei:");
+
+                setcolor(WHITE);
+                settextstyle(8, HORIZ_DIR, 3 );
+                settextjustify(CENTER_TEXT,CENTER_TEXT);
+                outtextxy(width/4+50,height-100,"Integrala in xmin:");
+
+                setcolor(WHITE);
+                settextstyle(8, HORIZ_DIR, 3 );
+                settextjustify(CENTER_TEXT,CENTER_TEXT);
+                outtextxy(width/2+210,height-100,"Integrala in xmax:");
+                setcolor(YELLOW);
+                graficfunctie();
+                }
+        }
+    while(car!=13);
+}
+
+void desenarefunctie()
+{//desenare grafic
+    int height, width;
+    height=GetSystemMetrics(SM_CYSCREEN);
+    width=GetSystemMetrics(SM_CXSCREEN);
+    initwindow(width,height,"Fereastra",-4,-4);
+
+    setcolor(RED);
+    rectangle(STANGA,TOP,DREAPTA,BOTTOM);
+    line(STANGA,height/2,DREAPTA, height/2);//axa ox
+    line(width/2,TOP,width/2,BOTTOM);//axa oy
+
+    setcolor(YELLOW);
+    graficnou(width,height);//graficul efectiv
 }
 
 void buton_iesire(int width, int height)
@@ -617,8 +676,8 @@ else if(coordx>=width/16-31&&coordx<=width/10&&coordy>=height/5-145&&coordy<=hei
             a=width/2+460; b=height/2-18; c=width/2+540; d=height/2+7;
             schimbareculoarebuton(a,b,c,d);
             schimbaresunet(ok);
-            closegraph();
             desenarefunctie();
+            closegraph();
         }
 
 else if(coordx>=(width/2-320)&&coordx<=(width/4+655)&&coordy>=(height/3+70)&&coordy<=(height/3+130))
@@ -629,27 +688,34 @@ else if(coordx>=(width/2-320)&&coordx<=(width/4+655)&&coordy>=(height/3+70)&&coo
             schimbareculoarebuton(a,b,c,d);
             schimbaresunet(ok);
             x=a+30;
+            do
+            {
             car = getch();
             sir[0]=car;
             sir[1]=NULL;
-        while (car!=13)
-            {
             if(car!=8)
                 {
                 settextstyle(8, HORIZ_DIR, 4 );
-                outtextxy(x,b+30,&car);
+                outtextxy(x,b+30,sir);
                 x+=textwidth(sir);
-                strcat((char*)fun,(char*)car);
-                car = getch();
+                strcat(fun,sir);
                 }
-            else{
+            else
+                if(strlen(sir)==0)
+                    Beep(1000,500);
+            else
+                {
+                setcolor(BLACK);
                 settextstyle(8, HORIZ_DIR, 4 );
-                outtextxy(x,b+30,&car);
+                outtextxy(x,b+30,sir);
                 x-=textwidth(sir);
-                car = getch();
+                sir[strlen(sir)-1]='\0';
+                strcat(fun,sir);
+                setcolor(WHITE);
                 }
             }
-            cout<<fun;
+            while(car!=13);
+
             clickpeGrafic(width,height,ok,poza,fun,capatst,capatdr);
         }
 
@@ -659,27 +725,33 @@ else if(coordx>=(width/2-320)&&coordx<=(width/4+655)&&coordy>=(height/3+70)&&coo
             a=width/2-320; b=height/4-10; c=width/4+320; d=height/4+50;
             schimbareculoarebuton(a,b,c,d);
             schimbaresunet(ok);
-            x=a+30;
-            car = getch();
+             x=a+30;
+            do
+            {car = getch();
             sir[0]=car;
             sir[1]=NULL;
-        while (car!=13)
-            {
             if(car!=8)
                 {
                 settextstyle(8, HORIZ_DIR, 4 );
-                outtextxy(x,b+30,&car);
+                outtextxy(x,b+30,sir);
                 x+=textwidth(sir);
-                strcat((char*)capatst,(char*)car);
-                car = getch();
+                strcat(capatst,sir);
                 }
-            else{
+            else
+                if(strlen(sir)==0)
+                    Beep(1000,500);
+                else
+                {
+                setcolor(BLACK);
                 settextstyle(8, HORIZ_DIR, 4 );
-                outtextxy(x,b+30,&car);
+                outtextxy(x,b+30,sir);
                 x-=textwidth(sir);
-                car = getch();
+                sir[strlen(sir)-1]='\0';
+                strcat(capatst,sir);
+                setcolor(WHITE);
                 }
             }
+            while(car!=13);
         clickpeGrafic(width,height,ok,poza,fun,capatst,capatdr);
         }
     else if(coordx>=(width/4+340)&&coordx<=(width/4+655)&&coordy>=(height/4-10)&&coordy<=(height/4+50))
@@ -688,27 +760,34 @@ else if(coordx>=(width/2-320)&&coordx<=(width/4+655)&&coordy>=(height/3+70)&&coo
             a=width/4+340; b=height/4-10; c=width/4+655; d=height/4+50;
             schimbareculoarebuton(a,b,c,d);
             schimbaresunet(ok);
-            x=a+30;
-            car = getch();
+             x=a+30;
+            do
+            {car = getch();
             sir[0]=car;
             sir[1]=NULL;
-        while (car!=13)
-            {
             if(car!=8)
                 {
                 settextstyle(8, HORIZ_DIR, 4 );
-                outtextxy(x,b+30,&car);
+                outtextxy(x,b+30,sir);
                 x+=textwidth(sir);
-                strcat((char*)capatdr,(char*)car);
-                car = getch();
+                strcat(capatdr,sir);
                 }
-            else{
+            else
+                if(strlen(sir)==0)
+                    Beep(1000,500);
+                else
+                {
+                setcolor(BLACK);
                 settextstyle(8, HORIZ_DIR, 4 );
-                outtextxy(x,b+30,&car);
+                outtextxy(x,b+30,sir);
                 x-=textwidth(sir);
-                car = getch();
+                sir[strlen(sir)-1]='\0';
+                strcat(capatdr,sir);
+                setcolor(WHITE);
                 }
             }
+            while(car!=13);
+
         clickpeGrafic(width,height,ok,poza,fun,capatst,capatdr);
         }
     }
@@ -753,47 +832,47 @@ else if(coordx>=(width/16-31)&&coordx<=(width/16)&&
 void transformarefunctie(char *functie, lista *&infixata)
 {
     char fposibile[][20]={"sin","cos","ln","tg","ctg","rad"};
-    char *matrice[NMAX][NMAX];
-    int i,j,nr=0,nr2;
+    char *vect[NMAX];
+    int i,j,nr;
     int ok=0;
     for(i=0;i<=strlen(functie)-1;i++)
     {
-        matrice[nr][0]=0;
-        nr2=0;
+        vect[0]=0;
+        nr=0;
         if(isdigit(functie[i])!=0)
         {
             while(isdigit(functie[i]!=0))
             {
-                matrice[nr][nr2]=(char*)functie[i];
+                vect[nr]=(char*)functie[i];
                 i++;
-                nr2++;
+                nr++;
             }
-            matrice[nr][nr2]=0;
+            vect[nr]=0;
             i--;
         }
         else if(strchr("+-*^/xe()",functie[i]))
                 {
-                    matrice[nr][nr2]=(char*)functie[i];
-                    nr2++;
-                    matrice[nr][nr2]=0;
+                    vect[nr]=(char*)functie[i];
+                    nr++;
+                    vect[nr]=0;
                 }
         else for(j=0;j<6;j++)
             if(ok==0)
                 if(strstr(functie+1,fposibile[j])==functie+i)
                     {
-                        strcpy((char*)matrice[nr],fposibile[j]);
+                        strcpy((char*)vect[nr],fposibile[j]);
                         i=i+strlen(fposibile[j])-1;
                         ok=1;
                     }
-        //push(infixata,matrice[nr]);
-        nr++;
+        push(infixata,*vect[nr]);
     }
 }
 
 void transformaredininfixinpostifx(lista *&infixata, lista *&value, lista *&operatori)
 {
-    char *c[256], *operator1[256];
+    char *c[256], *operator1[256], *valpr[256];
     c[0]=NULL;
+    valpr[0]=NULL;
     while(esteVidaS(infixata)==0)
     {
         strcpy((char*)c,(char*)top(infixata));
@@ -824,7 +903,11 @@ void transformaredininfixinpostifx(lista *&infixata, lista *&value, lista *&oper
                  }
                  else
                     if(strchr("+-*^/sctl",*c[0]))
-                    //while(esteVidaS(*&operatori)==0&&prioritatecaracter(top(operatori))>=prioritatecaracter(*c))
+                    {
+                    strcpy(*valpr,(char*)top(*&operatori));
+                    while(esteVidaS(*&operatori)==0&&
+                          prioritatecaracter(valpr)>=
+                          prioritatecaracter(c))
                     {
                         operator1[0]=NULL;
                         strcat(*operator1,(char*)top(value));
@@ -834,6 +917,7 @@ void transformaredininfixinpostifx(lista *&infixata, lista *&value, lista *&oper
                         strcat(*operator1,(char*)top(value));
                         pop(value);
                         push(*&value,*(char*)operator1);
+                    }
                     }
     }
     while(esteVidaS(operatori)==0)
