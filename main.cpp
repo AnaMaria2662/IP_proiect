@@ -1,8 +1,6 @@
 /*
 Plan:
--limba
 -integrala
--zoom
 -asimptota verticala
 -asimptota orizontala
 -puncte de discontinuitate
@@ -29,22 +27,22 @@ using namespace std;
 void click(int &coordxclick, int &coordyclick );
 double f(double x);
 void aflareminsimax();
-void graficfunctie();
-void graficnou(int widget,int height);
-void desenarefunctie();
+void graficfunctie(int culoarefunctie);
+void graficnou(int widget,int height,int limba,int culoarerama, int culoaregrafic);
+void desenarefunctie(int limba,int culoarerama, int culoaregrafic);
 void buton_iesire(int width, int height);
 void buton_inapoi(int width, int height);
 void fereastraalegeri(int width, int height);
-void fereastraprincipala(int width, int height,int ok,int poza);
+void fereastraprincipala(int width, int height,int ok,int poza,int limba);
 void fullscreen(int &width, int &height);
 void schimbaresunet(int ok);
 void schimbareculoarebuton(int a, int b, int c, int d);
-void fereastraGrafic(int width, int height,int ok,int poza);
-void fereastraContact(int width, int height,int ok,int poza);
-void clickpeGrafic(int width, int height,int ok,int poza, char fun[256],char capatst[256],char capatdr[256]);
-void clickpeContact(int width, int height,int ok,int poza,char fun[256],char capatst[256],char capatdr[256]);
-void clickpefereastrapr(int ok, int poza,char fun[256],char capatst[256],char capatdr[256]);
-void clickpefereastraalegeri(int &ok, int &poza,char fun[256],char capatst[256],char capatdr[256]);
+void fereastraGrafic(int width, int height,int ok,int poza,int limba);
+void fereastraContact(int width, int height,int ok,int poza,int limba);
+void clickpeGrafic(int width, int height,int ok,int poza,int limba,int culoarerama, int culoaregrafic, char fun[256],char capatst[256],char capatdr[256]);
+void clickpeContact(int width, int height,int ok,int poza,int limba,int culoarerama, int culoaregrafic,char fun[256],char capatst[256],char capatdr[256]);
+void clickpefereastrapr(int ok, int poza,int &limba,int culoarerama, int culoaregrafic, char fun[256],char capatst[256],char capatdr[256]);
+void clickpefereastraalegeri(int &ok, int &poza, int &limba, int &culoarerama, int &culoaregrafic, char fun[256],char capatst[256],char capatdr[256]);
 
 struct lista{
     char info;
@@ -71,6 +69,9 @@ int main()
     char fun[257],capatst[257],capatdr[257];
     int ok=1;
     int poza=1;
+    int limba=1;
+    int culoarerama=1;
+    int culoaregrafic=1;
     cin>>A>>B;
 
     lista *postfixata;
@@ -78,7 +79,7 @@ int main()
     //stiva_vida(postfixata);
     fullscreen(width, height);
     fereastraalegeri(width,height);
-    clickpefereastraalegeri(ok,poza,fun,capatst,capatdr);
+    clickpefereastraalegeri(ok,poza,limba,culoarerama,culoaregrafic,fun,capatst,capatdr);
     getch();
     closegraph();
     return 0;
@@ -132,77 +133,115 @@ void fereastraalegeri(int width, int height)
     buton_iesire(width, height);
 
     setfillstyle(0,BLACK);
-    bar(width/10+200,height/3,width/10+400,height/3+200);//fundal
-    readimagefile("image1_1.jpg",width/10+250,height/3+10,width/10+350,height/3+80);//imagine de fundal
-    readimagefile("Backgrf.jpg",width/10+250,height/3+110,width/10+350,height/3+180);//imagine de fundal
-    setcolor(WHITE);
-    settextstyle(8, HORIZ_DIR, 2 );
-    settextjustify(CENTER_TEXT,CENTER_TEXT);
-    outtextxy(width/10+300,height/3+230,"Poza fundal");
-
-    bar(width/10+640,height/3,width/10+840,height/3+200);//limba
-    setcolor(WHITE);
-    settextstyle(8, HORIZ_DIR, 3 );
-    settextjustify(CENTER_TEXT,CENTER_TEXT);
-    outtextxy(width/10+740,height/3+60,"Romana");
-
-    setcolor(WHITE);
-    settextstyle(8, HORIZ_DIR, 3 );
-    settextjustify(CENTER_TEXT,CENTER_TEXT);
-    outtextxy(width/10+740,height/3+140,"English");
-
-    setcolor(WHITE);
-    settextstyle(8, HORIZ_DIR, 3 );
-    settextjustify(CENTER_TEXT,CENTER_TEXT);
-    outtextxy(width/10+745,height/3+230,"Limba");
-
-    bar(width/10+420,height/3,width/10+620,height/3+200);//sunet
-    setcolor(WHITE);
-    settextstyle(8, HORIZ_DIR, 2 );
-    settextjustify(CENTER_TEXT,CENTER_TEXT);
-    outtextxy(width/10+515,height/3+60," Sunet inchis");
-    rectangle(width/10+445,height/3+40,width/10+600,height/3+70);
+    bar(width/10,height/3,width/10+200,height/3+200);//fundal
+    readimagefile("image1_1.jpg",width/10+50,height/3+10,width/10+150,height/3+80);//imagine de fundal
+    readimagefile("Backgrf.jpg",width/10+50,height/3+110,width/10+150,height/3+180);//imagine de fundal
 
     setcolor(WHITE);
     settextstyle(8, HORIZ_DIR, 2 );
     settextjustify(CENTER_TEXT,CENTER_TEXT);
-    outtextxy(width/10+519,height/3+140,"Sunet deschis");
-    rectangle(width/10+440,height/3+120,width/10+600,height/3+150);
+    outtextxy(width/10+100,height/3+230,"Poza fundal");
+
+    bar(width/10+440,height/3,width/10+640,height/3+200);//limba
+    setcolor(WHITE);
+    settextstyle(8, HORIZ_DIR, 3 );
+    settextjustify(CENTER_TEXT,CENTER_TEXT);
+    outtextxy(width/10+540,height/3+60,"Romana");
+    rectangle(width/10+470,height/3+40,width/10+615,height/3+70);
 
     setcolor(WHITE);
     settextstyle(8, HORIZ_DIR, 3 );
     settextjustify(CENTER_TEXT,CENTER_TEXT);
-    outtextxy(width/10+510,height/3+230,"Sunet");
+    outtextxy(width/10+540,height/3+140,"English");
+    rectangle(width/10+470,height/3+120,width/10+615,height/3+150);
+
+    setcolor(WHITE);
+    settextstyle(8, HORIZ_DIR, 3 );
+    settextjustify(CENTER_TEXT,CENTER_TEXT);
+    outtextxy(width/10+545,height/3+230,"Limba");
+
+    bar(width/10+220,height/3,width/10+420,height/3+200);//sunet
+    setcolor(WHITE);
+    settextstyle(8, HORIZ_DIR, 2 );
+    settextjustify(CENTER_TEXT,CENTER_TEXT);
+    outtextxy(width/10+315,height/3+60," Sunet inchis");
+    rectangle(width/10+245,height/3+40,width/10+400,height/3+70);
+
+    setcolor(WHITE);
+    settextstyle(8, HORIZ_DIR, 2 );
+    settextjustify(CENTER_TEXT,CENTER_TEXT);
+    outtextxy(width/10+319,height/3+140,"Sunet deschis");
+    rectangle(width/10+240,height/3+120,width/10+400,height/3+150);
+
+    setcolor(WHITE);
+    settextstyle(8, HORIZ_DIR, 3 );
+    settextjustify(CENTER_TEXT,CENTER_TEXT);
+    outtextxy(width/10+310,height/3+230,"Sunet");
 
     setcolor(WHITE);
     settextstyle(8, HORIZ_DIR, 4 );
     settextjustify(CENTER_TEXT,CENTER_TEXT);
-    outtextxy(width/2-30,height/2+250," OK! ");
-    rectangle(width/2-82,height/2+226,width/2+20,height/2+260);
+    outtextxy(width/2,height/2+250," OK! ");
+    rectangle(width/2-52,height/2+226,width/2+50,height/2+260);
+
+    setcolor(WHITE);
+    settextstyle(8, HORIZ_DIR,  2);
+    settextjustify(CENTER_TEXT,CENTER_TEXT);
+    outtextxy(width/10+760,height/3+230,"Culori rama");
+    outtextxy(width/10+760,height/3+250,"grafic");
+
+    bar(width/10+660,height/3,width/10+860,height/3+200);//culori rama
+
+    setfillstyle(1,RED);
+    bar(width/10+680,height/3+40,width/10+750,height/3+90);
+    setfillstyle(1,YELLOW);
+    bar(width/10+770,height/3+40,width/10+840,height/3+90);
+    setfillstyle(1,CYAN);
+    bar(width/10+680,height/3+110,width/10+750,height/3+160);
+    setfillstyle(1,GREEN);
+    bar(width/10+770,height/3+110,width/10+840,height/3+160);
+
+    setcolor(WHITE);
+    settextstyle(8, HORIZ_DIR,  2);
+    settextjustify(CENTER_TEXT,CENTER_TEXT);
+    outtextxy(width/10+980,height/3+230,"Culori grafic");
+
+    setfillstyle(1,BLACK);
+    bar(width/10+880,height/3,width/10+1080,height/3+200);//culori grafic
+
+    setfillstyle(1,RED);
+    bar(width/10+900,height/3+40,width/10+970,height/3+90);
+    setfillstyle(1,YELLOW);
+    bar(width/10+990,height/3+40,width/10+1060,height/3+90);
+    setfillstyle(1,CYAN);
+    bar(width/10+900,height/3+110,width/10+970,height/3+160);
+    setfillstyle(1,GREEN);
+    bar(width/10+990,height/3+110,width/10+1060,height/3+160);
 
     buton_iesire(width, height);
 }
 
-void clickpefereastraalegeri(int &ok, int &poza,char fun[256],char capatst[256],char capatdr[256])
+void clickpefereastraalegeri(int &ok, int &poza,int &limba, int &culoarerama, int &culoaregrafic, char fun[256],char capatst[256],char capatdr[256])
 {
     int coordx, coordy;
     int a,b,c,d;
     int height, width;
     fullscreen(width,height);
-
+    if(ok==1)
+        PlaySound("sound2.wav",NULL,SND_ASYNC);
     while(true)
     {
 
     click(coordx,coordy);
-    if(coordx>=(width/2-82)&&coordx<=(width/2+20)&&coordy>=(height/2+226)&&coordy<=(height/2+260))//click pe ok
+    if(coordx>=(width/2-52)&&coordx<=(width/2+50)&&coordy>=(height/2+226)&&coordy<=(height/2+260))//click pe ok
         {
-            a=width/2-82; b=height/2+226; c=width/2+20; d=height/2+260;
+            a=width/2-52; b=height/2+226; c=width/2+50; d=height/2+260;
             schimbareculoarebuton(a,b,c,d);
             rectangle(a,b,c,d);
             schimbaresunet(ok);
             closegraph();
-            fereastraprincipala(width,height,ok,poza);
-            clickpefereastrapr(ok,poza,fun,capatst,capatdr);
+            fereastraprincipala(width,height,ok,poza,limba);
+            clickpefereastrapr(ok,poza,limba,culoarerama,culoaregrafic,fun,capatst,capatdr);
         }
     else if(coordx>=width/16-31&&coordx<=width/10&&coordy>=height/5-145&&coordy<=height/5-114)//click pe exit
         {
@@ -212,37 +251,95 @@ void clickpefereastraalegeri(int &ok, int &poza,char fun[256],char capatst[256],
             schimbaresunet(ok);
             exit(1);
         }
-    else if(coordx>=(width/10+445)&&coordx<=(width/10+600)&&coordy>=(height/3+40)&&coordy<=(height/3+70))
+    else if(coordx>=(width/10+245)&&coordx<=(width/10+400)&&coordy>=(height/3+40)&&coordy<=(height/3+70))
         {//sunet inchis
-            a=width/10+445; b=height/3+40; c=width/10+600; d=height/3+70;
+            a=width/10+245; b=height/3+40; c=width/10+400; d=height/3+70;
             schimbareculoarebuton(a,b,c,d);
             rectangle(a,b,c,d);
             schimbaresunet(ok);
             PlaySound(NULL,0,0);
             ok=0;
         }
-     else if(coordx>=(width/10+440)&&coordx<=(width/10+600)&&coordy>=(height/3+120)&&coordy<=(height/3+150))
+     else if(coordx>=(width/10+240)&&coordx<=(width/10+400)&&coordy>=(height/3+120)&&coordy<=(height/3+150))
         {//sunet deschis
-            a=width/10+440; b=height/3+120; c=width/10+600; d=height/3+150;
+            a=width/10+240; b=height/3+120; c=width/10+400; d=height/3+150;
             schimbareculoarebuton(a,b,c,d);
             rectangle(a,b,c,d);
             schimbaresunet(ok);
             PlaySound("sound2.wav",NULL,SND_ASYNC);//sunet de fundal
             ok=1;
         }
-    else if(coordx>=(width/10+250)&&coordx<=(width/10+350)&&coordy>=(height/3+10)&&coordy<=(height/3+80))
+    else if(coordx>=(width/10+50)&&coordx<=(width/10+150)&&coordy>=(height/3+10)&&coordy<=(height/3+80))//poza mate
         {
-            a=width/10+250; b=height/3+10; c=width/10+350; d=height/3+80;
+            a=width/10+50; b=height/3+10; c=width/10+150; d=height/3+80;
             schimbaresunet(ok);
             poza=1;
         }
-    else if(coordx>=(width/10+250)&&coordx<=(width/10+350)&&coordy>=(height/3+110)&&coordy<=(height/3+180))
+    else if(coordx>=(width/10+50)&&coordx<=(width/10+150)&&coordy>=(height/3+110)&&coordy<=(height/3+180))//poza craciun
         {
-            a=width/10+250; b=height/3+110; c=width/10+350; d=height/3+180;
+            a=width/10+50; b=height/3+110; c=width/10+150; d=height/3+180;
             schimbaresunet(ok);
             poza=0;
         }
-    //de continuat cu toate butoanele de limba
+    else if(coordx>=(width/10+470)&&coordx<=(width/10+615)&&coordy>=(height/3+40)&&coordy<=(height/3+70))//buton romana
+    {
+        a=width/10+470; b=height/3+40; c=width/10+615; d=height/3+70;
+        schimbareculoarebuton(a,b,c,d);
+        rectangle(a,b,c,d);
+        schimbaresunet(ok);
+        limba=1;
+    }
+
+    else if(coordx>=(width/10+470)&&coordx<=(width/10+615)&&coordy>=(height/3+120)&&coordy<=(height/3+150))//buton engleza
+    {
+        a=width/10+470; b=height/3+120; c=width/10+615; d=height/3+150;
+        schimbareculoarebuton(a,b,c,d);
+        rectangle(a,b,c,d);
+        schimbaresunet(ok);
+        limba=0;
+    }
+    else if(coordx>=(width/10+680)&&coordx<=(width/10+750)&&coordy>=(height/3+40)&&coordy<=(height/3+90))//rama rosu
+        {
+        schimbaresunet(ok);
+        culoarerama=1;
+        }
+    else if(coordx>=(width/10+770)&&coordx<=(width/10+840)&&coordy>=(height/3+40)&&coordy<=(height/3+90))//rama galben
+    {
+        schimbaresunet(ok);
+        culoarerama=2;
+    }
+    else if(coordx>=(width/10+680)&&coordx<=(width/10+750)&&coordy>=(height/3+110)&&coordy<=(height/3+160))//rama cyan
+    {
+        schimbaresunet(ok);
+        culoarerama=3;
+    }
+    else if(coordx>=(width/10+770)&&coordx<=(width/10+840)&&coordy>=(height/3+110)&&coordy<=(height/3+160))//rama verde
+    {
+        schimbaresunet(ok);
+        culoarerama=4;
+    }
+
+    else if(coordx>=(width/10+900)&&coordx<=(width/10+970)&&coordy>=(height/3+40)&&coordy<=(height/3+90))//functie rosu
+        {
+        schimbaresunet(ok);
+        culoaregrafic=1;
+    }
+    else if(coordx>=(width/10+990)&&coordx<=(width/10+1060)&&coordy>=(height/3+40)&&coordy<=(height/3+90))//functie galben
+    {
+        schimbaresunet(ok);
+        culoaregrafic=2;
+    }
+    else if(coordx>=(width/10+900)&&coordx<=(width/10+970)&&coordy>=(height/3+110)&&coordy<=(height/3+160))//functie cyan
+    {
+        schimbaresunet(ok);
+        culoaregrafic=3;
+    }
+    else if(coordx>=(width/10+9900)&&coordx<=(width/10+1060)&&coordy>=(height/3+110)&&coordy<=(height/3+160))//functie verde
+    {
+        schimbaresunet(ok);
+        culoaregrafic=4;
+    }
+
     }
 }
 
@@ -278,7 +375,7 @@ void aflareminsimax()
     }
 }
 
-void graficfunctie()
+void graficfunctie(int culoaregrafic)
 {//trasare linie grafic pt toate punctele
     int i;
     double x,y,xecran,yecran,xpunctactual,ypunctactual;
@@ -293,99 +390,215 @@ void graficfunctie()
         y=f(x);
         xpunctactual=(int)((DREAPTA-STANGA)*x/(B-A)+(B*STANGA-A*DREAPTA)/(B-A));
         ypunctactual=(int)((BOTTOM-TOP)*y/(MAX-MIN)+(MAX*TOP-MIN*BOTTOM)/(MAX-MIN));
+        if(culoaregrafic==1)setcolor(RED);
+            else if(culoaregrafic==2)setcolor(YELLOW);
+            else if(culoaregrafic==3)setcolor(CYAN);
+            else setcolor(GREEN);
         line(xecran,yecran,xpunctactual,ypunctactual);
         xecran=xpunctactual;
         yecran=ypunctactual;
     }
 }
 
-void graficnou(int width, int height)
+void graficnou(int width, int height,int limba,int culoarerama, int culoaregrafic)
 {
-    setcolor(YELLOW);
-    graficfunctie();
+    if(culoaregrafic==1)setcolor(RED);
+        else if(culoaregrafic==2)setcolor(YELLOW);
+        else if(culoaregrafic==3)setcolor(CYAN);
+        else setcolor(GREEN);
+    graficfunctie(culoaregrafic);
     setcolor(WHITE);
     settextstyle(8, HORIZ_DIR, 4 );
     settextjustify(CENTER_TEXT,CENTER_TEXT);
-    outtextxy(width/2,height/4-50,"Reprezentarea functiei:");
+
+    if(limba==1) outtextxy(width/2,height/4-50,"Reprezentarea functiei:");
+        else  outtextxy(width/2,height/4-50,"Graph reprezentation:");
 
     setcolor(WHITE);
     settextstyle(8, HORIZ_DIR, 3 );
     settextjustify(CENTER_TEXT,CENTER_TEXT);
-    outtextxy(width/4+50,height-100,"Integrala in xmin:");
+
+    if(limba==1) outtextxy(width/4+50,height-100,"Integrala in xmin:");
+        else  outtextxy(width/4+50,height-100,"Integral in xmin:");
 
     setcolor(WHITE);
     settextstyle(8, HORIZ_DIR, 3 );
     settextjustify(CENTER_TEXT,CENTER_TEXT);
-    outtextxy(width/2+210,height-100,"Integrala in xmax:");
+
+    if(limba==1) outtextxy(width/2+210,height-100,"Integrala in xmax:");
+        else  outtextxy(width/2+210,height-100,"Integral in xmax:");
+
     char car;
     do
         {
             car = getch();
             if(car==KEY_RIGHT||car=='d')//dr
                 {
-                    setcolor(BLACK);
-                    graficfunctie();
-                    A+=50;
-                    B+=50;
+                    cleardevice();
+                    A+=2;
+                    B+=2;
+
+                    setcolor(RED);
+                    rectangle(STANGA,TOP,DREAPTA,BOTTOM);
+                    setcolor(DARKGRAY);
+                    line(STANGA,height/2,DREAPTA, height/2);//axa ox
+                    line(width/2,TOP,width/2,BOTTOM);//axa oy
 
                     setcolor(WHITE);
                     settextstyle(8, HORIZ_DIR, 4 );
                     settextjustify(CENTER_TEXT,CENTER_TEXT);
-                    outtextxy(width/2,height/4-50,"Reprezentarea functiei:");
+
+                    if(limba==1) outtextxy(width/2,height/4-50,"Reprezentarea functiei:");
+                        else  outtextxy(width/2,height/4-50,"Graph reprezentation:");
 
                     setcolor(WHITE);
                     settextstyle(8, HORIZ_DIR, 3 );
                     settextjustify(CENTER_TEXT,CENTER_TEXT);
-                    outtextxy(width/4+50,height-100,"Integrala in xmin:");
+
+                    if(limba==1) outtextxy(width/4+50,height-100,"Integrala in xmin:");
+                        else  outtextxy(width/4+50,height-100,"Integral in xmin:");
 
                     setcolor(WHITE);
                     settextstyle(8, HORIZ_DIR, 3 );
                     settextjustify(CENTER_TEXT,CENTER_TEXT);
-                    outtextxy(width/2+210,height-100,"Integrala in xmax:");
-                    setcolor(YELLOW);
-                    graficfunctie();
+
+                    if(limba==1) outtextxy(width/2+210,height-100,"Integrala in xmax:");
+                        else  outtextxy(width/2+210,height-100,"Integral in xmax:");
+
+                    graficfunctie(culoaregrafic);
                 }
             else if(car==KEY_LEFT||car=='a')//st
             {
-                setcolor(BLACK);
-                graficfunctie();
-                A-=50;
-                B-=50;
+                cleardevice();
+                A-=2;
+                B-=2;
+
+                setcolor(RED);
+                rectangle(STANGA,TOP,DREAPTA,BOTTOM);
+                setcolor(DARKGRAY);
+                line(STANGA,height/2,DREAPTA, height/2);//axa ox
+                line(width/2,TOP,width/2,BOTTOM);//axa oy
+
                 setcolor(WHITE);
                 settextstyle(8, HORIZ_DIR, 4 );
                 settextjustify(CENTER_TEXT,CENTER_TEXT);
-                outtextxy(width/2,height/4-50,"Reprezentarea functiei:");
+
+                if(limba==1) outtextxy(width/2,height/4-50,"Reprezentarea functiei:");
+                    else  outtextxy(width/2,height/4-50,"Graph reprezentation:");
 
                 setcolor(WHITE);
                 settextstyle(8, HORIZ_DIR, 3 );
                 settextjustify(CENTER_TEXT,CENTER_TEXT);
-                outtextxy(width/4+50,height-100,"Integrala in xmin:");
+
+                if(limba==1) outtextxy(width/4+50,height-100,"Integrala in xmin:");
+                    else  outtextxy(width/4+50,height-100,"Integral in xmin:");
 
                 setcolor(WHITE);
                 settextstyle(8, HORIZ_DIR, 3 );
                 settextjustify(CENTER_TEXT,CENTER_TEXT);
-                outtextxy(width/2+210,height-100,"Integrala in xmax:");
-                setcolor(YELLOW);
-                graficfunctie();
+
+                if(limba==1) outtextxy(width/2+210,height-100,"Integrala in xmax:");
+                    else  outtextxy(width/2+210,height-100,"Integral in xmax:");
+
+                graficfunctie(culoaregrafic);
                 }
+            else if(car=='w'||car==KEY_UP)//ZOOM -
+            {
+                cleardevice();
+                A+=2;
+                B-=2;
+                setcolor(RED);
+                rectangle(STANGA,TOP,DREAPTA,BOTTOM);
+                setcolor(DARKGRAY);
+                line(STANGA,height/2,DREAPTA, height/2);//axa ox
+                line(width/2,TOP,width/2,BOTTOM);//axa oy
+
+                setcolor(WHITE);
+                settextstyle(8, HORIZ_DIR, 4 );
+                settextjustify(CENTER_TEXT,CENTER_TEXT);
+
+                if(limba==1) outtextxy(width/2,height/4-50,"Reprezentarea functiei:");
+                    else  outtextxy(width/2,height/4-50,"Graph reprezentation:");
+
+                setcolor(WHITE);
+                settextstyle(8, HORIZ_DIR, 3 );
+                settextjustify(CENTER_TEXT,CENTER_TEXT);
+
+                if(limba==1) outtextxy(width/4+50,height-100,"Integrala in xmin:");
+                    else  outtextxy(width/4+50,height-100,"Integral in xmin:");
+
+                setcolor(WHITE);
+                settextstyle(8, HORIZ_DIR, 3 );
+                settextjustify(CENTER_TEXT,CENTER_TEXT);
+
+                if(limba==1) outtextxy(width/2+210,height-100,"Integrala in xmax:");
+                        else  outtextxy(width/2+210,height-100,"Integral in xmax:");
+
+
+                graficfunctie(culoaregrafic);
+            }
+            else if(car=='s'||car==KEY_DOWN)//ZOOM +
+            {
+                cleardevice();
+                A-=2;
+                B+=2;
+
+                setcolor(RED);
+                rectangle(STANGA,TOP,DREAPTA,BOTTOM);
+                setcolor(DARKGRAY);
+                line(STANGA,height/2,DREAPTA, height/2);//axa ox
+                line(width/2,TOP,width/2,BOTTOM);//axa oy
+
+                setcolor(WHITE);
+                settextstyle(8, HORIZ_DIR, 4 );
+                settextjustify(CENTER_TEXT,CENTER_TEXT);
+
+                if(limba==1) outtextxy(width/2,height/4-50,"Reprezentarea functiei:");
+                        else  outtextxy(width/2,height/4-50,"Graph reprezentation:");
+
+                setcolor(WHITE);
+                settextstyle(8, HORIZ_DIR, 3 );
+                settextjustify(CENTER_TEXT,CENTER_TEXT);
+
+                if(limba==1) outtextxy(width/4+50,height-100,"Integrala in xmin:");
+                    else  outtextxy(width/4+50,height-100,"Integral in xmin:");
+
+                setcolor(WHITE);
+                settextstyle(8, HORIZ_DIR, 3 );
+                settextjustify(CENTER_TEXT,CENTER_TEXT);
+
+                if(limba==1) outtextxy(width/2+210,height-100,"Integrala in xmax:");
+                    else  outtextxy(width/2+210,height-100,"Integral in xmax:");
+
+                graficfunctie(culoaregrafic);
+            }
         }
     while(car!=13);
 }
 
-void desenarefunctie()
+void desenarefunctie(int limba,int culoarerama,int culoaregrafic)
 {//desenare grafic
     int height, width;
     height=GetSystemMetrics(SM_CYSCREEN);
     width=GetSystemMetrics(SM_CXSCREEN);
     initwindow(width,height,"Fereastra",-4,-4);
 
-    setcolor(RED);
+    if(culoarerama==1)setcolor(RED);
+        else if(culoarerama==2)setcolor(YELLOW);
+        else if(culoarerama==3)setcolor(CYAN);
+        else setcolor(GREEN);
+
     rectangle(STANGA,TOP,DREAPTA,BOTTOM);
+    setcolor(DARKGRAY);
     line(STANGA,height/2,DREAPTA, height/2);//axa ox
     line(width/2,TOP,width/2,BOTTOM);//axa oy
 
-    setcolor(YELLOW);
-    graficnou(width,height);//graficul efectiv
+    if(culoaregrafic==1)setcolor(RED);
+        else if(culoaregrafic==2)setcolor(YELLOW);
+        else if(culoaregrafic==3)setcolor(CYAN);
+        else setcolor(GREEN);
+
+    graficnou(width,height,limba,culoarerama,culoaregrafic);//graficul efectiv
 }
 
 void buton_iesire(int width, int height)
@@ -404,7 +617,7 @@ void buton_inapoi(int width, int height)
     rectangle(width/10+10,height/5-145,width/10+90,height/5-114);
 }
 
-void fereastraprincipala(int width, int height,int ok, int poza)
+void fereastraprincipala(int width, int height,int ok, int poza,int limba)
 {//fereastra 1
 
     initwindow(width,height,"Fereastra principala",-4,-4);
@@ -423,17 +636,28 @@ void fereastraprincipala(int width, int height,int ok, int poza)
         readimagefile("sunetinchis1.jpeg",width/16-31,height/5-100,width/16,height/5-70);
         PlaySound(NULL,0,0);
     }
-
-    readimagefile("romana.jpg",width-80,height/5-145,width-30,(height/5-115));//steag->romana
+    if(limba==1)
+        readimagefile("romana.jpg",width-80,height/5-145,width-30,(height/5-115));//steag->romana
+    else   readimagefile("engleza.jpg",width-80,(height/5-145),width-30,(height/5-115));
 
     setcolor(WHITE);
     settextstyle(8, HORIZ_DIR, 8 );
     settextjustify(CENTER_TEXT,CENTER_TEXT);
-    outtextxy(width/2,height/4,"Graficul functiei");//setari titlu
+    if(limba==1)
+        outtextxy(width/2,height/4,"Graficul functiei");//setari titlu
+        else outtextxy(width/2,height/4,"Function's grapich");//setari titlu
+
 
     settextstyle(8, HORIZ_DIR, 6);
-    outtextxy(width/2,height/2,"Grafic");
-    rectangle(width/2-100,height/2-40,width/2+98,height/2+12);//setari a doua linie de text
+    if(limba==1)
+        {
+            outtextxy(width/2,height/2,"Grafic");
+            rectangle(width/2-100,height/2-40,width/2+98,height/2+12);//setari a doua linie de text
+        }
+        else {
+                outtextxy(width/2,height/2,"Graph");
+                rectangle(width/2-82,height/2-40,width/2+80,height/2+12);//setari a doua linie de text
+            }
 
     settextstyle(8, HORIZ_DIR, 6);
     outtextxy(width/2,height/2+150,"Contact");
@@ -466,7 +690,7 @@ void schimbareculoarebuton(int a, int b, int c, int d)
     rectangle(a,b,c,d);
 }
 
-void fereastraGrafic(int width, int height,int ok,int poza)
+void fereastraGrafic(int width, int height,int ok,int poza,int limba)
 {//fereastra 2
 
     initwindow(width,height,"Fereastra",-4,-4);
@@ -489,24 +713,35 @@ void fereastraGrafic(int width, int height,int ok,int poza)
 
     settextstyle(8, HORIZ_DIR, 4 );
     settextjustify(CENTER_TEXT,CENTER_TEXT);
-    outtextxy(width/2+10,height/4-40,"Introduceti intervalul  aici:");
+
+    if(limba==1) outtextxy(width/2+10,height/4-40,"Introduceti intervalul  aici:");
+        else   outtextxy(width/2+10,height/4-40,"Write the interval:");
+
     setfillstyle(0,BLACK);
     bar(width/2-320,height/4-10,width/4+320,height/4+50);//text 1
     bar(width/4+340,height/4-10,width/4+655,height/4+50);
     setcolor(WHITE);
     settextstyle(8, HORIZ_DIR, 4 );
     settextjustify(CENTER_TEXT,CENTER_TEXT);
-    outtextxy(width/2-400,height/4+33,"Stanga:");
+
+    if(limba==1)outtextxy(width/2-400,height/4+33,"Stanga:");
+        else outtextxy(width/2-395,height/4+33,"Left:");
+
     settextstyle(8, HORIZ_DIR, 4 );
     settextjustify(CENTER_TEXT,CENTER_TEXT);
-    outtextxy(width/2+400,height/4+33,":Dreapta");
+
+     if(limba==1) outtextxy(width/2+400,height/4+33,":Dreapta");
+        else outtextxy(width/2+400,height/4+33,":Right");
+
     rectangle(width/2-320,height/4-10,width/4+320,height/4+50);//st
     rectangle(width/4+340,height/4-10,width/4+655,height/4+50);//dr
 
-
     settextstyle(8, HORIZ_DIR, 4 );
     settextjustify(CENTER_TEXT,CENTER_TEXT);
-    outtextxy(width/2,height/3+40,"Introduceti functia aici:");
+
+    if(limba==1) outtextxy(width/2,height/3+40,"Introduceti functia aici:");
+        else   outtextxy(width/2,height/3+40,"Write the funtion");
+
     setfillstyle(0,BLACK);
     bar(width/2-320,height/3+70,width/4+655,height/3+130);//text 2
     setcolor(WHITE);
@@ -514,7 +749,10 @@ void fereastraGrafic(int width, int height,int ok,int poza)
 
     settextstyle(8, HORIZ_DIR, 4);
     settextjustify(CENTER_TEXT,CENTER_TEXT);
-    outtextxy(width/2,height/2+35,"Evaluator functie");
+
+    if(limba==1)outtextxy(width/2,height/2+35,"Evaluator functie");
+        else outtextxy(width/2,height/2+35,"Function evaluation");
+
     setfillstyle(0,BLACK);
     bar(width/2-379,height/2+70,width/2+376,height/2+250);//text 3
     setcolor(WHITE);
@@ -531,7 +769,7 @@ void fereastraGrafic(int width, int height,int ok,int poza)
     buton_iesire(width, height);
 }
 
-void fereastraContact(int width, int height,int ok,int poza)
+void fereastraContact(int width, int height,int ok,int poza,int limba)
 {//fereastra 3
     initwindow(width,height,"Fereastra",-4,-4);
 
@@ -552,13 +790,15 @@ void fereastraContact(int width, int height,int ok,int poza)
     }
 
     settextstyle(8, HORIZ_DIR, 5);
-    outtextxy(width/2-350,height/2-200,"Proiectul a fost realizat de:");//text 1
+    if(limba==1)  outtextxy(width/2-350,height/2-200,"Proiectul a fost realizat de:");//text 1
+        else  outtextxy(width/2-350,height/2-200,"The project was made by:");//text 1
 
     settextstyle(8, HORIZ_DIR, 4);
     outtextxy(width/2-180,height/2-70,"Ursache Ana-Maria");//text 2
 
     settextstyle(8, HORIZ_DIR, 4);
-    outtextxy(width/2-30,height/2+8,"si");//text 3
+    if(limba==1) outtextxy(width/2-30,height/2+8,"si");//text 3
+        else outtextxy(width/2-30,height/2+8,"and");//text 3
 
     settextstyle(8, HORIZ_DIR, 4);
     outtextxy(width/2-160,height/2+80,"Galatanu Emilia");//text 4
@@ -568,7 +808,7 @@ void fereastraContact(int width, int height,int ok,int poza)
     buton_iesire(width, height);
 }
 
-void clickpefereastrapr(int ok, int poza, char fun[256],char capatst[256],char capatdr[256])
+void clickpefereastrapr(int ok, int poza, int &limba,int culoarerama, int culoaregrafic,char fun[256],char capatst[256],char capatdr[256])
 {
     int coordx, coordy;
     int a,b,c,d;
@@ -587,14 +827,23 @@ void clickpefereastrapr(int ok, int poza, char fun[256],char capatst[256],char c
             schimbaresunet(ok);
             exit(1);
         }
-    else if(coordx>=(width/2-100)&&coordx<=(width/2+98)&&coordy>=(height/2-40)&&coordy<=(height/2+12))
+    else if(coordx>=(width/2-100)&&coordx<=(width/2+98)&&coordy>=(height/2-40)&&coordy<=(height/2+12)&&limba==1)
             {//daca se face click pe primul buton: "Grafic"
                 a=width/2-100; b=height/2-40; c=width/2+98; d=height/2+12;
                 schimbareculoarebuton(a,b,c,d);
                 schimbaresunet(ok);
                 clearmouseclick(WM_LBUTTONUP);
-                fereastraGrafic(width,height,ok,poza);
-                clickpeGrafic(width,height,ok,poza,fun,capatst,capatdr);
+                fereastraGrafic(width,height,ok,poza,limba);
+                clickpeGrafic(width,height,ok,poza,limba,culoarerama,culoaregrafic,fun,capatst,capatdr);
+            }
+    else if(coordx>=(width/2-82)&&coordx<=(width/2+80)&&coordy>=(height/2-40)&&coordy<=(height/2+12)&&limba==0)
+            {//daca se face click pe "Graph"
+                a=width/2-82; b=height/2-40; c=width/2+80; d=height/2+12;
+                schimbareculoarebuton(a,b,c,d);
+                schimbaresunet(ok);
+                clearmouseclick(WM_LBUTTONUP);
+                fereastraGrafic(width,height,ok,poza,limba);
+                clickpeGrafic(width,height,ok,poza,limba,culoarerama,culoaregrafic,fun,capatst,capatdr);
             }
     else if(coordx>=(width/2-119)&&coordx<=(width/2+117)&&
                 coordy>=(height/2+110)&&coordy<=(height/2+165))
@@ -604,14 +853,22 @@ void clickpefereastrapr(int ok, int poza, char fun[256],char capatst[256],char c
                 a=width/2-119; b=height/2+110; c=width/2+117; d=height/2+165;
                 schimbareculoarebuton(a,b,c,d);
                 schimbaresunet(ok);
-                fereastraContact(width, height,ok,poza);
-                clickpeContact(width,height,ok,poza,fun,capatst,capatdr);
+                fereastraContact(width, height,ok,poza,limba);
+                clickpeContact(width,height,ok,poza,limba,culoarerama,culoaregrafic,fun,capatst,capatdr);
             }
     else if(coordx>=(width-80)&&coordx<=(width-30)&&
-                    coordy>=(height/5-145)&&coordy<=(height/5-115))//steag-daca se apasa setarea de limba
+                    coordy>=(height/5-145)&&coordy<=(height/5-115)&&limba==1)//steag-daca se apasa setarea de limba
             {
                 schimbaresunet(ok);
-                readimagefile("engleza.jpg",width-80,(height/5-145),width-30,(height/5-115));//se schimba imaginea->engleza
+                readimagefile("engleza.jpg",width-80,(height/5-145),width-30,(height/5-115));
+                limba=0;//se schimba imaginea->engleza
+            }
+    else if(coordx>=(width-80)&&coordx<=(width-30)&&
+                    coordy>=(height/5-145)&&coordy<=(height/5-115)&&limba==0)//steag-daca se apasa setarea de limba
+            {
+                schimbaresunet(ok);
+                readimagefile("romana.jpg",width-80,height/5-145,width-30,(height/5-115));//steag->romana
+                limba=1;//se schimba imaginea->romana
             }
     else if(coordx>=(width/16-31)&&coordx<=(width/16)&&
                     coordy>=(height/5-100)&&coordy<=(height/5-70))
@@ -623,7 +880,7 @@ void clickpefereastrapr(int ok, int poza, char fun[256],char capatst[256],char c
 }
 
 
-void clickpeGrafic(int width, int height,int ok,int poza,char fun[256],char capatst[256],char capatdr[256])
+void clickpeGrafic(int width, int height,int ok,int poza, int limba, int culoarerama, int culoaregrafic,char fun[256],char capatst[256],char capatdr[256])
 {
     int coordx, coordy;
     int a,b,c,d;
@@ -643,8 +900,8 @@ void clickpeGrafic(int width, int height,int ok,int poza,char fun[256],char capa
             schimbareculoarebuton(a,b,c,d);
             schimbaresunet(ok);
             closegraph();
-            fereastraprincipala(width, height,ok,poza);
-            clickpefereastrapr(ok,poza,fun,capatst,capatdr);
+            fereastraprincipala(width, height,ok,poza,limba);
+            clickpefereastrapr(ok,poza,limba,culoarerama, culoaregrafic,fun,capatst,capatdr);
         }
 else if(coordx>=width/16-31&&coordx<=width/10&&coordy>=height/5-145&&coordy<=height/5-114)//exit
         {
@@ -674,7 +931,7 @@ else if(coordx>=width/16-31&&coordx<=width/10&&coordy>=height/5-145&&coordy<=hei
             a=width/2+460; b=height/2-18; c=width/2+540; d=height/2+7;
             schimbareculoarebuton(a,b,c,d);
             schimbaresunet(ok);
-            desenarefunctie();
+            desenarefunctie(limba,culoarerama,culoaregrafic);
             closegraph();
         }
 
@@ -713,8 +970,8 @@ else if(coordx>=(width/2-320)&&coordx<=(width/4+655)&&coordy>=(height/3+70)&&coo
                 }
             }
             while(car!=13);
-
-            clickpeGrafic(width,height,ok,poza,fun,capatst,capatdr);
+            cout<<fun;
+            clickpeGrafic(width,height,ok,poza,limba,culoarerama,culoaregrafic,fun,capatst,capatdr);
         }
 
     else if(coordx>=(width/2-320)&&coordx<=(width/4+320)&&coordy>=(height/4-10)&&coordy<=(height/4+50))
@@ -750,7 +1007,7 @@ else if(coordx>=(width/2-320)&&coordx<=(width/4+655)&&coordy>=(height/3+70)&&coo
                 }
             }
             while(car!=13);
-        clickpeGrafic(width,height,ok,poza,fun,capatst,capatdr);
+        clickpeGrafic(width,height,ok,poza,limba,culoarerama,culoaregrafic,fun,capatst,capatdr);
         }
     else if(coordx>=(width/4+340)&&coordx<=(width/4+655)&&coordy>=(height/4-10)&&coordy<=(height/4+50))
         {
@@ -786,11 +1043,11 @@ else if(coordx>=(width/2-320)&&coordx<=(width/4+655)&&coordy>=(height/3+70)&&coo
             }
             while(car!=13);
 
-        clickpeGrafic(width,height,ok,poza,fun,capatst,capatdr);
+        clickpeGrafic(width,height,ok,poza,limba,culoarerama,culoaregrafic,fun,capatst,capatdr);
         }
     }
 }
-void clickpeContact(int width, int height,int ok,int poza,char fun[256],char capatst[256],char capatdr[256])
+void clickpeContact(int width, int height,int ok,int poza,int limba,int culoarerama, int culoaregrafic,char fun[256],char capatst[256],char capatdr[256])
 {
     int coordx, coordy;
     int a,b,c,d;
@@ -805,8 +1062,8 @@ void clickpeContact(int width, int height,int ok,int poza,char fun[256],char cap
             schimbareculoarebuton(a,b,c,d);
             schimbaresunet(ok);
             closegraph();
-            fereastraprincipala(width, height,ok,poza);
-            clickpefereastrapr(ok,poza,fun,capatst,capatdr);
+            fereastraprincipala(width, height,ok,poza,limba);
+            clickpefereastrapr(ok,poza,limba,culoarerama,culoaregrafic,fun,capatst,capatdr);
         }
 else if(coordx>=width/16-31&&coordx<=width/10&&coordy>=height/5-145&&coordy<=height/5-114)//exit
         {
@@ -824,7 +1081,6 @@ else if(coordx>=(width/16-31)&&coordx<=(width/16)&&
 
     }
 }
-
 
 
 void transformarefunctie(char *functie, lista *&infixata)
