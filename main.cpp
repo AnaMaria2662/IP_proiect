@@ -3,8 +3,6 @@ Plan:
 -limba
 -integrala
 -zoom
--stanga
--dreapta
 -asimptota verticala
 -asimptota orizontala
 -puncte de discontinuitate
