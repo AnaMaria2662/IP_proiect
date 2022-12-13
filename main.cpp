@@ -17,12 +17,13 @@ Evaluator:
 #include<cstring>
 #include<math.h>
 #define NMAX 200
-double A,B;
-double MIN,MAX;
-int STANGA=250, DREAPTA=1100, TOP=150, BOTTOM=600;
 
 using namespace std;
 
+double A,B;
+double MIN,MAX;
+int STANGA=250, DREAPTA=1100, TOP=150, BOTTOM=600;
+char vect[256];
 
 void click(int &coordxclick, int &coordyclick );
 double f(double x);
@@ -52,17 +53,17 @@ struct lista{
 }*infixata;
 
 double operatie (char r, double x, double y);
-double operatie_spekiala (char r, double x);
+double operatie_speciala (char r, double x);
 int prioritatecaracter(char a);
 void transformarefunctie(char *functie);
-void transformaredininfixinpostifx(double x);
+double transformaredininfixinpostifx(double x);
 
 
 void push(lista *&varf, char element);
 void push2(lista *&varf, double element);
 void pop(lista *&varf );
 char top(lista *&varf);
-void pune_in_stiva(char *vect)
+void pune_in_stiva(char *vect);
 bool esteVidaS(lista *&Stiva);
 void stiva_vida(lista *&Stiva);
 
@@ -1253,7 +1254,7 @@ double transformaredininfixinpostifx(double x)
                         char operator1=top(operatori);
                         if(operator1=='s'||operator1=='c'||operator1=='l'||operator1=='r'||operator1=='t')
                                {
-                                   answ=operatie_spekiala(operator1,valoare1);
+                                   answ=operatie_speciala(operator1,valoare1);
                                    pop(operatori);
                                 }
                         else {
@@ -1276,7 +1277,7 @@ double transformaredininfixinpostifx(double x)
                         char operator1=top(operatori);
                         if(operator1=='s'||operator1=='c'||operator1=='l'||operator1=='r'||operator1=='t')
                                {
-                                   ans=operatie_spekiala(operator1,valoare1);
+                                   ans=operatie_speciala(operator1,valoare1);
                                    pop(operatori);
                                 }
                         else {
@@ -1318,7 +1319,7 @@ double operatie (char r, double x, double y)
     return pow(x,y);
 }
 
-double operatie_spekiala (char r, double x)
+double operatie_speciala (char r, double x)
   {
     if(r=='s')
     return sin(x);
