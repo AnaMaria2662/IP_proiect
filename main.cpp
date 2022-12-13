@@ -49,16 +49,20 @@ struct lista{
     char inf;
     lista *urm;
     lista *varf;
-}*nod;
+}*infixata;
 
-int prioritatecaracter(char *a[]);
-void transformarefunctie(char *functie, lista *&infixata);
-void transformaredininfixinpostifx(lista *&infixata, lista*&value, lista*&operatori);
+double operatie (char r, double x, double y);
+double operatie_spekiala (char r, double x);
+int prioritatecaracter(char a);
+void transformarefunctie(char *functie);
+void transformaredininfixinpostifx(double x);
 
 
 void push(lista *&varf, char element);
+void push2(lista *&varf, double element);
 void pop(lista *&varf );
 char top(lista *&varf);
+void pune_in_stiva(char *vect)
 bool esteVidaS(lista *&Stiva);
 void stiva_vida(lista *&Stiva);
 
@@ -94,6 +98,15 @@ Stiva->urm = varf;
 varf=Stiva;
 }
 
+void push2(lista *&varf, double element)
+{
+lista *Stiva;
+Stiva=new lista;
+Stiva->inf=element;
+Stiva->urm = varf;
+varf=Stiva;
+}
+
 void pop(lista *&varf )
 {
     lista *Stiva=varf;
@@ -109,10 +122,23 @@ char top(lista *&varf)
     return element;
 }
 
+void pune_in_stiva(char *vect)
+{
+stiva_vida(infixata);
+char*p,val;
+p=strtok(vect," ");
+while(p)
+{   strcpy((char*)val,p);
+    push(infixata,val);
+    p=strtok(" ",NULL);
+}
+}
 
 bool esteVidaS(lista *&Stiva)//stiva
 {
-return top(Stiva);
+if(top(Stiva)==NULL)
+    return 1;
+return 0;
 }
 
 void stiva_vida(lista *&Stiva)
@@ -354,10 +380,8 @@ void click(int &coordxclick, int &coordyclick )
 }
 
 double f(double x)
-{//functia in care se va forma functia dupa ce este preluata ca sir de caractere
-    if(x!=0)
-        return x*sin(1.0*x);
-    else return 0;
+{
+    return transformaredininfixinpostifx(x);
 }
 
 void aflareminsimax()
@@ -1103,118 +1127,216 @@ else if(coordx>=(width/16-31)&&coordx<=(width/16)&&
     }
 }
 
-
-void transformarefunctie(char *functie, lista *&infixata)
+void transformarefunctie(char *functie)
 {
-    char fposibile[][20]={"sin","cos","ln","tg","ctg","rad"};
-    char *vect[NMAX];
-    int i,j,nr;
-    int ok=0;
-    for(i=0;i<=strlen(functie)-1;i++)
+    int i=0,j,nr=0;
+    while(i<=strlen(functie)-1)
     {
-        vect[0]=0;
-        nr=0;
         if(isdigit(functie[i])!=0)
         {
             while(isdigit(functie[i]!=0))
             {
-                vect[nr]=(char*)functie[i];
+                vect[nr]=functie[i];
                 i++;
                 nr++;
             }
-            vect[nr]=0;
-            i--;
+        vect[nr]=' ';nr++;
         }
-        else if(strchr("+-*^/xe()",functie[i]))
+        else if(strchr("+-*^/)(",functie[i]))
                 {
-                    vect[nr]=(char*)functie[i];
-                    nr++;
-                    vect[nr]=0;
+                    vect[nr]=functie[i];
+                    nr++;i=i+1;
+                    vect[nr]=' ';nr++;
                 }
-        else for(j=0;j<6;j++)
-            if(ok==0)
-                if(strstr(functie+1,fposibile[j])==functie+i)
+        else
+            if(functie[i]=='x')
+            {vect[nr]=functie[i];
+            nr++;
+            i++;
+            vect[nr]=' ';nr++;}
+    else
+            {
+                if(strchr("s",functie[i])!=0)
                     {
-                        strcpy((char*)vect[nr],fposibile[j]);
-                        i=i+strlen(fposibile[j])-1;
-                        ok=1;
+                    vect[nr]=functie[i];
+                    nr++;i=i+3;
+                    vect[nr]=' ';nr++;
                     }
-        push(infixata,*vect[nr]);
+                if(strchr("c",functie[i])!=0)
+                    {
+                    vect[nr]=functie[i];
+                    nr++;i=i+3;
+                    vect[nr]=' ';nr++;
+                    }
+                if(strchr("l",functie[i])!=0)
+                    {
+                    vect[nr]=functie[i];
+                    nr++;i=i+2;
+                    vect[nr]=' ';nr++;
+                    }
+                if(strchr("t",functie[i])!=0)
+                    {
+                    vect[nr]=functie[i];
+                    nr++;
+                    }
+                if(strchr("g",functie[i])!=0)
+                    {
+                    vect[nr]=functie[i];
+                    nr++;
+                    }
+                if(strchr("r",functie[i])!=0)
+                    {
+                    vect[nr]=functie[i];
+                    nr++;
+                    }
+
+
     }
 }
+}
 
-void transformaredininfixinpostifx(lista *&infixata, lista *&value, lista *&operatori)
+double transformaredininfixinpostifx(double x)
 {
-    char *c[256], *operator1[256], *valpr[256];
-    c[0]=NULL;
+    char  *operator1[256], valpr[256];
+    lista *value,*operatori;
+    stiva_vida(value);
+    stiva_vida(operatori);
     valpr[0]=NULL;
     while(esteVidaS(infixata)==0)
     {
-        strcpy((char*)c,(char*)top(infixata));
-        if(isdigit(*c[0]))
-            push(value,*c[0]);
+        if(top(infixata)=='(')
+                {push(operatori,top(infixata));
+                pop(infixata);}
         else
-            if(strchr("abcdefghijklmnopqrstuvwxyz",*c[0]))
-                push(value,*c[0]);
-            else
-                if(strchr("(",*c[0]))
-                   push(operatori,*c[0]);
-                else
-                    if(strchr(")",*c[0]))
-                    {
+             if(top(infixata)=='x')
+                 {push(value,x);pop(infixata);}
+        else
+            if(isdigit(top(infixata)))
+            { char c=top(infixata);
+                double val=atoi((char*)c);
+                push(value,val);
+                pop(infixata);}
+        else
+            if(strchr("+-/^*",top(infixata)!=0))
+                {push(operatori,top(infixata));
+                pop(infixata);}
+        else
 
-                        while(top(operatori)!='(')
-                        {
-                        operator1[0]=NULL;
-                        strcat(*operator1,(char*)top(*&value));
-                        pop(value);
-                        strcat(*operator1,(char*)top(*&operatori));
-                        pop(operatori);
-                        strcat(*operator1,(char*)top(*&value));
-                        pop(value);
-                        push(*&value,*(char*)operator1);
-                        }
-                 pop(operatori);
-                 }
-                 else
-                    if(strchr("+-*^/sctl",*c[0]))
+            if(top(infixata)==')')
+               {push(operatori,top(infixata));
+               pop(infixata);
+                   while(top(infixata)!='(')
                     {
-                    strcpy(*valpr,(char*)top(*&operatori));
-                    while(esteVidaS(*&operatori)==0&&
-                          prioritatecaracter(valpr)>=
-                          prioritatecaracter(c))
+                        if(strchr("+-/^*",top(infixata)!=0))
+                           {push(operatori,top(infixata));
+                           pop(infixata);}
+                           if(strchr("scltr",top(infixata)!=0))
+                           {push(operatori,top(infixata));
+                           pop(infixata);}
+                        else
+                            if(top(infixata)=='x')
+                                {push(value,x);pop(infixata);}
+                            else
+                                if(isdigit(top(infixata)))
+                                    { char c=top(infixata);
+                                    double val=atoi((char*)c);
+                                    push(value,val);pop(infixata);}
+
+                else
+                    if(top(infixata)=='(')
+                    while(top(operatori)!=')'&&esteVidaS(operatori)==0)
+                    {double valoare1, valoare2,answ;
+                        valoare1=top(value);
+                        pop(value);
+                        valoare2=top(value);
+                        pop(value);
+                        char operator1=top(operatori);
+                        if(operator1=='s'||operator1=='c'||operator1=='l'||operator1=='r'||operator1=='t')
+                               {
+                                   answ=operatie_spekiala(operator1,valoare1);
+                                   pop(operatori);
+                                }
+                        else {
+                                answ=operatie(operator1, valoare1, valoare2);
+                                pop(operatori);
+                            }
+                        push2(value,answ);}
+               }
+               }
+                    else
                     {
-                        operator1[0]=NULL;
-                        strcat(*operator1,(char*)top(value));
+                    while(esteVidaS(operatori)==0&&
+                          prioritatecaracter(top(operatori))>=prioritatecaracter(top(infixata)))
+                    {
+                        double valoare1, valoare2,ans;
+                        valoare1=top(value);
                         pop(value);
-                        strcat(*operator1,(char*)top(operatori));
-                        pop(operatori);
-                        strcat(*operator1,(char*)top(value));
+                        valoare2=top(value);
                         pop(value);
-                        push(*&value,*(char*)operator1);
+                        char operator1=top(operatori);
+                        if(operator1=='s'||operator1=='c'||operator1=='l'||operator1=='r'||operator1=='t')
+                               {
+                                   ans=operatie_spekiala(operator1,valoare1);
+                                   pop(operatori);
+                                }
+                        else {
+                                ans=operatie(operator1, valoare1, valoare2);
+                                pop(operatori);
+                            }
+                        push(value,ans);}
+
+                    push(operatori,top(infixata));
                     }
-                    }
-    }
     while(esteVidaS(operatori)==0)
-    {
-        operator1[0]=NULL;
-        strcat(*operator1,(char*)top(value));
-        pop(value);
-        strcat(*operator1,(char*)top(operatori));
-        pop(operatori);
-        strcat(*operator1,(char*)top(value));
-        pop(value);
-        push(*&value,*(char*)operator1);
+
+            {double valoare1, valoare2;
+                        valoare1=top(value);
+                        pop(value);
+                        valoare2=top(value);
+                        pop(value);
+                        char operator1=top(operatori);
+                        double ans=operatie(operator1, valoare1, valoare2);
+                        push(value,ans);}
     }
+
+    return top(value);
+
     //functia noastra este in top(value)
 }
 
-
-int prioritatecaracter(char *a[])
+double operatie (char r, double x, double y)
 {
-    if(strchr("+",*a[0])||strchr("-",*a[0]))return 1;
-        else if(strchr("*",*a[0])||strchr("/",*a[0]))return 2;
-                else if(strchr("^",*a[0]))return 3;
-                        else if(strchr("sclt",*a[0]))return 4;
-                                else if(strchr("(",*a[0])||strchr(")",*a[0]))return 5;
+    if(r=='+')
+    return x+y;
+   if(r=='-')
+    return x-y;
+   if(r=='*')
+    return x*y;
+   if(r=='/')
+    return x/y;
+   if(r=='^')
+    return pow(x,y);
+}
+
+double operatie_spekiala (char r, double x)
+  {
+    if(r=='s')
+    return sin(x);
+   if(r=='c')
+    return cos(x);
+   if(r=='l')
+    return log(x);
+    if(r=='r')
+    return sqrt(x);
+    if(r=='t')
+        return tan(x);
+}
+
+int prioritatecaracter(char a)
+{
+    if(strchr("+",a)||strchr("-",a))return 1;
+        else if(strchr("*",a)||strchr("/",a))return 2;
+                else if(strchr("^",a))return 3;
+                        else if(strchr("sclt",a))return 4;
+                                else if(strchr("(",a)||strchr(")",a))return 5;
 }
