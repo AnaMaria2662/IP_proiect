@@ -390,11 +390,14 @@ void graficfunctie(int culoaregrafic)
         y=f(x);
         xpunctactual=(int)((DREAPTA-STANGA)*x/(B-A)+(B*STANGA-A*DREAPTA)/(B-A));
         ypunctactual=(int)((BOTTOM-TOP)*y/(MAX-MIN)+(MAX*TOP-MIN*BOTTOM)/(MAX-MIN));
+
         if(culoaregrafic==1)setcolor(RED);
             else if(culoaregrafic==2)setcolor(YELLOW);
             else if(culoaregrafic==3)setcolor(CYAN);
             else setcolor(GREEN);
+
         line(xecran,yecran,xpunctactual,ypunctactual);
+
         xecran=xpunctactual;
         yecran=ypunctactual;
     }
@@ -438,8 +441,12 @@ void graficnou(int width, int height,int limba,int culoarerama, int culoaregrafi
                     A+=2;
                     B+=2;
 
-                    setcolor(RED);
+                    if(culoarerama==1)setcolor(RED);
+                        else if(culoarerama==2)setcolor(YELLOW);
+                            else if(culoarerama==3)setcolor(CYAN);
+                                else setcolor(GREEN);
                     rectangle(STANGA,TOP,DREAPTA,BOTTOM);
+
                     setcolor(DARKGRAY);
                     line(STANGA,height/2,DREAPTA, height/2);//axa ox
                     line(width/2,TOP,width/2,BOTTOM);//axa oy
@@ -473,8 +480,12 @@ void graficnou(int width, int height,int limba,int culoarerama, int culoaregrafi
                 A-=2;
                 B-=2;
 
-                setcolor(RED);
+                if(culoarerama==1)setcolor(RED);
+                        else if(culoarerama==2)setcolor(YELLOW);
+                            else if(culoarerama==3)setcolor(CYAN);
+                                else setcolor(GREEN);
                 rectangle(STANGA,TOP,DREAPTA,BOTTOM);
+
                 setcolor(DARKGRAY);
                 line(STANGA,height/2,DREAPTA, height/2);//axa ox
                 line(width/2,TOP,width/2,BOTTOM);//axa oy
@@ -507,8 +518,13 @@ void graficnou(int width, int height,int limba,int culoarerama, int culoaregrafi
                 cleardevice();
                 A+=2;
                 B-=2;
-                setcolor(RED);
+
+                if(culoarerama==1)setcolor(RED);
+                        else if(culoarerama==2)setcolor(YELLOW);
+                            else if(culoarerama==3)setcolor(CYAN);
+                                else setcolor(GREEN);
                 rectangle(STANGA,TOP,DREAPTA,BOTTOM);
+
                 setcolor(DARKGRAY);
                 line(STANGA,height/2,DREAPTA, height/2);//axa ox
                 line(width/2,TOP,width/2,BOTTOM);//axa oy
@@ -543,8 +559,12 @@ void graficnou(int width, int height,int limba,int culoarerama, int culoaregrafi
                 A-=2;
                 B+=2;
 
-                setcolor(RED);
+                if(culoarerama==1)setcolor(RED);
+                        else if(culoarerama==2)setcolor(YELLOW);
+                            else if(culoarerama==3)setcolor(CYAN);
+                                else setcolor(GREEN);
                 rectangle(STANGA,TOP,DREAPTA,BOTTOM);
+
                 setcolor(DARKGRAY);
                 line(STANGA,height/2,DREAPTA, height/2);//axa ox
                 line(width/2,TOP,width/2,BOTTOM);//axa oy
@@ -589,6 +609,7 @@ void desenarefunctie(int limba,int culoarerama,int culoaregrafic)
         else setcolor(GREEN);
 
     rectangle(STANGA,TOP,DREAPTA,BOTTOM);
+
     setcolor(DARKGRAY);
     line(STANGA,height/2,DREAPTA, height/2);//axa ox
     line(width/2,TOP,width/2,BOTTOM);//axa oy
