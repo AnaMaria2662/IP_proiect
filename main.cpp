@@ -1,10 +1,8 @@
 /*
 Plan:
--integrala
 -asimptota verticala
 -asimptota orizontala
--puncte de discontinuitate
-
+-axe
 Evaluator:
 -restrictii fiecare semn1
 */
@@ -15,8 +13,9 @@ Evaluator:
 #include<windows.h>
 #include<graphics.h>
 #include<winbgim.h>
-#include<cstring>
+#include<string.h>
 #include<math.h>
+
 #define NMAX 200
 #define EPSILON 0.0001
 
@@ -39,6 +38,7 @@ void fereastraalegeri(int width, int height);
 void fereastraprincipala(int width, int height,int ok,int poza,int limba);
 void fullscreen(int &width, int &height);
 void schimbaresunet(int ok);
+void explicatiigrafic(int width,int height,int limba);
 void schimbareculoarebuton(int a, int b, int c, int d);
 void fereastraGrafic(int width, int height,int ok,int poza,int limba);
 void fereastraContact(int width, int height,int ok,int poza,int limba);
@@ -68,6 +68,10 @@ void pune_in_stiva(char *vect);
 bool esteVidaS(lista *&Stiva);
 void stiva_vida(lista *&Stiva);
 
+double calculareintegralafunctiei(double A, double B, double(*f)(double));
+
+bool discontinuitate(double x);
+
 int main()
 {
     int height, width;
@@ -77,27 +81,36 @@ int main()
     int limba=1;
     int culoarerama=1;
     int culoaregrafic=1;
-    cin>>A>>B;
+
+    scanf("%lf %lf",&A,&B);
+
     fullscreen(width, height);
     fereastraalegeri(width,height);
     clickpefereastraalegeri(ok,poza,limba,culoarerama,culoaregrafic,fun,capatst,capatdr);
+
     getch();
     closegraph();
     return 0;
 }
-/*
-double calculareintegralafunctiei(double stanga, double dreapta double(*f)(double))
+
+double calculareintegralafunctiei(double A, double B, double(*f)(double))
 {
-    if((dreapta-stanga)<EPSILON)
-        return (dreapta-stanga)*((*f)(stanga)+(*f)(dreapta))/2.0;
+    if((B-A)<EPSILON)
+        return (B-A)*((*f)(A)+(*f)(B))/2.0;
 
     else {
-            double suma;
-            suma=(stanga+dreapta)/2.0;
-            return calculareintegralafunctiei(stanga,suma,f)+calculareintegralafunctiei(suma,dreapta,f);
+            double punctint;
+            punctint=(A+B)/2.0;
+            return calculareintegralafunctiei(A,punctint,f)+calculareintegralafunctiei(punctint,B,f);
             }
 }
-*/
+
+bool discontinuitate(double x)
+{
+        if((floor(f(x-EPSILON))!=floor(f(x+EPSILON)))||(floor(f(x-EPSILON))!=floor(f(x)))||(floor(f(x+EPSILON))!=floor(f(x))))return 1;//punct de discontinuitate
+                else return 0;//continuu in x
+}
+
 void push(lista *&varf, char element)
 {
 lista *Stiva;
@@ -137,17 +150,17 @@ stiva_vida(infixata);
 char *p,val;
 p=strtok(vect," ");
 while(p)
-{   strcpy((char*)val,p);
-    push(infixata,val);
-    p=strtok(NULL," ");
-}
+    {
+        strcpy((char*)val,p);
+        push(infixata,val);
+        p=strtok(NULL," ");
+    }
 }
 
 bool esteVidaS(lista *&Stiva)//stiva
 {
-if(top(Stiva)==NULL)
-    return 1;
-return 0;
+    if(top(Stiva))return 0;
+        else return 1;
 }
 
 void stiva_vida(lista *&Stiva)
@@ -432,19 +445,47 @@ void graficfunctie(int culoaregrafic)
 
         line(xecran,yecran,xpunctactual,ypunctactual);
 
+        if(discontinuitate(x)==1)
+        {
+            setcolor(COLOR(18,18,18));
+            line(xecran,TOP+2,xecran,BOTTOM-2);
+        }
+
         xecran=xpunctactual;
         yecran=ypunctactual;
     }
 }
-
+void explicatiigrafic(int width, int height, int limba)
+{
+    setcolor(WHITE);
+    settextstyle(8, HORIZ_DIR, 2 );
+    settextjustify(CENTER_TEXT,CENTER_TEXT);
+    if(limba==1)
+    {
+        outtextxy(width/2+550,height/4+130,"w/UP: Zoom in");
+        outtextxy(width/2+550,height/4+160,"s/DOWN: Zoom out");
+        outtextxy(width/2+550,height/4+190,"a/<-: Stanga");
+        outtextxy(width/2+550,height/4+220,"d/->: Dreapta");
+    }
+        else  {
+                outtextxy(width/2+550,height/4+130,"w/UP: Zoom in");
+                outtextxy(width/2+550,height/4+160,"s/DOWN: Zoom out");
+                outtextxy(width/2+550,height/4+190,"a/<-: Left");
+                outtextxy(width/2+550,height/4+220,"d/->: Right");
+        }
+}
 void graficnou(int width, int height,int limba,int culoarerama, int culoaregrafic)
 {
+    double valoareintegrala;
     if(culoaregrafic==1)setcolor(RED);
         else if(culoaregrafic==2)setcolor(YELLOW);
         else if(culoaregrafic==3)setcolor(CYAN);
         else if(culoaregrafic==4)setcolor(GREEN);
 
     graficfunctie(culoaregrafic);
+
+    explicatiigrafic(width,height,limba);
+
     setcolor(WHITE);
     settextstyle(8, HORIZ_DIR, 4 );
     settextjustify(CENTER_TEXT,CENTER_TEXT);
@@ -456,15 +497,21 @@ void graficnou(int width, int height,int limba,int culoarerama, int culoaregrafi
     settextstyle(8, HORIZ_DIR, 3 );
     settextjustify(CENTER_TEXT,CENTER_TEXT);
 
-    if(limba==1) outtextxy(width/4+50,height-100,"Integrala in xmin:");
-        else  outtextxy(width/4+50,height-100,"Integral in xmin:");
-
-    setcolor(WHITE);
-    settextstyle(8, HORIZ_DIR, 3 );
-    settextjustify(CENTER_TEXT,CENTER_TEXT);
-
-    if(limba==1) outtextxy(width/2+210,height-100,"Integrala in xmax:");
-        else  outtextxy(width/2+210,height-100,"Integral in xmax:");
+    if(limba==1)
+    {
+        outtextxy(width/4+250,height-100,"Integrala:");
+        valoareintegrala=calculareintegralafunctiei(A,B,&f);
+        char charintegrala[256];
+        sprintf(charintegrala," %lf",valoareintegrala);
+        outtextxy(width/4+430, height-100,charintegrala);
+    }
+        else  {
+                outtextxy(width/4+250,height-100,"Integrala:");
+                valoareintegrala=calculareintegralafunctiei(A,B,&f);
+                char charintegrala[256];
+                sprintf(charintegrala," %lf",valoareintegrala);
+                outtextxy(width/4+430, height-100,charintegrala);
+            }
 
     char car;
     do
@@ -487,6 +534,8 @@ void graficnou(int width, int height,int limba,int culoarerama, int culoaregrafi
                     line(STANGA,height/2,DREAPTA, height/2);//axa ox
                     line(width/2,TOP,width/2,BOTTOM);//axa oy
 
+                    explicatiigrafic(width,height,limba);
+
                     setcolor(WHITE);
                     settextstyle(8, HORIZ_DIR, 4 );
                     settextjustify(CENTER_TEXT,CENTER_TEXT);
@@ -498,15 +547,21 @@ void graficnou(int width, int height,int limba,int culoarerama, int culoaregrafi
                     settextstyle(8, HORIZ_DIR, 3 );
                     settextjustify(CENTER_TEXT,CENTER_TEXT);
 
-                    if(limba==1) outtextxy(width/4+50,height-100,"Integrala in xmin:");
-                        else  outtextxy(width/4+50,height-100,"Integral in xmin:");
-
-                    setcolor(WHITE);
-                    settextstyle(8, HORIZ_DIR, 3 );
-                    settextjustify(CENTER_TEXT,CENTER_TEXT);
-
-                    if(limba==1) outtextxy(width/2+210,height-100,"Integrala in xmax:");
-                        else  outtextxy(width/2+210,height-100,"Integral in xmax:");
+                    if(limba==1)
+                        {
+                            outtextxy(width/4+250,height-100,"Integrala:");
+                            valoareintegrala=calculareintegralafunctiei(A,B,&f);
+                            char charintegrala[256];
+                            sprintf(charintegrala,"%lf",valoareintegrala);
+                            outtextxy(width/4+430, height-100,charintegrala);
+                        }
+                    else  {
+                            outtextxy(width/4+250,height-100,"Integrala:");
+                            valoareintegrala=calculareintegralafunctiei(A,B,&f);
+                            char charintegrala[256];
+                            sprintf(charintegrala,"%lf",valoareintegrala);
+                            outtextxy(width/4+430, height-100,charintegrala);
+                            }
 
                     graficfunctie(culoaregrafic);
                 }
@@ -527,6 +582,8 @@ void graficnou(int width, int height,int limba,int culoarerama, int culoaregrafi
                 line(STANGA,height/2,DREAPTA, height/2);//axa ox
                 line(width/2,TOP,width/2,BOTTOM);//axa oy
 
+                explicatiigrafic(width,height,limba);
+
                 setcolor(WHITE);
                 settextstyle(8, HORIZ_DIR, 4 );
                 settextjustify(CENTER_TEXT,CENTER_TEXT);
@@ -538,15 +595,21 @@ void graficnou(int width, int height,int limba,int culoarerama, int culoaregrafi
                 settextstyle(8, HORIZ_DIR, 3 );
                 settextjustify(CENTER_TEXT,CENTER_TEXT);
 
-                if(limba==1) outtextxy(width/4+50,height-100,"Integrala in xmin:");
-                    else  outtextxy(width/4+50,height-100,"Integral in xmin:");
-
-                setcolor(WHITE);
-                settextstyle(8, HORIZ_DIR, 3 );
-                settextjustify(CENTER_TEXT,CENTER_TEXT);
-
-                if(limba==1) outtextxy(width/2+210,height-100,"Integrala in xmax:");
-                    else  outtextxy(width/2+210,height-100,"Integral in xmax:");
+                if(limba==1)
+                    {
+                        outtextxy(width/4+250,height-100,"Integrala:");
+                        valoareintegrala=calculareintegralafunctiei(A,B,&f);
+                        char charintegrala[256];
+                        sprintf(charintegrala,"%lf",valoareintegrala);
+                        outtextxy(width/4+430, height-100,charintegrala);
+                    }
+                else  {
+                        outtextxy(width/4+250,height-100,"Integrala:");
+                        valoareintegrala=calculareintegralafunctiei(A,B,&f);
+                        char charintegrala[256];
+                        sprintf(charintegrala,"%lf",valoareintegrala);
+                        outtextxy(width/4+430, height-100,charintegrala);
+                        }
 
                 graficfunctie(culoaregrafic);
                 }
@@ -567,6 +630,8 @@ void graficnou(int width, int height,int limba,int culoarerama, int culoaregrafi
                 line(STANGA,height/2,DREAPTA, height/2);//axa ox
                 line(width/2,TOP,width/2,BOTTOM);//axa oy
 
+                explicatiigrafic(width,height,limba);
+
                 setcolor(WHITE);
                 settextstyle(8, HORIZ_DIR, 4 );
                 settextjustify(CENTER_TEXT,CENTER_TEXT);
@@ -578,15 +643,21 @@ void graficnou(int width, int height,int limba,int culoarerama, int culoaregrafi
                 settextstyle(8, HORIZ_DIR, 3 );
                 settextjustify(CENTER_TEXT,CENTER_TEXT);
 
-                if(limba==1) outtextxy(width/4+50,height-100,"Integrala in xmin:");
-                    else  outtextxy(width/4+50,height-100,"Integral in xmin:");
-
-                setcolor(WHITE);
-                settextstyle(8, HORIZ_DIR, 3 );
-                settextjustify(CENTER_TEXT,CENTER_TEXT);
-
-                if(limba==1) outtextxy(width/2+210,height-100,"Integrala in xmax:");
-                        else  outtextxy(width/2+210,height-100,"Integral in xmax:");
+                if(limba==1)
+                    {
+                        outtextxy(width/4+250,height-100,"Integrala:");
+                        valoareintegrala=calculareintegralafunctiei(A,B,&f);
+                        char charintegrala[256];
+                        sprintf(charintegrala,"%lf",valoareintegrala);
+                        outtextxy(width/4+430, height-100,charintegrala);
+                    }
+                else  {
+                        outtextxy(width/4+250,height-100,"Integrala:");
+                        valoareintegrala=calculareintegralafunctiei(A,B,&f);
+                        char charintegrala[256];
+                        sprintf(charintegrala,"%lf",valoareintegrala);
+                        outtextxy(width/4+430, height-100,charintegrala);
+                    }
 
 
                 graficfunctie(culoaregrafic);
@@ -608,6 +679,8 @@ void graficnou(int width, int height,int limba,int culoarerama, int culoaregrafi
                 line(STANGA,height/2,DREAPTA, height/2);//axa ox
                 line(width/2,TOP,width/2,BOTTOM);//axa oy
 
+                explicatiigrafic(width,height,limba);
+
                 setcolor(WHITE);
                 settextstyle(8, HORIZ_DIR, 4 );
                 settextjustify(CENTER_TEXT,CENTER_TEXT);
@@ -619,15 +692,21 @@ void graficnou(int width, int height,int limba,int culoarerama, int culoaregrafi
                 settextstyle(8, HORIZ_DIR, 3 );
                 settextjustify(CENTER_TEXT,CENTER_TEXT);
 
-                if(limba==1) outtextxy(width/4+50,height-100,"Integrala in xmin:");
-                    else  outtextxy(width/4+50,height-100,"Integral in xmin:");
-
-                setcolor(WHITE);
-                settextstyle(8, HORIZ_DIR, 3 );
-                settextjustify(CENTER_TEXT,CENTER_TEXT);
-
-                if(limba==1) outtextxy(width/2+210,height-100,"Integrala in xmax:");
-                    else  outtextxy(width/2+210,height-100,"Integral in xmax:");
+                if(limba==1)
+                    {
+                        outtextxy(width/4+250,height-100,"Integrala:");
+                        valoareintegrala=calculareintegralafunctiei(A,B,&f);
+                        char charintegrala[256];
+                        sprintf(charintegrala,"%lf",valoareintegrala);
+                        outtextxy(width/4+430, height-100,charintegrala);
+                    }
+                else  {
+                        outtextxy(width/4+250,height-100,"Integrala:");
+                        valoareintegrala=calculareintegralafunctiei(A,B,&f);
+                        char charintegrala[256];
+                        sprintf(charintegrala,"%lf",valoareintegrala);
+                        outtextxy(width/4+430, height-100,charintegrala);
+                    }
 
                 graficfunctie(culoaregrafic);
             }
@@ -1029,7 +1108,6 @@ else if(coordx>=(width/2-320)&&coordx<=(width/4+655)&&coordy>=(height/3+70)&&coo
                 }
             }
             while(car!=13);
-            cout<<fun;
             clickpeGrafic(width,height,ok,poza,limba,culoarerama,culoaregrafic,fun,capatst,capatdr);
         }
 
@@ -1143,7 +1221,7 @@ else if(coordx>=(width/16-31)&&coordx<=(width/16)&&
 
 void transformarefunctie(char *fun)
 {
-    int i=0,j,nr=0;
+    int i=0,nr=0;
     while(i<=strlen(fun)-1)
     {
         if(isdigit(fun[i])!=0)
@@ -1223,11 +1301,10 @@ void transformarefunctie(char *fun)
 
 double transformaredininfixinpostifx(double x)
 {
-    char  *operator1[256], valpr[256];
+    char  *operator1[256];
     lista *value,*operatori;
     stiva_vida(value);
     stiva_vida(operatori);
-    valpr[0]=NULL;
 
     while(esteVidaS(infixata)==0)
     {
