@@ -4,10 +4,11 @@ Plan:
 -asimptota verticala
 -asimptota orizontala
 -puncte de discontinuitate
+
 Evaluator:
--restrictii fiecare semn
+-restrictii fiecare semn1
 */
-///Ana-Maria
+
 #include<iostream>
 #include<stdlib.h>
 #include<stdio.h>
@@ -17,6 +18,7 @@ Evaluator:
 #include<cstring>
 #include<math.h>
 #define NMAX 200
+#define EPSILON 0.0001
 
 using namespace std;
 
@@ -58,7 +60,6 @@ int prioritatecaracter(char a);
 void transformarefunctie(char *functie);
 double transformaredininfixinpostifx(double x);
 
-
 void push(lista *&varf, char element);
 void push2(lista *&varf, double element);
 void pop(lista *&varf );
@@ -66,7 +67,6 @@ char top(lista *&varf);
 void pune_in_stiva(char *vect);
 bool esteVidaS(lista *&Stiva);
 void stiva_vida(lista *&Stiva);
-
 
 int main()
 {
@@ -78,10 +78,6 @@ int main()
     int culoarerama=1;
     int culoaregrafic=1;
     cin>>A>>B;
-
-    lista *postfixata;
-    postfixata=new lista;
-    //stiva_vida(postfixata);
     fullscreen(width, height);
     fereastraalegeri(width,height);
     clickpefereastraalegeri(ok,poza,limba,culoarerama,culoaregrafic,fun,capatst,capatdr);
@@ -89,7 +85,19 @@ int main()
     closegraph();
     return 0;
 }
+/*
+double calculareintegralafunctiei(double stanga, double dreapta double(*f)(double))
+{
+    if((dreapta-stanga)<EPSILON)
+        return (dreapta-stanga)*((*f)(stanga)+(*f)(dreapta))/2.0;
 
+    else {
+            double suma;
+            suma=(stanga+dreapta)/2.0;
+            return calculareintegralafunctiei(stanga,suma,f)+calculareintegralafunctiei(suma,dreapta,f);
+            }
+}
+*/
 void push(lista *&varf, char element)
 {
 lista *Stiva;
@@ -126,12 +134,12 @@ char top(lista *&varf)
 void pune_in_stiva(char *vect)
 {
 stiva_vida(infixata);
-char*p,val;
+char *p,val;
 p=strtok(vect," ");
 while(p)
 {   strcpy((char*)val,p);
     push(infixata,val);
-    p=strtok(" ",NULL);
+    p=strtok(NULL," ");
 }
 }
 
@@ -361,7 +369,7 @@ void clickpefereastraalegeri(int &ok, int &poza,int &limba, int &culoarerama, in
         schimbaresunet(ok);
         culoaregrafic=3;
     }
-    else if(coordx>=(width/10+9900)&&coordx<=(width/10+1060)&&coordy>=(height/3+110)&&coordy<=(height/3+160))//functie verde
+    else if(coordx>=(width/10+990)&&coordx<=(width/10+1060)&&coordy>=(height/3+110)&&coordy<=(height/3+160))//functie verde
     {
         schimbaresunet(ok);
         culoaregrafic=4;
@@ -382,7 +390,8 @@ void click(int &coordxclick, int &coordyclick )
 
 double f(double x)
 {
-    return transformaredininfixinpostifx(x);
+    return 2*x*cos(x);
+    //return transformaredininfixinpostifx(x);
 }
 
 void aflareminsimax()
@@ -419,7 +428,7 @@ void graficfunctie(int culoaregrafic)
         if(culoaregrafic==1)setcolor(RED);
             else if(culoaregrafic==2)setcolor(YELLOW);
             else if(culoaregrafic==3)setcolor(CYAN);
-            else setcolor(GREEN);
+            else if(culoaregrafic==4)setcolor(GREEN);
 
         line(xecran,yecran,xpunctactual,ypunctactual);
 
@@ -433,7 +442,8 @@ void graficnou(int width, int height,int limba,int culoarerama, int culoaregrafi
     if(culoaregrafic==1)setcolor(RED);
         else if(culoaregrafic==2)setcolor(YELLOW);
         else if(culoaregrafic==3)setcolor(CYAN);
-        else setcolor(GREEN);
+        else if(culoaregrafic==4)setcolor(GREEN);
+
     graficfunctie(culoaregrafic);
     setcolor(WHITE);
     settextstyle(8, HORIZ_DIR, 4 );
@@ -468,8 +478,9 @@ void graficnou(int width, int height,int limba,int culoarerama, int culoaregrafi
 
                     if(culoarerama==1)setcolor(RED);
                         else if(culoarerama==2)setcolor(YELLOW);
-                            else if(culoarerama==3)setcolor(CYAN);
-                                else setcolor(GREEN);
+                        else if(culoarerama==3)setcolor(CYAN);
+                        else if(culoarerama==4)setcolor(GREEN);
+
                     rectangle(STANGA,TOP,DREAPTA,BOTTOM);
 
                     setcolor(DARKGRAY);
@@ -506,9 +517,10 @@ void graficnou(int width, int height,int limba,int culoarerama, int culoaregrafi
                 B-=2;
 
                 if(culoarerama==1)setcolor(RED);
-                        else if(culoarerama==2)setcolor(YELLOW);
-                            else if(culoarerama==3)setcolor(CYAN);
-                                else setcolor(GREEN);
+                    else if(culoarerama==2)setcolor(YELLOW);
+                    else if(culoarerama==3)setcolor(CYAN);
+                    else if(culoarerama==4)setcolor(GREEN);
+
                 rectangle(STANGA,TOP,DREAPTA,BOTTOM);
 
                 setcolor(DARKGRAY);
@@ -544,10 +556,11 @@ void graficnou(int width, int height,int limba,int culoarerama, int culoaregrafi
                 A+=2;
                 B-=2;
 
-                if(culoarerama==1)setcolor(RED);
-                        else if(culoarerama==2)setcolor(YELLOW);
-                            else if(culoarerama==3)setcolor(CYAN);
-                                else setcolor(GREEN);
+               if(culoarerama==1)setcolor(RED);
+                    else if(culoarerama==2)setcolor(YELLOW);
+                    else if(culoarerama==3)setcolor(CYAN);
+                    else if(culoarerama==4)setcolor(GREEN);
+
                 rectangle(STANGA,TOP,DREAPTA,BOTTOM);
 
                 setcolor(DARKGRAY);
@@ -585,9 +598,10 @@ void graficnou(int width, int height,int limba,int culoarerama, int culoaregrafi
                 B+=2;
 
                 if(culoarerama==1)setcolor(RED);
-                        else if(culoarerama==2)setcolor(YELLOW);
-                            else if(culoarerama==3)setcolor(CYAN);
-                                else setcolor(GREEN);
+                    else if(culoarerama==2)setcolor(YELLOW);
+                    else if(culoarerama==3)setcolor(CYAN);
+                    else if(culoarerama==4)setcolor(GREEN);
+
                 rectangle(STANGA,TOP,DREAPTA,BOTTOM);
 
                 setcolor(DARKGRAY);
@@ -631,7 +645,7 @@ void desenarefunctie(int limba,int culoarerama,int culoaregrafic)
     if(culoarerama==1)setcolor(RED);
         else if(culoarerama==2)setcolor(YELLOW);
         else if(culoarerama==3)setcolor(CYAN);
-        else setcolor(GREEN);
+        else if(culoarerama==4)setcolor(GREEN);
 
     rectangle(STANGA,TOP,DREAPTA,BOTTOM);
 
@@ -642,7 +656,7 @@ void desenarefunctie(int limba,int culoarerama,int culoaregrafic)
     if(culoaregrafic==1)setcolor(RED);
         else if(culoaregrafic==2)setcolor(YELLOW);
         else if(culoaregrafic==3)setcolor(CYAN);
-        else setcolor(GREEN);
+        else if(culoaregrafic==4)setcolor(GREEN);
 
     graficnou(width,height,limba,culoarerama,culoaregrafic);//graficul efectiv
 }
@@ -925,7 +939,6 @@ void clickpefereastrapr(int ok, int poza, int &limba,int culoarerama, int culoar
     }
 }
 
-
 void clickpeGrafic(int width, int height,int ok,int poza, int limba, int culoarerama, int culoaregrafic,char fun[256],char capatst[256],char capatdr[256])
 {
     int coordx, coordy;
@@ -1128,72 +1141,84 @@ else if(coordx>=(width/16-31)&&coordx<=(width/16)&&
     }
 }
 
-void transformarefunctie(char *functie)
+void transformarefunctie(char *fun)
 {
     int i=0,j,nr=0;
-    while(i<=strlen(functie)-1)
+    while(i<=strlen(fun)-1)
     {
-        if(isdigit(functie[i])!=0)
+        if(isdigit(fun[i])!=0)
         {
-            while(isdigit(functie[i]!=0))
+            while(isdigit(fun[i])!=0)
             {
-                vect[nr]=functie[i];
+                vect[nr]=fun[i];
                 i++;
                 nr++;
             }
-        vect[nr]=' ';nr++;
+        vect[nr]=' ';
+        nr++;
         }
-        else if(strchr("+-*^/)(",functie[i]))
+        else if(strchr("+-*^/)(",fun[i]))
                 {
-                    vect[nr]=functie[i];
-                    nr++;i=i+1;
-                    vect[nr]=' ';nr++;
+                    vect[nr]=fun[i];
+                    nr++;
+                    i=i+1;
+                    vect[nr]=' ';
+                    nr++;
                 }
         else
-            if(functie[i]=='x')
-            {vect[nr]=functie[i];
-            nr++;
-            i++;
-            vect[nr]=' ';nr++;}
+            if(fun[i]=='x')
+            {
+                vect[nr]=fun[i];
+                nr++;
+                i++;
+                vect[nr]=' ';
+                nr++;
+            }
     else
             {
-                if(strchr("s",functie[i])!=0)
+                if(strchr("s",fun[i])!=0)
                     {
-                    vect[nr]=functie[i];
-                    nr++;i=i+3;
-                    vect[nr]=' ';nr++;
-                    }
-                if(strchr("c",functie[i])!=0)
-                    {
-                    vect[nr]=functie[i];
-                    nr++;i=i+3;
-                    vect[nr]=' ';nr++;
-                    }
-                if(strchr("l",functie[i])!=0)
-                    {
-                    vect[nr]=functie[i];
-                    nr++;i=i+2;
-                    vect[nr]=' ';nr++;
-                    }
-                if(strchr("t",functie[i])!=0)
-                    {
-                    vect[nr]=functie[i];
+                    vect[nr]=fun[i];
+                    nr++;
+                    i=i+3;
+                    vect[nr]=' ';
                     nr++;
                     }
-                if(strchr("g",functie[i])!=0)
+                if(strchr("c",fun[i])!=0)
                     {
-                    vect[nr]=functie[i];
+                    vect[nr]=fun[i];
+                    nr++;
+                    i=i+3;
+                    vect[nr]=' ';
                     nr++;
                     }
-                if(strchr("r",functie[i])!=0)
+                if(strchr("l",fun[i])!=0)
                     {
-                    vect[nr]=functie[i];
+                    vect[nr]=fun[i];
+                    nr++;
+                    i=i+2;
+                    vect[nr]=' ';
+                    nr++;
+                    }
+                if(strchr("t",fun[i])!=0)
+                    {
+                    vect[nr]=fun[i];
+                    nr++;
+                    }
+                if(strchr("g",fun[i])!=0)
+                    {
+                    vect[nr]=fun[i];
+                    nr++;
+                    }
+                if(strchr("r",fun[i])!=0)
+                    {
+                    vect[nr]=fun[i];
                     nr++;
                     }
 
 
+        }
     }
-}
 }
 
 double transformaredininfixinpostifx(double x)
@@ -1203,55 +1228,80 @@ double transformaredininfixinpostifx(double x)
     stiva_vida(value);
     stiva_vida(operatori);
     valpr[0]=NULL;
+
     while(esteVidaS(infixata)==0)
     {
-        if(top(infixata)=='(')
-                {push(operatori,top(infixata));
-                pop(infixata);}
+        if(top(infixata)=='(')// (
+                {
+                    push(operatori,top(infixata));
+                    pop(infixata);
+                }
+
         else
-             if(top(infixata)=='x')
-                 {push(value,x);pop(infixata);}
+             if(top(infixata)=='x')// x=necunoscuta
+                 {
+                     push(value,x);
+                     pop(infixata);
+                }
+
         else
-            if(isdigit(top(infixata)))
-            { char c=top(infixata);
+            if(isdigit(top(infixata)))//cifre
+            {
+                char c=top(infixata);
                 double val=atoi((char*)c);
                 push(value,val);
-                pop(infixata);}
-        else
-            if(strchr("+-/^*",top(infixata)!=0))
-                {push(operatori,top(infixata));
-                pop(infixata);}
-        else
+                pop(infixata);
+            }
 
-            if(top(infixata)==')')
-               {push(operatori,top(infixata));
-               pop(infixata);
+        else
+            if(strchr("+-/^*",top(infixata)!=0))//semne
+                {
+                    push(operatori,top(infixata));
+                    pop(infixata);
+                }
+
+        else
+            if(top(infixata)==')')// )
+               {
+                   push(operatori,top(infixata));
+                   pop(infixata);
                    while(top(infixata)!='(')
                     {
                         if(strchr("+-/^*",top(infixata)!=0))
-                           {push(operatori,top(infixata));
-                           pop(infixata);}
-                           if(strchr("scltr",top(infixata)!=0))
-                           {push(operatori,top(infixata));
-                           pop(infixata);}
+                           {
+                               push(operatori,top(infixata));
+                               pop(infixata);}
+                               if(strchr("scltr",top(infixata)!=0))
+                                    {
+                                        push(operatori,top(infixata));
+                                        pop(infixata);
+                                    }
                         else
                             if(top(infixata)=='x')
-                                {push(value,x);pop(infixata);}
+                                {
+                                    push(value,x);
+                                    pop(infixata);
+                                }
                             else
                                 if(isdigit(top(infixata)))
-                                    { char c=top(infixata);
-                                    double val=atoi((char*)c);
-                                    push(value,val);pop(infixata);}
+                                    {
+                                        char c=top(infixata);
+                                        double val=atoi((char*)c);
+                                        push(value,val);
+                                        pop(infixata);
+                                    }
 
                 else
                     if(top(infixata)=='(')
                     while(top(operatori)!=')'&&esteVidaS(operatori)==0)
-                    {double valoare1, valoare2,answ;
+                    {
+                        double valoare1, valoare2,answ;
                         valoare1=top(value);
                         pop(value);
                         valoare2=top(value);
                         pop(value);
                         char operator1=top(operatori);
+
                         if(operator1=='s'||operator1=='c'||operator1=='l'||operator1=='r'||operator1=='t')
                                {
                                    answ=operatie_speciala(operator1,valoare1);
@@ -1261,10 +1311,10 @@ double transformaredininfixinpostifx(double x)
                                 answ=operatie(operator1, valoare1, valoare2);
                                 pop(operatori);
                             }
-                        push2(value,answ);}
+                    push2(value,answ);}
+                    }
                }
-               }
-                    else
+                else
                     {
                     while(esteVidaS(operatori)==0&&
                           prioritatecaracter(top(operatori))>=prioritatecaracter(top(infixata)))
@@ -1289,48 +1339,36 @@ double transformaredininfixinpostifx(double x)
                     push(operatori,top(infixata));
                     }
     while(esteVidaS(operatori)==0)
-
-            {double valoare1, valoare2;
-                        valoare1=top(value);
-                        pop(value);
-                        valoare2=top(value);
-                        pop(value);
-                        char operator1=top(operatori);
-                        double ans=operatie(operator1, valoare1, valoare2);
-                        push(value,ans);}
+            {
+                double valoare1, valoare2;
+                valoare1=top(value);
+                pop(value);
+                valoare2=top(value);
+                pop(value);
+                char operator1=top(operatori);
+                double ans=operatie(operator1, valoare1, valoare2);
+                push(value,ans);
+            }
     }
-
     return top(value);
-
-    //functia noastra este in top(value)
 }
 
 double operatie (char r, double x, double y)
 {
-    if(r=='+')
-    return x+y;
-   if(r=='-')
-    return x-y;
-   if(r=='*')
-    return x*y;
-   if(r=='/')
-    return x/y;
-   if(r=='^')
-    return pow(x,y);
+    if(r=='+')return x+y;
+    if(r=='-')return x-y;
+    if(r=='*')return x*y;
+    if(r=='/')return x/y;
+    if(r=='^')return pow(x,y);
 }
 
 double operatie_speciala (char r, double x)
-  {
-    if(r=='s')
-    return sin(x);
-   if(r=='c')
-    return cos(x);
-   if(r=='l')
-    return log(x);
-    if(r=='r')
-    return sqrt(x);
-    if(r=='t')
-        return tan(x);
+{
+    if(r=='s')return sin(x);
+    if(r=='c')return cos(x);
+    if(r=='l')return log(x);
+    if(r=='r')return sqrt(x);
+    if(r=='t')return tan(x);
 }
 
 int prioritatecaracter(char a)
@@ -1338,6 +1376,6 @@ int prioritatecaracter(char a)
     if(strchr("+",a)||strchr("-",a))return 1;
         else if(strchr("*",a)||strchr("/",a))return 2;
                 else if(strchr("^",a))return 3;
-                        else if(strchr("sclt",a))return 4;
+                        else if(strchr("scltr",a))return 4;
                                 else if(strchr("(",a)||strchr(")",a))return 5;
 }
