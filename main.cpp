@@ -3,6 +3,7 @@ Plan:
 -asimptota verticala
 -asimptota orizontala
 -axe
+-minim maxim
 Evaluator:
 -restrictii fiecare semn1
 */
@@ -21,17 +22,17 @@ Evaluator:
 
 using namespace std;
 
-double A,B;
 double MIN,MAX;
 int STANGA=250, DREAPTA=1100, TOP=150, BOTTOM=600;
 char vect[256];
 
 void click(int &coordxclick, int &coordyclick );
+void clickpeGrafic(double &A, double &B, int width, int height,int ok,int poza,int limba,int culoarerama, int culoaregrafic, char fun[256],char capatst[256],char capatdr[256]);
 double f(double x);
 void aflareminsimax();
-void graficfunctie(int culoarefunctie);
-void graficnou(int widget,int height,int limba,int culoarerama, int culoaregrafic);
-void desenarefunctie(int limba,int culoarerama, int culoaregrafic);
+void graficfunctie(double A, double B, int culoarefunctie);
+void graficnou(double A, double B, int widget,int height,int limba,int culoarerama, int culoaregrafic);
+void desenarefunctie(double A, double B,int limba,int culoarerama, int culoaregrafic);
 void buton_iesire(int width, int height);
 void buton_inapoi(int width, int height);
 void fereastraalegeri(int width, int height);
@@ -42,10 +43,9 @@ void explicatiigrafic(int width,int height,int limba);
 void schimbareculoarebuton(int a, int b, int c, int d);
 void fereastraGrafic(int width, int height,int ok,int poza,int limba);
 void fereastraContact(int width, int height,int ok,int poza,int limba);
-void clickpeGrafic(int width, int height,int ok,int poza,int limba,int culoarerama, int culoaregrafic, char fun[256],char capatst[256],char capatdr[256]);
-void clickpeContact(int width, int height,int ok,int poza,int limba,int culoarerama, int culoaregrafic,char fun[256],char capatst[256],char capatdr[256]);
-void clickpefereastrapr(int ok, int poza,int &limba,int culoarerama, int culoaregrafic, char fun[256],char capatst[256],char capatdr[256]);
-void clickpefereastraalegeri(int &ok, int &poza, int &limba, int &culoarerama, int &culoaregrafic, char fun[256],char capatst[256],char capatdr[256]);
+void clickpeContact(double A, double B,int width, int height,int ok,int poza,int limba,int culoarerama, int culoaregrafic,char fun[256],char capatst[256],char capatdr[256]);
+void clickpefereastrapr(double A, double B,int ok, int poza,int &limba,int culoarerama, int culoaregrafic, char fun[256],char capatst[256],char capatdr[256]);
+void clickpefereastraalegeri(double A, double B, int &ok, int &poza, int &limba, int &culoarerama, int &culoaregrafic, char fun[256],char capatst[256],char capatdr[256]);
 
 struct lista{
     char info;
@@ -81,13 +81,10 @@ int main()
     int limba=1;
     int culoarerama=1;
     int culoaregrafic=1;
-
-    scanf("%lf %lf",&A,&B);
-
+    double A,B;
     fullscreen(width, height);
     fereastraalegeri(width,height);
-    clickpefereastraalegeri(ok,poza,limba,culoarerama,culoaregrafic,fun,capatst,capatdr);
-
+    clickpefereastraalegeri(A,B,ok,poza,limba,culoarerama,culoaregrafic,fun,capatst,capatdr);
     getch();
     closegraph();
     return 0;
@@ -269,7 +266,7 @@ void fereastraalegeri(int width, int height)
     buton_iesire(width, height);
 }
 
-void clickpefereastraalegeri(int &ok, int &poza,int &limba, int &culoarerama, int &culoaregrafic, char fun[256],char capatst[256],char capatdr[256])
+void clickpefereastraalegeri(double A, double B, int &ok, int &poza,int &limba, int &culoarerama, int &culoaregrafic, char fun[256],char capatst[256],char capatdr[256])
 {
     int coordx, coordy;
     int a,b,c,d;
@@ -289,7 +286,7 @@ void clickpefereastraalegeri(int &ok, int &poza,int &limba, int &culoarerama, in
             schimbaresunet(ok);
             closegraph();
             fereastraprincipala(width,height,ok,poza,limba);
-            clickpefereastrapr(ok,poza,limba,culoarerama,culoaregrafic,fun,capatst,capatdr);
+            clickpefereastrapr(A,B,ok,poza,limba,culoarerama,culoaregrafic,fun,capatst,capatdr);
         }
     else if(coordx>=width/16-31&&coordx<=width/10&&coordy>=height/5-145&&coordy<=height/5-114)//click pe exit
         {
@@ -403,11 +400,11 @@ void click(int &coordxclick, int &coordyclick )
 
 double f(double x)
 {
-    return 2*x*cos(x);
+    return sin(x);
     //return transformaredininfixinpostifx(x);
 }
 
-void aflareminsimax()
+void aflareminsimax(double A, double B)
 {//aflare min max
     int i;
     double x,y;
@@ -417,24 +414,34 @@ void aflareminsimax()
     {
         x=A+i*(B-A)/(DREAPTA-STANGA);
         y=f(x);//functia introdusa de la la fereastra in casuta de text
-        MAX=max(MAX,y);//noul max
-        MIN=min(MIN,y);//noul min
+        MAX=max(MAX,y);//noul max in y
+        MIN=min(MIN,y);//noul min in y
     }
 }
 
-void graficfunctie(int culoaregrafic)
+void graficfunctie(double A, double B, int culoaregrafic)
 {//trasare linie grafic pt toate punctele
     int i;
     double x,y,xecran,yecran,xpunctactual,ypunctactual;
+    double valoriy[NMAX];
+    double k=0;
+    //double maximgl,minimgl;
+    //maximgl=-100000001;
+    //minimgl=100000001;
     x=A;
     y=(int)(f(A));
-    aflareminsimax();
+    aflareminsimax(A,B);
     xecran=(DREAPTA-STANGA)*x/(B-A)+(B*STANGA-A*DREAPTA)/(B-A);
     yecran=(BOTTOM-TOP)*y/(MAX-MIN)+(MAX*TOP-MIN*BOTTOM)/(MAX-MIN);
     for(i=0;i<=DREAPTA-STANGA;i++)
     {
         x=A+i*(B-A)/(DREAPTA-STANGA);
+        //if(x==0)
+        //if((A>0&&B>0)||(A<0&&B<0)-DOAR OY
+             //else if(A<0&&B>0)-OX SI OY
         y=f(x);
+        valoriy[k]=y;
+        k++;
         xpunctactual=(int)((DREAPTA-STANGA)*x/(B-A)+(B*STANGA-A*DREAPTA)/(B-A));
         ypunctactual=(int)((BOTTOM-TOP)*y/(MAX-MIN)+(MAX*TOP-MIN*BOTTOM)/(MAX-MIN));
 
@@ -446,7 +453,7 @@ void graficfunctie(int culoaregrafic)
         line(xecran,yecran,xpunctactual,ypunctactual);
 
         if(discontinuitate(x)==1)
-        {
+        {0
             setcolor(COLOR(18,18,18));
             line(xecran,TOP+2,xecran,BOTTOM-2);
         }
@@ -454,6 +461,43 @@ void graficfunctie(int culoaregrafic)
         xecran=xpunctactual;
         yecran=ypunctactual;
     }
+    /*
+    int k=0;
+    for(i=0;i<=DREAPTA-STANGA;i++)
+    {
+        x=A+i*(B-A)/(DREAPTA-STANGA);
+        y=f(x);
+        ypunctactual=(int)((BOTTOM-TOP)*y/(MAX-MIN)+(MAX*TOP-MIN*BOTTOM)/(MAX-MIN));
+        vectpunctactual[i]=ypunctactual;
+        k++;
+        yecran=ypunctactual;
+    }
+
+    for(i=0;i<=k;i++)
+    {
+        maximgl=max(maximgl,vectpunctactual[i]);
+        minimgl=min(minimgl,vectpunctactual[i]);
+    }
+
+    for(i=0;i<=DREAPTA-STANGA;i++)
+    {
+        x=A+i*(B-A)/(DREAPTA-STANGA);
+        y=f(x);
+        ypunctactual=(int)((BOTTOM-TOP)*y/(MAX-MIN)+(MAX*TOP-MIN*BOTTOM)/(MAX-MIN));
+        if(ypunctactual==maximgl)//e de fapt minim
+            {
+                setcolor(COLOR(41,27,54));
+                line(STANGA,ypunctactual,DREAPTA,ypunctactual);
+            }
+
+        if(ypunctactual==minimgl)//e de fapt maxim
+            {
+                setcolor(COLOR(42,35,80));
+                line(STANGA,ypunctactual,DREAPTA,ypunctactual);
+            }
+        yecran=ypunctactual;
+    }
+*/
 }
 void explicatiigrafic(int width, int height, int limba)
 {
@@ -474,7 +518,7 @@ void explicatiigrafic(int width, int height, int limba)
                 outtextxy(width/2+550,height/4+220,"d/->: Right");
         }
 }
-void graficnou(int width, int height,int limba,int culoarerama, int culoaregrafic)
+void graficnou(double A, double B, int width, int height,int limba,int culoarerama, int culoaregrafic)
 {
     double valoareintegrala;
     if(culoaregrafic==1)setcolor(RED);
@@ -482,7 +526,7 @@ void graficnou(int width, int height,int limba,int culoarerama, int culoaregrafi
         else if(culoaregrafic==3)setcolor(CYAN);
         else if(culoaregrafic==4)setcolor(GREEN);
 
-    graficfunctie(culoaregrafic);
+    graficfunctie(A,B,culoaregrafic);
 
     explicatiigrafic(width,height,limba);
 
@@ -563,7 +607,7 @@ void graficnou(int width, int height,int limba,int culoarerama, int culoaregrafi
                             outtextxy(width/4+430, height-100,charintegrala);
                             }
 
-                    graficfunctie(culoaregrafic);
+                    graficfunctie(A,B,culoaregrafic);
                 }
             else if(car==KEY_LEFT||car=='a')//st
             {
@@ -611,7 +655,7 @@ void graficnou(int width, int height,int limba,int culoarerama, int culoaregrafi
                         outtextxy(width/4+430, height-100,charintegrala);
                         }
 
-                graficfunctie(culoaregrafic);
+                graficfunctie(A,B,culoaregrafic);
                 }
             else if(car=='w'||car==KEY_UP)//ZOOM -
             {
@@ -660,7 +704,7 @@ void graficnou(int width, int height,int limba,int culoarerama, int culoaregrafi
                     }
 
 
-                graficfunctie(culoaregrafic);
+                graficfunctie(A,B,culoaregrafic);
             }
             else if(car=='s'||car==KEY_DOWN)//ZOOM +
             {
@@ -708,13 +752,13 @@ void graficnou(int width, int height,int limba,int culoarerama, int culoaregrafi
                         outtextxy(width/4+430, height-100,charintegrala);
                     }
 
-                graficfunctie(culoaregrafic);
+                graficfunctie(A,B,culoaregrafic);
             }
         }
     while(car!=13);
 }
 
-void desenarefunctie(int limba,int culoarerama,int culoaregrafic)
+void desenarefunctie(double A, double B, int limba,int culoarerama,int culoaregrafic)
 {//desenare grafic
     int height, width;
     height=GetSystemMetrics(SM_CYSCREEN);
@@ -737,7 +781,7 @@ void desenarefunctie(int limba,int culoarerama,int culoaregrafic)
         else if(culoaregrafic==3)setcolor(CYAN);
         else if(culoaregrafic==4)setcolor(GREEN);
 
-    graficnou(width,height,limba,culoarerama,culoaregrafic);//graficul efectiv
+    graficnou(A,B,width,height,limba,culoarerama,culoaregrafic);//graficul efectiv
 }
 
 void buton_iesire(int width, int height)
@@ -784,7 +828,7 @@ void fereastraprincipala(int width, int height,int ok, int poza,int limba)
     settextjustify(CENTER_TEXT,CENTER_TEXT);
     if(limba==1)
         outtextxy(width/2,height/4,"Graficul functiei");//setari titlu
-        else outtextxy(width/2,height/4,"Function's grapich");//setari titlu
+        else outtextxy(width/2,height/4,"Function's graphic");//setari titlu
 
 
     settextstyle(8, HORIZ_DIR, 6);
@@ -794,8 +838,8 @@ void fereastraprincipala(int width, int height,int ok, int poza,int limba)
             rectangle(width/2-100,height/2-40,width/2+98,height/2+12);//setari a doua linie de text
         }
         else {
-                outtextxy(width/2,height/2,"Graph");
-                rectangle(width/2-82,height/2-40,width/2+80,height/2+12);//setari a doua linie de text
+                outtextxy(width/2,height/2,"Graphic");
+                rectangle(width/2-119,height/2-40,width/2+118,height/2+12);//setari a doua linie de text
             }
 
     settextstyle(8, HORIZ_DIR, 6);
@@ -947,7 +991,7 @@ void fereastraContact(int width, int height,int ok,int poza,int limba)
     buton_iesire(width, height);
 }
 
-void clickpefereastrapr(int ok, int poza, int &limba,int culoarerama, int culoaregrafic,char fun[256],char capatst[256],char capatdr[256])
+void clickpefereastrapr(double A, double B, int ok, int poza, int &limba,int culoarerama, int culoaregrafic,char fun[256],char capatst[256],char capatdr[256])
 {
     int coordx, coordy;
     int a,b,c,d;
@@ -973,16 +1017,16 @@ void clickpefereastrapr(int ok, int poza, int &limba,int culoarerama, int culoar
                 schimbaresunet(ok);
                 clearmouseclick(WM_LBUTTONUP);
                 fereastraGrafic(width,height,ok,poza,limba);
-                clickpeGrafic(width,height,ok,poza,limba,culoarerama,culoaregrafic,fun,capatst,capatdr);
+                clickpeGrafic(A,B,width,height,ok,poza,limba,culoarerama,culoaregrafic,fun,capatst,capatdr);
             }
-    else if(coordx>=(width/2-82)&&coordx<=(width/2+80)&&coordy>=(height/2-40)&&coordy<=(height/2+12)&&limba==0)
+    else if(coordx>=(width/2-119)&&coordx<=(width/2+118)&&coordy>=(height/2-40)&&coordy<=(height/2+12)&&limba==0)
             {//daca se face click pe "Graph"
-                a=width/2-82; b=height/2-40; c=width/2+80; d=height/2+12;
+                a=width/2-119; b=height/2-40; c=width/2+118; d=height/2+12;
                 schimbareculoarebuton(a,b,c,d);
                 schimbaresunet(ok);
                 clearmouseclick(WM_LBUTTONUP);
                 fereastraGrafic(width,height,ok,poza,limba);
-                clickpeGrafic(width,height,ok,poza,limba,culoarerama,culoaregrafic,fun,capatst,capatdr);
+                clickpeGrafic(A,B,width,height,ok,poza,limba,culoarerama,culoaregrafic,fun,capatst,capatdr);
             }
     else if(coordx>=(width/2-119)&&coordx<=(width/2+117)&&
                 coordy>=(height/2+110)&&coordy<=(height/2+165))
@@ -993,7 +1037,7 @@ void clickpefereastrapr(int ok, int poza, int &limba,int culoarerama, int culoar
                 schimbareculoarebuton(a,b,c,d);
                 schimbaresunet(ok);
                 fereastraContact(width, height,ok,poza,limba);
-                clickpeContact(width,height,ok,poza,limba,culoarerama,culoaregrafic,fun,capatst,capatdr);
+                clickpeContact(A,B,width,height,ok,poza,limba,culoarerama,culoaregrafic,fun,capatst,capatdr);
             }
     else if(coordx>=(width-80)&&coordx<=(width-30)&&
                     coordy>=(height/5-145)&&coordy<=(height/5-115)&&limba==1)//steag-daca se apasa setarea de limba
@@ -1018,7 +1062,7 @@ void clickpefereastrapr(int ok, int poza, int &limba,int culoarerama, int culoar
     }
 }
 
-void clickpeGrafic(int width, int height,int ok,int poza, int limba, int culoarerama, int culoaregrafic,char fun[256],char capatst[256],char capatdr[256])
+void clickpeGrafic(double &A, double &B, int width, int height,int ok,int poza, int limba, int culoarerama, int culoaregrafic,char fun[256],char capatst[256],char capatdr[256])
 {
     int coordx, coordy;
     int a,b,c,d;
@@ -1039,7 +1083,7 @@ void clickpeGrafic(int width, int height,int ok,int poza, int limba, int culoare
             schimbaresunet(ok);
             closegraph();
             fereastraprincipala(width, height,ok,poza,limba);
-            clickpefereastrapr(ok,poza,limba,culoarerama, culoaregrafic,fun,capatst,capatdr);
+            clickpefereastrapr(A,B,ok,poza,limba,culoarerama, culoaregrafic,fun,capatst,capatdr);
         }
 else if(coordx>=width/16-31&&coordx<=width/10&&coordy>=height/5-145&&coordy<=height/5-114)//exit
         {
@@ -1069,7 +1113,7 @@ else if(coordx>=width/16-31&&coordx<=width/10&&coordy>=height/5-145&&coordy<=hei
             a=width/2+460; b=height/2-18; c=width/2+540; d=height/2+7;
             schimbareculoarebuton(a,b,c,d);
             schimbaresunet(ok);
-            desenarefunctie(limba,culoarerama,culoaregrafic);
+            desenarefunctie(A,B,limba,culoarerama,culoaregrafic);
             closegraph();
         }
 
@@ -1108,7 +1152,7 @@ else if(coordx>=(width/2-320)&&coordx<=(width/4+655)&&coordy>=(height/3+70)&&coo
                 }
             }
             while(car!=13);
-            clickpeGrafic(width,height,ok,poza,limba,culoarerama,culoaregrafic,fun,capatst,capatdr);
+            clickpeGrafic(A,B,width,height,ok,poza,limba,culoarerama,culoaregrafic,fun,capatst,capatdr);
         }
 
     else if(coordx>=(width/2-320)&&coordx<=(width/4+320)&&coordy>=(height/4-10)&&coordy<=(height/4+50))
@@ -1117,7 +1161,7 @@ else if(coordx>=(width/2-320)&&coordx<=(width/4+655)&&coordy>=(height/3+70)&&coo
             a=width/2-320; b=height/4-10; c=width/4+320; d=height/4+50;
             schimbareculoarebuton(a,b,c,d);
             schimbaresunet(ok);
-             x=a+30;
+              x=a+30;
             do
             {car = getch();
             sir[0]=car;
@@ -1144,7 +1188,8 @@ else if(coordx>=(width/2-320)&&coordx<=(width/4+655)&&coordy>=(height/3+70)&&coo
                 }
             }
             while(car!=13);
-        clickpeGrafic(width,height,ok,poza,limba,culoarerama,culoaregrafic,fun,capatst,capatdr);
+        double A=atof((char*)capatst);
+        clickpeGrafic(A,B,width,height,ok,poza,limba,culoarerama,culoaregrafic,fun,capatst,capatdr);
         }
     else if(coordx>=(width/4+340)&&coordx<=(width/4+655)&&coordy>=(height/4-10)&&coordy<=(height/4+50))
         {
@@ -1179,12 +1224,12 @@ else if(coordx>=(width/2-320)&&coordx<=(width/4+655)&&coordy>=(height/3+70)&&coo
                 }
             }
             while(car!=13);
-
-        clickpeGrafic(width,height,ok,poza,limba,culoarerama,culoaregrafic,fun,capatst,capatdr);
+        double B=atof((char*)capatdr);
+        clickpeGrafic(A,B,width,height,ok,poza,limba,culoarerama,culoaregrafic,fun,capatst,capatdr);
         }
     }
 }
-void clickpeContact(int width, int height,int ok,int poza,int limba,int culoarerama, int culoaregrafic,char fun[256],char capatst[256],char capatdr[256])
+void clickpeContact(double A, double B, int width, int height,int ok,int poza,int limba,int culoarerama, int culoaregrafic,char fun[256],char capatst[256],char capatdr[256])
 {
     int coordx, coordy;
     int a,b,c,d;
@@ -1200,7 +1245,7 @@ void clickpeContact(int width, int height,int ok,int poza,int limba,int culoarer
             schimbaresunet(ok);
             closegraph();
             fereastraprincipala(width, height,ok,poza,limba);
-            clickpefereastrapr(ok,poza,limba,culoarerama,culoaregrafic,fun,capatst,capatdr);
+            clickpefereastrapr(A,B,ok,poza,limba,culoarerama,culoaregrafic,fun,capatst,capatdr);
         }
 else if(coordx>=width/16-31&&coordx<=width/10&&coordy>=height/5-145&&coordy<=height/5-114)//exit
         {
