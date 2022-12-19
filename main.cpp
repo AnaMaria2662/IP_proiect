@@ -3,7 +3,8 @@ Plan:
 -asimptota verticala
 -asimptota orizontala
 -axe
--minim maxim
+-minim si maxim
+
 Evaluator:
 -restrictii fiecare semn1
 */
@@ -23,6 +24,7 @@ Evaluator:
 using namespace std;
 
 double MIN,MAX;
+double minim, maxim;
 int STANGA=250, DREAPTA=1100, TOP=150, BOTTOM=600;
 char vect[256];
 
@@ -30,6 +32,7 @@ void click(int &coordxclick, int &coordyclick );
 void clickpeGrafic(double &A, double &B, int width, int height,int ok,int poza,int limba,int culoarerama, int culoaregrafic, char fun[256],char capatst[256],char capatdr[256]);
 double f(double x);
 void aflareminsimax();
+void aflareminmaxdininterval(double A, double B, double &minim, double &maxim);
 void graficfunctie(double A, double B, int culoarefunctie);
 void graficnou(double A, double B, int widget,int height,int limba,int culoarerama, int culoaregrafic);
 void desenarefunctie(double A, double B,int limba,int culoarerama, int culoaregrafic);
@@ -400,7 +403,7 @@ void click(int &coordxclick, int &coordyclick )
 
 double f(double x)
 {
-    return sin(x);
+    return 2*x*sin(x);
     //return transformaredininfixinpostifx(x);
 }
 
@@ -418,16 +421,12 @@ void aflareminsimax(double A, double B)
         MIN=min(MIN,y);//noul min in y
     }
 }
-
-void graficfunctie(double A, double B, int culoaregrafic)
-{//trasare linie grafic pt toate punctele
-    int i;
+void aflareminmaxdininterval(double A, double B, double &minim, double &maxim)
+{
+    minim=100000001;
+    maxim=-minim;
+    double i;
     double x,y,xecran,yecran,xpunctactual,ypunctactual;
-    double valoriy[NMAX];
-    double k=0;
-    //double maximgl,minimgl;
-    //maximgl=-100000001;
-    //minimgl=100000001;
     x=A;
     y=(int)(f(A));
     aflareminsimax(A,B);
@@ -436,68 +435,64 @@ void graficfunctie(double A, double B, int culoaregrafic)
     for(i=0;i<=DREAPTA-STANGA;i++)
     {
         x=A+i*(B-A)/(DREAPTA-STANGA);
-        //if(x==0)
-        //if((A>0&&B>0)||(A<0&&B<0)-DOAR OY
-             //else if(A<0&&B>0)-OX SI OY
         y=f(x);
-        valoriy[k]=y;
-        k++;
         xpunctactual=(int)((DREAPTA-STANGA)*x/(B-A)+(B*STANGA-A*DREAPTA)/(B-A));
         ypunctactual=(int)((BOTTOM-TOP)*y/(MAX-MIN)+(MAX*TOP-MIN*BOTTOM)/(MAX-MIN));
 
+        minim=min(minim,ypunctactual);
+        maxim=max(maxim,ypunctactual);
+
+        xecran=xpunctactual;
+        yecran=ypunctactual;
+    }
+}
+void graficfunctie(double A, double B, int culoaregrafic)
+{//trasare linie grafic pt toate punctele
+    int i;
+    double x,y,xecran,yecran,xpunctactual,ypunctactual;
+
+    aflareminmaxdininterval(A,B,minim,maxim);
+
+    x=A;
+    y=(int)(f(A));
+    aflareminsimax(A,B);
+    xecran=(DREAPTA-STANGA)*x/(B-A)+(B*STANGA-A*DREAPTA)/(B-A);
+    yecran=(BOTTOM-TOP)*y/(MAX-MIN)+(MAX*TOP-MIN*BOTTOM)/(MAX-MIN);
+    for(i=0;i<=DREAPTA-STANGA;i++)
+    {
+        x=A+i*(B-A)/(DREAPTA-STANGA);
+        y=f(x);
+        xpunctactual=(int)((DREAPTA-STANGA)*x/(B-A)+(B*STANGA-A*DREAPTA)/(B-A));
+        ypunctactual=(int)((BOTTOM-TOP)*y/(MAX-MIN)+(MAX*TOP-MIN*BOTTOM)/(MAX-MIN));
+
+        if(discontinuitate(x)==1)
+        {
+            setcolor(COLOR(18,18,18));
+            line(xecran,TOP+2,xecran,BOTTOM-2);
+        }
+
+        if(ypunctactual==minim)
+        {
+            setcolor(WHITE);
+            line(xecran,yecran,xpunctactual,ypunctactual);
+        }
+    else if(ypunctactual==maxim)
+        {
+            setcolor(WHITE);
+            line(xecran,yecran,xpunctactual,ypunctactual);
+        }
+   else {
         if(culoaregrafic==1)setcolor(RED);
             else if(culoaregrafic==2)setcolor(YELLOW);
             else if(culoaregrafic==3)setcolor(CYAN);
             else if(culoaregrafic==4)setcolor(GREEN);
 
         line(xecran,yecran,xpunctactual,ypunctactual);
-
-        if(discontinuitate(x)==1)
-        {0
-            setcolor(COLOR(18,18,18));
-            line(xecran,TOP+2,xecran,BOTTOM-2);
         }
 
         xecran=xpunctactual;
         yecran=ypunctactual;
     }
-    /*
-    int k=0;
-    for(i=0;i<=DREAPTA-STANGA;i++)
-    {
-        x=A+i*(B-A)/(DREAPTA-STANGA);
-        y=f(x);
-        ypunctactual=(int)((BOTTOM-TOP)*y/(MAX-MIN)+(MAX*TOP-MIN*BOTTOM)/(MAX-MIN));
-        vectpunctactual[i]=ypunctactual;
-        k++;
-        yecran=ypunctactual;
-    }
-
-    for(i=0;i<=k;i++)
-    {
-        maximgl=max(maximgl,vectpunctactual[i]);
-        minimgl=min(minimgl,vectpunctactual[i]);
-    }
-
-    for(i=0;i<=DREAPTA-STANGA;i++)
-    {
-        x=A+i*(B-A)/(DREAPTA-STANGA);
-        y=f(x);
-        ypunctactual=(int)((BOTTOM-TOP)*y/(MAX-MIN)+(MAX*TOP-MIN*BOTTOM)/(MAX-MIN));
-        if(ypunctactual==maximgl)//e de fapt minim
-            {
-                setcolor(COLOR(41,27,54));
-                line(STANGA,ypunctactual,DREAPTA,ypunctactual);
-            }
-
-        if(ypunctactual==minimgl)//e de fapt maxim
-            {
-                setcolor(COLOR(42,35,80));
-                line(STANGA,ypunctactual,DREAPTA,ypunctactual);
-            }
-        yecran=ypunctactual;
-    }
-*/
 }
 void explicatiigrafic(int width, int height, int limba)
 {
@@ -574,12 +569,6 @@ void graficnou(double A, double B, int width, int height,int limba,int culoarera
 
                     rectangle(STANGA,TOP,DREAPTA,BOTTOM);
 
-                    setcolor(DARKGRAY);
-                    line(STANGA,height/2,DREAPTA, height/2);//axa ox
-                    line(width/2,TOP,width/2,BOTTOM);//axa oy
-
-                    explicatiigrafic(width,height,limba);
-
                     setcolor(WHITE);
                     settextstyle(8, HORIZ_DIR, 4 );
                     settextjustify(CENTER_TEXT,CENTER_TEXT);
@@ -608,6 +597,10 @@ void graficnou(double A, double B, int width, int height,int limba,int culoarera
                             }
 
                     graficfunctie(A,B,culoaregrafic);
+                    setcolor(DARKGRAY);
+                    line(STANGA,height/2,DREAPTA, height/2);//axa ox
+                    line(DREAPTA-7,height/2-7,DREAPTA,height/2);
+                    line(DREAPTA-7,height/2+7,DREAPTA,height/2);
                 }
             else if(car==KEY_LEFT||car=='a')//st
             {
@@ -621,10 +614,6 @@ void graficnou(double A, double B, int width, int height,int limba,int culoarera
                     else if(culoarerama==4)setcolor(GREEN);
 
                 rectangle(STANGA,TOP,DREAPTA,BOTTOM);
-
-                setcolor(DARKGRAY);
-                line(STANGA,height/2,DREAPTA, height/2);//axa ox
-                line(width/2,TOP,width/2,BOTTOM);//axa oy
 
                 explicatiigrafic(width,height,limba);
 
@@ -656,6 +645,11 @@ void graficnou(double A, double B, int width, int height,int limba,int culoarera
                         }
 
                 graficfunctie(A,B,culoaregrafic);
+
+                setcolor(DARKGRAY);
+                line(STANGA,height/2,DREAPTA, height/2);//axa ox
+                line(DREAPTA-7,height/2-7,DREAPTA,height/2);
+                line(DREAPTA-7,height/2+7,DREAPTA,height/2);
                 }
             else if(car=='w'||car==KEY_UP)//ZOOM -
             {
@@ -669,10 +663,6 @@ void graficnou(double A, double B, int width, int height,int limba,int culoarera
                     else if(culoarerama==4)setcolor(GREEN);
 
                 rectangle(STANGA,TOP,DREAPTA,BOTTOM);
-
-                setcolor(DARKGRAY);
-                line(STANGA,height/2,DREAPTA, height/2);//axa ox
-                line(width/2,TOP,width/2,BOTTOM);//axa oy
 
                 explicatiigrafic(width,height,limba);
 
@@ -705,6 +695,11 @@ void graficnou(double A, double B, int width, int height,int limba,int culoarera
 
 
                 graficfunctie(A,B,culoaregrafic);
+
+                setcolor(DARKGRAY);
+                line(STANGA,height/2,DREAPTA, height/2);//axa ox
+                line(DREAPTA-7,height/2-7,DREAPTA,height/2);
+                line(DREAPTA-7,height/2+7,DREAPTA,height/2);
             }
             else if(car=='s'||car==KEY_DOWN)//ZOOM +
             {
@@ -718,10 +713,6 @@ void graficnou(double A, double B, int width, int height,int limba,int culoarera
                     else if(culoarerama==4)setcolor(GREEN);
 
                 rectangle(STANGA,TOP,DREAPTA,BOTTOM);
-
-                setcolor(DARKGRAY);
-                line(STANGA,height/2,DREAPTA, height/2);//axa ox
-                line(width/2,TOP,width/2,BOTTOM);//axa oy
 
                 explicatiigrafic(width,height,limba);
 
@@ -753,6 +744,11 @@ void graficnou(double A, double B, int width, int height,int limba,int culoarera
                     }
 
                 graficfunctie(A,B,culoaregrafic);
+
+                setcolor(DARKGRAY);
+                line(STANGA,height/2,DREAPTA, height/2);//axa ox
+                line(DREAPTA-7,height/2-7,DREAPTA,height/2);
+                line(DREAPTA-7,height/2+7,DREAPTA,height/2);
             }
         }
     while(car!=13);
@@ -774,7 +770,8 @@ void desenarefunctie(double A, double B, int limba,int culoarerama,int culoaregr
 
     setcolor(DARKGRAY);
     line(STANGA,height/2,DREAPTA, height/2);//axa ox
-    line(width/2,TOP,width/2,BOTTOM);//axa oy
+    line(DREAPTA-7,height/2-7,DREAPTA,height/2);
+    line(DREAPTA-7,height/2+7,DREAPTA,height/2);
 
     if(culoaregrafic==1)setcolor(RED);
         else if(culoaregrafic==2)setcolor(YELLOW);
@@ -1066,6 +1063,7 @@ void clickpeGrafic(double &A, double &B, int width, int height,int ok,int poza, 
 {
     int coordx, coordy;
     int a,b,c,d;
+    int i;
     char car, sir[256];
     int x;
     fun[0]=NULL;
@@ -1125,67 +1123,80 @@ else if(coordx>=(width/2-320)&&coordx<=(width/4+655)&&coordy>=(height/3+70)&&coo
             schimbareculoarebuton(a,b,c,d);
             schimbaresunet(ok);
             x=a+30;
+            i=0;
             do
             {
             car = getch();
-            sir[0]=car;
-            sir[1]=NULL;
             if(car!=8)
                 {
+                sir[0]=car;
+                sir[1]=NULL;
                 settextstyle(8, HORIZ_DIR, 4 );
                 outtextxy(x,b+30,sir);
                 x+=textwidth(sir);
-                strcat(fun,sir);
+                fun[i]=sir[0];
+                fun[i+1]=NULL;
+                i++;
                 }
-            else
-                if(strlen(sir)==0)
-                    Beep(1000,500);
-            else
+            else if(car==8)
                 {
                 setcolor(BLACK);
                 settextstyle(8, HORIZ_DIR, 4 );
                 outtextxy(x,b+30,sir);
                 x-=textwidth(sir);
-                sir[strlen(sir)-1]='\0';
-                strcat(fun,sir);
+                i--;
                 setcolor(WHITE);
                 }
+            else
+            {
+                sir[0]=car;
+                sir[1]=NULL;
+                if(strlen(sir)==0)
+                    Beep(1000,500);
+            }
             }
             while(car!=13);
             clickpeGrafic(A,B,width,height,ok,poza,limba,culoarerama,culoaregrafic,fun,capatst,capatdr);
         }
 
-    else if(coordx>=(width/2-320)&&coordx<=(width/4+320)&&coordy>=(height/4-10)&&coordy<=(height/4+50))
+    else if(coordx>=(width/2-320)&&coordx<=(width/4+320)&&coordy>=(height/4-10)&&coordy<=(height/4+50))//stanga
         {
 
             a=width/2-320; b=height/4-10; c=width/4+320; d=height/4+50;
             schimbareculoarebuton(a,b,c,d);
             schimbaresunet(ok);
-              x=a+30;
+            x=a+30;
+            i=0;
             do
-            {car = getch();
-            sir[0]=car;
-            sir[1]=NULL;
+            {
+            car = getch();
             if(car!=8)
                 {
+                sir[0]=car;
+                sir[1]=NULL;
                 settextstyle(8, HORIZ_DIR, 4 );
                 outtextxy(x,b+30,sir);
                 x+=textwidth(sir);
-                strcat(capatst,sir);
+                capatst[i]=sir[0];
+                capatst[i+1]=NULL;
+                i++;
                 }
-            else
-                if(strlen(sir)==0)
-                    Beep(1000,500);
-                else
+            else if(car==8)
                 {
                 setcolor(BLACK);
                 settextstyle(8, HORIZ_DIR, 4 );
                 outtextxy(x,b+30,sir);
                 x-=textwidth(sir);
-                sir[strlen(sir)-1]='\0';
-                strcat(capatst,sir);
+                i--;
                 setcolor(WHITE);
                 }
+            else
+            {
+                sir[0]=car;
+                sir[1]=NULL;
+                if(strlen(sir)==0)
+                    Beep(1000,500);
+            }
             }
             while(car!=13);
         double A=atof((char*)capatst);
@@ -1197,31 +1208,38 @@ else if(coordx>=(width/2-320)&&coordx<=(width/4+655)&&coordy>=(height/3+70)&&coo
             a=width/4+340; b=height/4-10; c=width/4+655; d=height/4+50;
             schimbareculoarebuton(a,b,c,d);
             schimbaresunet(ok);
-             x=a+30;
+           x=a+30;
+            i=0;
             do
-            {car = getch();
-            sir[0]=car;
-            sir[1]=NULL;
+            {
+            car = getch();
             if(car!=8)
                 {
+                sir[0]=car;
+                sir[1]=NULL;
                 settextstyle(8, HORIZ_DIR, 4 );
                 outtextxy(x,b+30,sir);
                 x+=textwidth(sir);
-                strcat(capatdr,sir);
+                capatdr[i]=sir[0];
+                capatdr[i+1]=NULL;
+                i++;
                 }
-            else
-                if(strlen(sir)==0)
-                    Beep(1000,500);
-                else
+            else if(car==8)
                 {
                 setcolor(BLACK);
                 settextstyle(8, HORIZ_DIR, 4 );
                 outtextxy(x,b+30,sir);
                 x-=textwidth(sir);
-                sir[strlen(sir)-1]='\0';
-                strcat(capatdr,sir);
+                i--;
                 setcolor(WHITE);
                 }
+            else
+            {
+                sir[0]=car;
+                sir[1]=NULL;
+                if(strlen(sir)==0)
+                    Beep(1000,500);
+            }
             }
             while(car!=13);
         double B=atof((char*)capatdr);
