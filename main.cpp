@@ -653,6 +653,8 @@ void graficnou(double A, double B, int width, int height,int limba,int culoarera
                 }
             else if(car=='w'||car==KEY_UP)//ZOOM -
             {
+                if((A+2)<(B-2))
+                {
                 cleardevice();
                 A+=2;
                 B-=2;
@@ -700,6 +702,7 @@ void graficnou(double A, double B, int width, int height,int limba,int culoarera
                 line(STANGA,height/2,DREAPTA, height/2);//axa ox
                 line(DREAPTA-7,height/2-7,DREAPTA,height/2);
                 line(DREAPTA-7,height/2+7,DREAPTA,height/2);
+                }
             }
             else if(car=='s'||car==KEY_DOWN)//ZOOM +
             {
