@@ -94,6 +94,7 @@ int main()
     int culoarerama=1;
     int culoaregrafic=1;
     double A,B;
+    A=B=0;
     fullscreen(width, height);
     fereastraalegeri(width,height);
     clickpefereastraalegeri(A,B,ok,poza,limba,culoarerama,culoaregrafic,fun,capatst,capatdr);
@@ -460,24 +461,17 @@ void aflareminmaxdininterval(double A, double B, double &minim, double &maxim)
     minim=100000001;
     maxim=-minim;
     double i;
-    double x,y,xecran,yecran,xpunctactual,ypunctactual;
+    double x,y,ypunctactual;
     x=A;
-    y=(int)(f(A));
+    y=(int)(f(x));
     aflareminsimax(A,B);
-    xecran=(DREAPTA-STANGA)*x/(B-A)+(B*STANGA-A*DREAPTA)/(B-A);
-    yecran=(BOTTOM-TOP)*y/(MAX-MIN)+(MAX*TOP-MIN*BOTTOM)/(MAX-MIN);
     for(i=0;i<=DREAPTA-STANGA;i++)
     {
         x=A+i*(B-A)/(DREAPTA-STANGA);
         y=f(x);
-        xpunctactual=(int)((DREAPTA-STANGA)*x/(B-A)+(B*STANGA-A*DREAPTA)/(B-A));
         ypunctactual=(int)((BOTTOM-TOP)*y/(MAX-MIN)+(MAX*TOP-MIN*BOTTOM)/(MAX-MIN));
-
         minim=min(minim,ypunctactual);
         maxim=max(maxim,ypunctactual);
-
-        xecran=xpunctactual;
-        yecran=ypunctactual;
     }
 }
 void graficfunctie(double A, double B, int culoaregrafic)
@@ -923,7 +917,7 @@ void fereastraprincipala(int width, int height,int ok, int poza,int limba)
     if(limba==1)
     {
         strcpy(t,"Graficul functiei");
-        outtextxy(width/2,height/4,"Graficul functiei");//setari titlu
+        outtextxy(width/2,height/4,t);//setari titlu
     }
         else {
                 strcpy(t,"Function's graphic");
@@ -1224,9 +1218,9 @@ void clickpeGrafic(double &A, double &B, int width, int height,int ok,int poza, 
     int i;
     char car, sir[256];
     int x;
-    fun[0]=NULL;
-    capatst[0]=NULL;
-    capatdr[0]=NULL;
+    fun[0]='\n';
+    capatst[0]='\n';
+    capatdr[0]='\n';
     fullscreen(width,height);
 
     while(true)
@@ -1281,12 +1275,12 @@ else if(coordx>=(width/2-320)&&coordx<=(width/4+655)&&coordy>=(height/3+70)&&coo
             if(car!=8)
                 {
                 sir[0]=car;
-                sir[1]=NULL;
+                sir[1]='\n';
                 settextstyle(8, HORIZ_DIR, 4 );
                 outtextxy(x,b+30,sir);
                 x+=textwidth(sir);
                 fun[i]=sir[0];
-                fun[i+1]=NULL;
+                fun[i+1]='\n';
                 i++;
                 }
             else if(car==8)
@@ -1327,12 +1321,12 @@ else if(coordx>=(width/2-320)&&coordx<=(width/4+655)&&coordy>=(height/3+70)&&coo
             if(car!=8)
                 {
                 sir[0]=car;
-                sir[1]=NULL;
+                sir[1]='\n';
                 settextstyle(8, HORIZ_DIR, 4 );
                 outtextxy(x,b+30,sir);
                 x+=textwidth(sir);
                 capatst[i]=sir[0];
-                capatst[i+1]=NULL;
+                capatst[i+1]='\n';
                 i++;
                 }
             else if(car==8)
@@ -1364,12 +1358,12 @@ else if(coordx>=(width/2-320)&&coordx<=(width/4+655)&&coordy>=(height/3+70)&&coo
             if(car!=8)
                 {
                 sir[0]=car;
-                sir[1]=NULL;
+                sir[1]='\n';
                 settextstyle(8, HORIZ_DIR, 4 );
                 outtextxy(x,b+30,sir);
                 x+=textwidth(sir);
                 capatdr[i]=sir[0];
-                capatdr[i+1]=NULL;
+                capatdr[i+1]='\n';
                 i++;
                 }
             else if(car==8)
@@ -1434,9 +1428,8 @@ else if(coordx>=(width/16-31)&&coordx<=(width/16)&&
 
 void transformarefunctie()
 {
-    int i=0,j,nr=0;
-    double numar;
-    while(i<=strlen(fun)-1)
+    int i=0,nr=0;
+    while(i<=(strlen(fun)-1))
     {
         if(isdigit(fun[i])!=0)
         {
@@ -1720,9 +1713,11 @@ void evaluator()
 
 void evaluareinterval(int width, int height,double A, double B)
 {
+    char t[256];
     if(A>=B)//intervalul nu e bun
         {
-            outtextxy(width/2,height/2+150,"Intervalul nu este bine ales");
+            strcpy(t,"Intervalul nu este bine ales");
+            outtextxy(width/2,height/2+150,t);
             k2=0;
         }
         else k2=1;
