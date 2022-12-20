@@ -1,14 +1,3 @@
-/*
-Plan:
--asimptota verticala
--asimptota orizontala
--axe
--minim si maxim
-
-Evaluator:
--restrictii fiecare semn1
-*/
-
 #include<iostream>
 #include<stdlib.h>
 #include<stdio.h>
@@ -1340,7 +1329,6 @@ else if(coordx>=(width/2-320)&&coordx<=(width/4+655)&&coordy>=(height/3+70)&&coo
                 }
             }
             while(car!=13);
-
         double A=atof((char*)capatst);
         clickpeGrafic(A,B,width,height,ok,poza,limba,culoarerama,culoaregrafic,capatst,capatdr);
         }
@@ -1733,7 +1721,7 @@ void evaluareinterval(int width, int height,double A, double B)
     setcolor(WHITE);
 
  for(i=0;i<=k;i++)
- {
+    {
     if(strchr("+-*/^",v[0])){
             strcpy(t,"Functie nu este corect scrisa");
             outtextxy(width/2,height/2+150,t);}
@@ -1863,5 +1851,5 @@ void evaluareinterval(int width, int height,double A, double B)
     if(v[i]==41){
         strcpy(t,"Numarul de paranteze deschise nu coincide cu numarul de paranteze inchise");
         outtextxy(width/2,height/2+150,t);}
- }
+    }
  }
