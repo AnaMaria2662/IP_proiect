@@ -1207,9 +1207,9 @@ void clickpeGrafic(double &A, double &B, int width, int height,int ok,int poza, 
     int i;
     char car, sir[256];
     int x;
-    fun[0]='\n';
-    capatst[0]='\n';
-    capatdr[0]='\n';
+    fun[0]='\0';
+    capatst[0]='\0';
+    capatdr[0]='\0';
     fullscreen(width,height);
 
     while(true)
@@ -1264,12 +1264,12 @@ else if(coordx>=(width/2-320)&&coordx<=(width/4+655)&&coordy>=(height/3+70)&&coo
             if(car!=8)
                 {
                 sir[0]=car;
-                sir[1]='\n';
+                sir[1]='\0';
                 settextstyle(8, HORIZ_DIR, 4 );
                 outtextxy(x,b+30,sir);
                 x+=textwidth(sir);
                 fun[i]=sir[0];
-                fun[i+1]='\n';
+                fun[i+1]='\0';
                 i++;
                 }
             else if(car==8)
@@ -1310,12 +1310,12 @@ else if(coordx>=(width/2-320)&&coordx<=(width/4+655)&&coordy>=(height/3+70)&&coo
             if(car!=8)
                 {
                 sir[0]=car;
-                sir[1]='\n';
+                sir[1]='\0';
                 settextstyle(8, HORIZ_DIR, 4 );
                 outtextxy(x,b+30,sir);
                 x+=textwidth(sir);
                 capatst[i]=sir[0];
-                capatst[i+1]='\n';
+                capatst[i+1]='\0';
                 i++;
                 }
             else if(car==8)
@@ -1346,12 +1346,12 @@ else if(coordx>=(width/2-320)&&coordx<=(width/4+655)&&coordy>=(height/3+70)&&coo
             if(car!=8)
                 {
                 sir[0]=car;
-                sir[1]='\n';
+                sir[1]='\0';
                 settextstyle(8, HORIZ_DIR, 4 );
                 outtextxy(x,b+30,sir);
                 x+=textwidth(sir);
                 capatdr[i]=sir[0];
-                capatdr[i+1]='\n';
+                capatdr[i+1]='\0';
                 i++;
                 }
             else if(car==8)
