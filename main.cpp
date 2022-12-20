@@ -1704,11 +1704,13 @@ void evaluator()
         {ok=38; v[++k]=ok;}
     if(fun[i]=='^'&&fun[i+1]=='^')
         {ok=39; v[++k]=ok;}
+    if(strchr("sctlr",fun[i])&&strchr("sctlr",fun[i+1]))
+        {ok=40; v[++k]=ok;}
     }
     if(nr!=nr1)
-        {ok=40; v[++k]=ok;}
+        {ok=41; v[++k]=ok;}
     if(k==0)
-        ok=41;
+        ok=42;
 }
 
 void evaluareinterval(int width, int height,double A, double B)
@@ -1855,7 +1857,10 @@ void evaluareinterval(int width, int height,double A, double B)
     if(v[i]==39){
         strcpy(t,"Nu poate aparea simbolul ^ urmat de simbolul ^ ");
         outtextxy(width/2,height/2+150,t);}
-    if(v[i]==40){
+     if(v[i]==40){
+        strcpy(t,"Nu se pot folosi 2 astfel de simboluri lipite");
+        outtextxy(width/2,height/2+150,t);}
+    if(v[i]==41){
         strcpy(t,"Numarul de paranteze deschise nu coincide cu numarul de paranteze inchise");
         outtextxy(width/2,height/2+150,t);}
  }
