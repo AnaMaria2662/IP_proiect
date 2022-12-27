@@ -19,31 +19,6 @@ int STANGA=250, DREAPTA=1100, TOP=150, BOTTOM=600;
 char vect[256];
 int k,k2,v[50], contorev;
 
-void click(int &coordxclick, int &coordyclick );
-void click_pe_Grafic(double &A, double &B, int width, int height,int ok,int poza,int limba,int culoarerama, int culoaregrafic, char capatst[256],char capatdr[256]);
-double functie(double x);
-void aflare_min_si_max();
-void aflare_min_max_din_interval(double A, double B, double &minim, double &maxim);
-void desenare_grafic_functie(double A, double B, int culoarefunctie);
-void redesenare_grafic(double A, double B, int widget,int height,int limba,int culoarerama, int culoaregrafic);
-void fereastra_cu_graficul_desenat(double A, double B,int limba,int culoarerama, int culoaregrafic);
-void buton_iesire(int width, int height);
-void buton_inapoi(int width, int height);
-void fereastra_de_alegeri(int width, int height);
-void fereastra_principala(int width, int height,int ok,int poza,int limba);
-void fullscreen(int &width, int &height);
-void schimbare_sunet(int ok);
-void explicatii_grafic(int width,int height,int limba);
-void schimbare_culoare_buton(int a, int b, int c, int d);
-void fereastra_Grafic(int width, int height,int ok,int poza,int limba);
-void fereastra_Contact(int width, int height,int ok,int poza,int limba);
-void click_pe_Contact(double A, double B,int width, int height,int ok,int poza,int limba,int culoarerama, int culoaregrafic,char fun[256],char capatst[256],char capatdr[256]);
-void click_pe_fereastra_pr(double A, double B,int ok, int poza,int &limba,int culoarerama, int culoaregrafic, char fun[256],char capatst[256],char capatdr[256]);
-void click_pe_fereastra_de_alegeri(double A, double B, int &ok, int &poza, int &limba, int &culoarerama, int &culoaregrafic, char fun[256],char capatst[256],char capatdr[256]);
-void evaluator();
-void mesaj_evaluator(int width, int height);
-void evaluare_interval(int width, int height,double A, double B);
-
 struct nod{
     double info;
     char inf;
@@ -52,6 +27,52 @@ struct nod{
 
 nod *infixata,*postfixata,*S,*p,*varf,*prim,*ultim;
 
+//stive:
+void push(nod *&varf, char element);
+void push2(nod *&varf, double element);
+void pop(nod *&varf );
+bool esteVidaS(nod *&Stiva);
+void stivaVida(nod *&S);
+
+//cozi:
+void eliminare(nod *&postfixata);
+void inserare(nod *&postfixata, char element);
+bool esteVidaC(nod *&prim);
+void coadaVida(nod *&prim);
+
+//dimensiuni:
+void fullscreen(int &width, int &height);
+
+
+//ferestre:
+void fereastra_cu_graficul_desenat(double A, double B,int limba,int culoarerama, int culoaregrafic);
+void fereastra_de_alegeri(int width, int height);
+void fereastra_principala(int width, int height,int ok,int poza,int limba);
+void fereastra_Grafic(int width, int height,int ok,int poza,int limba);
+void fereastra_Contact(int width, int height,int ok,int poza,int limba);
+void explicatii_grafic(int width,int height,int limba);
+void buton_iesire(int width, int height);
+void buton_inapoi(int width, int height);
+
+
+//click:
+void click(int &coordxclick, int &coordyclick );
+void schimbare_sunet(int ok);
+void schimbare_culoare_buton(int a, int b, int c, int d);
+void click_pe_Grafic(double &A, double &B, int width, int height,int ok,int poza,int limba,int culoarerama, int culoaregrafic, char capatst[256],char capatdr[256]);
+void click_pe_Contact(double A, double B,int width, int height,int ok,int poza,int limba,int culoarerama, int culoaregrafic,char fun[256],char capatst[256],char capatdr[256]);
+void click_pe_fereastra_pr(double A, double B,int ok, int poza,int &limba,int culoarerama, int culoaregrafic, char fun[256],char capatst[256],char capatdr[256]);
+void click_pe_fereastra_de_alegeri(double A, double B, int &ok, int &poza, int &limba, int &culoarerama, int &culoaregrafic, char fun[256],char capatst[256],char capatdr[256]);
+
+
+//functie:
+double functie(double x);
+double calculare_integrala_functiei(double A, double B, double(*f)(double));
+bool discontinuitate(double x);
+void aflare_min_si_max();
+void aflare_min_max_din_interval(double A, double B, double &minim, double &maxim);
+void desenare_grafic_functie(double A, double B, int culoarefunctie);
+void redesenare_grafic(double A, double B, int widget,int height,int limba,int culoarerama, int culoaregrafic);
 double operatie (char r, double x, double y);
 double operatie_speciala (char r, double x);
 int prioritate_caracter(char a);
@@ -59,19 +80,11 @@ void transformare_functie(char *functie);
 void transformare_din_infix_in_postinfx();
 double calculare_f_din_postf(double x);
 
-void push(nod *&varf, char element);
-void push2(nod *&varf, double element);
-void pop(nod *&varf );
-void eliminare(nod *&postfixata);
-void inserare(nod *&postfixata, char element);
-bool esteVidaS(nod *&Stiva);
-void stivaVida(nod *&S);
-bool esteVidaC(nod *&prim);
-void coadaVida(nod *&prim);
 
-double calculare_integrala_functiei(double A, double B, double(*f)(double));
-
-bool discontinuitate(double x);
+//evaluator:
+void evaluator();
+void evaluare_interval(int width, int height,double A, double B);
+void mesaj_evaluator(int width, int height);
 
 int main()
 {
