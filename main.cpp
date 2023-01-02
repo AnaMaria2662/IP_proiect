@@ -86,6 +86,7 @@ void evaluator();
 void evaluare_interval(int width, int height,double A, double B);
 void mesaj_evaluator(int width, int height);
 
+
 int main()
 {
     int height, width;
@@ -104,6 +105,8 @@ int main()
     closegraph();
     return 0;
 }
+
+
 //stive
 void push(nod *&varf, char element)
 {
