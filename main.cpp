@@ -18,7 +18,6 @@ char fun[256];
 int STANGA=250, DREAPTA=1100, TOP=150, BOTTOM=600;
 char vect[256];
 int k,k2,v[50], contorev;
-
 struct nod{
     double info;
     char inf;
@@ -60,9 +59,9 @@ void click(int &coordxclick, int &coordyclick );
 void schimbare_sunet(int ok);
 void schimbare_culoare_buton(int a, int b, int c, int d);
 void click_pe_Grafic(double &A, double &B, int width, int height,int ok,int poza,int limba,int culoarerama, int culoaregrafic, char capatst[256],char capatdr[256]);
-void click_pe_Contact(double A, double B,int width, int height,int ok,int poza,int limba,int culoarerama, int culoaregrafic,char fun[256],char capatst[256],char capatdr[256]);
-void click_pe_fereastra_pr(double A, double B,int ok, int poza,int &limba,int culoarerama, int culoaregrafic, char fun[256],char capatst[256],char capatdr[256]);
-void click_pe_fereastra_de_alegeri(double A, double B, int &ok, int &poza, int &limba, int &culoarerama, int &culoaregrafic, char fun[256],char capatst[256],char capatdr[256]);
+void click_pe_Contact(double A, double B,int width, int height,int ok,int poza,int limba,int culoarerama, int culoaregrafic,char capatst[256],char capatdr[256]);
+void click_pe_fereastra_pr(double A, double B,int ok, int poza,int &limba,int culoarerama, int culoaregrafic,char capatst[256],char capatdr[256]);
+void click_pe_fereastra_de_alegeri(double A, double B, int &ok, int &poza, int &limba, int &culoarerama, int &culoaregrafic,char capatst[256],char capatdr[256]);
 
 
 //functie:
@@ -76,7 +75,7 @@ void redesenare_grafic(double A, double B, int widget,int height,int limba,int c
 double operatie (char r, double x, double y);
 double operatie_speciala (char r, double x);
 int prioritate_caracter(char a);
-void transformare_functie(char *functie);
+void transformare_functie();
 void transformare_din_infix_in_postinfx();
 double calculare_f_din_postf(double x);
 
@@ -85,6 +84,10 @@ double calculare_f_din_postf(double x);
 void evaluator();
 void evaluare_interval(int width, int height,double A, double B);
 void mesaj_evaluator(int width, int height);
+
+
+//axe
+void desenare_axe(double A, double B);
 
 
 int main()
@@ -100,13 +103,11 @@ int main()
     A=B=0;
     fullscreen(width, height);
     fereastra_de_alegeri(width,height);
-    click_pe_fereastra_de_alegeri(A,B,ok,poza,limba,culoarerama,culoaregrafic,fun,capatst,capatdr);
+    click_pe_fereastra_de_alegeri(A,B,ok,poza,limba,culoarerama,culoaregrafic,capatst,capatdr);
     getch();
     closegraph();
     return 0;
 }
-
-
 //stive
 void push(nod *&varf, char element)
 {
@@ -315,6 +316,7 @@ void fereastra_cu_graficul_desenat(double A, double B, int limba,int culoarerama
     width=GetSystemMetrics(SM_CXSCREEN);
     initwindow(width,height,"Fereastra",-4,-4);
 
+
     if(culoarerama==1)setcolor(RED);
         else if(culoarerama==2)setcolor(YELLOW);
         else if(culoarerama==3)setcolor(CYAN);
@@ -323,9 +325,7 @@ void fereastra_cu_graficul_desenat(double A, double B, int limba,int culoarerama
     rectangle(STANGA,TOP,DREAPTA,BOTTOM);
 
     setcolor(DARKGRAY);
-    line(STANGA,height/2,DREAPTA, height/2);//axa ox
-    line(DREAPTA-7,height/2-7,DREAPTA,height/2);
-    line(DREAPTA-7,height/2+7,DREAPTA,height/2);
+    desenare_axe(A,B);
 
     if(culoaregrafic==1)setcolor(RED);
         else if(culoaregrafic==2)setcolor(YELLOW);
@@ -644,7 +644,7 @@ void schimbare_culoare_buton(int a, int b, int c, int d)
     rectangle(a,b,c,d);
 }
 
-void click_pe_fereastra_de_alegeri(double A, double B, int &ok, int &poza,int &limba, int &culoarerama, int &culoaregrafic, char fun[256],char capatst[256],char capatdr[256])
+void click_pe_fereastra_de_alegeri(double A, double B, int &ok, int &poza,int &limba, int &culoarerama, int &culoaregrafic,char capatst[256],char capatdr[256])
 {
     int coordx, coordy;
     int a,b,c,d;
@@ -664,7 +664,7 @@ void click_pe_fereastra_de_alegeri(double A, double B, int &ok, int &poza,int &l
             schimbare_sunet(ok);
             closegraph();
             fereastra_principala(width,height,ok,poza,limba);
-            click_pe_fereastra_pr(A,B,ok,poza,limba,culoarerama,culoaregrafic,fun,capatst,capatdr);
+            click_pe_fereastra_pr(A,B,ok,poza,limba,culoarerama,culoaregrafic,capatst,capatdr);
         }
     else if(coordx>=width/16-31&&coordx<=width/10&&coordy>=height/5-145&&coordy<=height/5-114)//click pe exit
         {
@@ -765,7 +765,7 @@ void click_pe_fereastra_de_alegeri(double A, double B, int &ok, int &poza,int &l
     }
 }
 
-void click_pe_fereastra_pr(double A, double B, int ok, int poza, int &limba,int culoarerama, int culoaregrafic,char fun[256],char capatst[256],char capatdr[256])
+void click_pe_fereastra_pr(double A, double B, int ok, int poza, int &limba,int culoarerama, int culoaregrafic,char capatst[256],char capatdr[256])
 {
     int coordx, coordy;
     int a,b,c,d;
@@ -811,7 +811,7 @@ void click_pe_fereastra_pr(double A, double B, int ok, int poza, int &limba,int 
                 schimbare_culoare_buton(a,b,c,d);
                 schimbare_sunet(ok);
                 fereastra_Contact(width, height,ok,poza,limba);
-                click_pe_Contact(A,B,width,height,ok,poza,limba,culoarerama,culoaregrafic,fun,capatst,capatdr);
+                click_pe_Contact(A,B,width,height,ok,poza,limba,culoarerama,culoaregrafic,capatst,capatdr);
             }
     else if(coordx>=(width-80)&&coordx<=(width-30)&&
                     coordy>=(height/5-145)&&coordy<=(height/5-115)&&limba==1)//steag-daca se apasa setarea de limba
@@ -836,60 +836,14 @@ void click_pe_fereastra_pr(double A, double B, int ok, int poza, int &limba,int 
     }
 }
 
-void click_pe_Grafic(double &A, double &B, int width, int height,int ok,int poza, int limba, int culoarerama, int culoaregrafic,char capatst[256],char capatdr[256])
+void caseta_text_functie(int width, int height,int ok)
 {
-    int coordx, coordy;
-    int a,b,c,d;
-    int i;
-    char car, sir[256];
-    int x;
-    fun[0]='\0';
-    capatst[0]='\0';
-    capatdr[0]='\0';
-    fullscreen(width,height);
-
-    while(true)
-    {
-    click(coordx,coordy);
-    if(coordx>=width/10+10&&coordx<=width/10+90&&coordy>=height/5-145&&coordy<=height/5-114)//back
-        {
-            a=width/10+10; b=height/5-145; c=width/10+90; d=height/5-114;
-            schimbare_culoare_buton(a,b,c,d);
-            schimbare_sunet(ok);
-            closegraph();
-            fereastra_principala(width, height,ok,poza,limba);
-            click_pe_fereastra_pr(A,B,ok,poza,limba,culoarerama, culoaregrafic,fun,capatst,capatdr);
-        }
-else if(coordx>=width/16-31&&coordx<=width/10&&coordy>=height/5-145&&coordy<=height/5-114)//exit
-        {
-            a=width/16-31; b=height/5-145; c=width/10; d=height/5-114;
-            schimbare_culoare_buton(a,b,c,d);
-            schimbare_sunet(ok);
-            exit(1);
-        }
-    else if(coordx>=(width/16-31)&&coordx<=(width/16)&&
-                    coordy>=(height/5-100)&&coordy<=(height/5-70))
-            {
-                readimagefile("sunetinchis1.jpeg",width/16-31,height/5-100,width/16,height/5-70);
-                PlaySound(NULL,0,0);
-            }
-    else if(coordx>=(width/2+460)&&coordx<=(width/2+540)&&coordy>=(height/2-18)&&coordy<=(height/2+7))//buton spre functie
-        {
-        if(k2==1&&k==0)
-            {
-            a=width/2+460; b=height/2-18; c=width/2+540; d=height/2+7;
-            schimbare_culoare_buton(a,b,c,d);
-            schimbare_sunet(ok);
-            fereastra_cu_graficul_desenat(A,B,limba,culoarerama,culoaregrafic);
-            closegraph();
-            }
-        }
-
-else if(coordx>=(width/2-320)&&coordx<=(width/4+655)&&coordy>=(height/3+70)&&coordy<=(height/3+130))
-        {
-            //daca se apasa caseta cu "Introduceti functia aici:"
-            //se schimba culoare dreptunghiului in galben la click
-            a=width/2-320; b=height/3+70; c=width/4+655; d=height/3+130;
+int a,b,c,d;
+int i;
+char car, sir[256];
+int x;
+fun[0]='\0';
+a=width/2-320; b=height/3+70; c=width/4+655; d=height/3+130;
             schimbare_culoare_buton(a,b,c,d);
             schimbare_sunet(ok);
             x=a+30;
@@ -929,20 +883,25 @@ else if(coordx>=(width/2-320)&&coordx<=(width/4+655)&&coordy>=(height/3+70)&&coo
                     mesaj_evaluator(width,height);
                 }
 
-            click_pe_Grafic(A,B,width,height,ok,poza,limba,culoarerama,culoaregrafic,capatst,capatdr);
         }
 
-    else if(coordx>=(width/2-320)&&coordx<=(width/4+320)&&coordy>=(height/4-10)&&coordy<=(height/4+50))//stanga
-        {
 
-            a=width/2-320; b=height/4-10; c=width/4+320; d=height/4+50;
-            schimbare_culoare_buton(a,b,c,d);
-            schimbare_sunet(ok);
-            x=a+30;
-            i=0;
-            do
-            {
-            car = getch();
+void caseta_text_capat_stanga(int width, int height,double &A,int ok)
+{
+    int a,b,c,d;
+    int i;
+    char capatst[256];
+    char car, sir[256];
+    int x;
+    capatst[0]='\0';
+    a=width/2-320; b=height/4-10; c=width/4+320; d=height/4+50;
+    schimbare_culoare_buton(a,b,c,d);
+    schimbare_sunet(ok);
+    x=a+30;
+    i=0;
+    do
+        {
+        car = getch();
             if(car!=8)
                 {
                 sir[0]=car;
@@ -963,20 +922,26 @@ else if(coordx>=(width/2-320)&&coordx<=(width/4+655)&&coordy>=(height/3+70)&&coo
                 i--;
                 setcolor(WHITE);
                 }
-            }
-            while(car!=13);
-        double A=atof((char*)capatst);
-        click_pe_Grafic(A,B,width,height,ok,poza,limba,culoarerama,culoaregrafic,capatst,capatdr);
         }
-    else if(coordx>=(width/4+340)&&coordx<=(width/4+655)&&coordy>=(height/4-10)&&coordy<=(height/4+50))//dreapta
+        while(car!=13);
+        A=atof((char*)capatst);
+}
+
+void caseta_text_capat_dreapta(int width, int height,double &A,double &B,int ok)
+{
+  int a,b,c,d;
+    int i;
+    char capatdr[256];
+    char car, sir[256];
+    int x;
+    capatdr[0]='\0';
+    a=width/4+340; b=height/4-10; c=width/4+655; d=height/4+50;
+    schimbare_culoare_buton(a,b,c,d);
+    schimbare_sunet(ok);
+    x=a+30;
+    i=0;
+    do
         {
-            a=width/4+340; b=height/4-10; c=width/4+655; d=height/4+50;
-            schimbare_culoare_buton(a,b,c,d);
-            schimbare_sunet(ok);
-           x=a+30;
-            i=0;
-            do
-            {
             car = getch();
             if(car!=8)
                 {
@@ -998,10 +963,10 @@ else if(coordx>=(width/2-320)&&coordx<=(width/4+655)&&coordy>=(height/3+70)&&coo
                 i--;
                 setcolor(WHITE);
                 }
-            }
-            while(car!=13);
+        }
+        while(car!=13);
 
-        double B=atof((char*)capatdr);
+        B=atof((char*)capatdr);
         if(car==13)
                 {
                     a=width/2-550; b=height/2+70; c=width/2+550; d=height/2+250;
@@ -1009,12 +974,74 @@ else if(coordx>=(width/2-320)&&coordx<=(width/4+655)&&coordy>=(height/3+70)&&coo
                     schimbare_sunet(ok);
                     evaluare_interval(width,height,A,B);
                 }
+}
+void click_pe_Grafic(double &A, double &B, int width, int height,int ok,int poza, int limba, int culoarerama, int culoaregrafic,char capatst[256],char capatdr[256])
+{
+    int coordx, coordy;
+    int a,b,c,d;
+    fullscreen(width,height);
+
+    while(true)
+    {
+    click(coordx,coordy);
+    if(coordx>=width/10+10&&coordx<=width/10+90&&coordy>=height/5-145&&coordy<=height/5-114)//back
+        {
+            a=width/10+10; b=height/5-145; c=width/10+90; d=height/5-114;
+            schimbare_culoare_buton(a,b,c,d);
+            schimbare_sunet(ok);
+            closegraph();
+            fereastra_principala(width, height,ok,poza,limba);
+            click_pe_fereastra_pr(A,B,ok,poza,limba,culoarerama, culoaregrafic,capatst,capatdr);
+        }
+else if(coordx>=width/16-31&&coordx<=width/10&&coordy>=height/5-145&&coordy<=height/5-114)//exit
+        {
+            a=width/16-31; b=height/5-145; c=width/10; d=height/5-114;
+            schimbare_culoare_buton(a,b,c,d);
+            schimbare_sunet(ok);
+            exit(1);
+        }
+    else if(coordx>=(width/16-31)&&coordx<=(width/16)&&
+                    coordy>=(height/5-100)&&coordy<=(height/5-70))
+            {
+                readimagefile("sunetinchis1.jpeg",width/16-31,height/5-100,width/16,height/5-70);
+                PlaySound(NULL,0,0);
+            }
+        else if(coordx>=(width/2-320)&&coordx<=(width/4+655)&&coordy>=(height/3+70)&&coordy<=(height/3+130))
+        {
+            //daca se apasa caseta cu "Introduceti functia aici:"
+            //se schimba culoare dreptunghiului in galben la click
+            caseta_text_functie(width,height,ok);
+            click_pe_Grafic(A,B,width,height,ok,poza,limba,culoarerama,culoaregrafic,capatst,capatdr);
+        }
+
+    else if(coordx>=(width/2-320)&&coordx<=(width/4+320)&&coordy>=(height/4-10)&&coordy<=(height/4+50))//stanga
+        {
+
+        caseta_text_capat_stanga(width,height,A,ok);
         click_pe_Grafic(A,B,width,height,ok,poza,limba,culoarerama,culoaregrafic,capatst,capatdr);
         }
+    else if(coordx>=(width/4+340)&&coordx<=(width/4+655)&&coordy>=(height/4-10)&&coordy<=(height/4+50))//dreapta
+        {
+         caseta_text_capat_dreapta(width,height,A,B,ok);
+        click_pe_Grafic(A,B,width,height,ok,poza,limba,culoarerama,culoaregrafic,capatst,capatdr);
+        }
+    else if(coordx>=(width/2+460)&&coordx<=(width/2+540)&&coordy>=(height/2-18)&&coordy<=(height/2+7))//buton spre functie
+        {
+        if(k2==1&&k==0)
+            {
+            a=width/2+460; b=height/2-18; c=width/2+540; d=height/2+7;
+            schimbare_culoare_buton(a,b,c,d);
+            schimbare_sunet(ok);
+            fereastra_cu_graficul_desenat(A,B,limba,culoarerama,culoaregrafic);
+            closegraph();
+            }
+        }
+
+
     }
 }
 
-void click_pe_Contact(double A, double B, int width, int height,int ok,int poza,int limba,int culoarerama, int culoaregrafic,char fun[256],char capatst[256],char capatdr[256])
+void click_pe_Contact(double A, double B, int width, int height,int ok,int poza,int limba,int culoarerama, int culoaregrafic,char capatst[256],char capatdr[256])
 {
     int coordx, coordy;
     int a,b,c,d;
@@ -1030,7 +1057,7 @@ void click_pe_Contact(double A, double B, int width, int height,int ok,int poza,
             schimbare_sunet(ok);
             closegraph();
             fereastra_principala(width, height,ok,poza,limba);
-            click_pe_fereastra_pr(A,B,ok,poza,limba,culoarerama,culoaregrafic,fun,capatst,capatdr);
+            click_pe_fereastra_pr(A,B,ok,poza,limba,culoarerama,culoaregrafic,capatst,capatdr);
         }
 else if(coordx>=width/16-31&&coordx<=width/10&&coordy>=height/5-145&&coordy<=height/5-114)//exit
         {
@@ -1053,8 +1080,9 @@ else if(coordx>=(width/16-31)&&coordx<=(width/16)&&
 //functie:
 double functie(double x)
 {
-    return 2*x*sin(x);
-    //return calcularefdinpostf(x);
+    transformare_functie();
+    transformare_din_infix_in_postinfx();
+    return calculare_f_din_postf(x);
 }
 
 double calculare_integrala_functiei(double A, double B, double(*f)(double))
@@ -1097,7 +1125,7 @@ void aflare_min_max_din_interval(double A, double B, double &minim, double &maxi
     double i;
     double x,y,ypunctactual;
     x=A;
-    y=(int)(functie(x));
+    y=functie(x);
     aflare_min_si_max(A,B);
     for(i=0;i<=DREAPTA-STANGA;i++)
     {
@@ -1117,7 +1145,7 @@ void desenare_grafic_functie(double A, double B, int culoaregrafic)
     aflare_min_max_din_interval(A,B,minim,maxim);
 
     x=A;
-    y=(int)(functie(A));
+    y=(functie(A));
     aflare_min_si_max(A,B);
     xecran=(DREAPTA-STANGA)*x/(B-A)+(B*STANGA-A*DREAPTA)/(B-A);
     yecran=(BOTTOM-TOP)*y/(MAX-MIN)+(MAX*TOP-MIN*BOTTOM)/(MAX-MIN);
@@ -1125,8 +1153,8 @@ void desenare_grafic_functie(double A, double B, int culoaregrafic)
     {
         x=A+i*(B-A)/(DREAPTA-STANGA);
         y=functie(x);
-        xpunctactual=(int)((DREAPTA-STANGA)*x/(B-A)+(B*STANGA-A*DREAPTA)/(B-A));
-        ypunctactual=(int)((BOTTOM-TOP)*y/(MAX-MIN)+(MAX*TOP-MIN*BOTTOM)/(MAX-MIN));
+        xpunctactual=((DREAPTA-STANGA)*x/(B-A)+(B*STANGA-A*DREAPTA)/(B-A));
+        ypunctactual=((BOTTOM-TOP)*y/(MAX-MIN)+(MAX*TOP-MIN*BOTTOM)/(MAX-MIN));
 
         if(discontinuitate(x)==1)
         {
@@ -1263,9 +1291,8 @@ void redesenare_grafic(double A, double B, int width, int height,int limba,int c
 
                     desenare_grafic_functie(A,B,culoaregrafic);
                     setcolor(DARKGRAY);
-                    line(STANGA,height/2,DREAPTA, height/2);//axa ox
-                    line(DREAPTA-7,height/2-7,DREAPTA,height/2);
-                    line(DREAPTA-7,height/2+7,DREAPTA,height/2);
+                    desenare_axe(A,B);
+
                 }
             else if(car==KEY_LEFT||car=='a')//st
             {
@@ -1321,9 +1348,8 @@ void redesenare_grafic(double A, double B, int width, int height,int limba,int c
                 desenare_grafic_functie(A,B,culoaregrafic);
 
                 setcolor(DARKGRAY);
-                line(STANGA,height/2,DREAPTA, height/2);//axa ox
-                line(DREAPTA-7,height/2-7,DREAPTA,height/2);
-                line(DREAPTA-7,height/2+7,DREAPTA,height/2);
+                desenare_axe(A,B);
+
                 }
             else if(car=='w'||car==KEY_UP)//ZOOM -
             {
@@ -1382,9 +1408,8 @@ void redesenare_grafic(double A, double B, int width, int height,int limba,int c
                 desenare_grafic_functie(A,B,culoaregrafic);
 
                 setcolor(DARKGRAY);
-                line(STANGA,height/2,DREAPTA, height/2);//axa ox
-                line(DREAPTA-7,height/2-7,DREAPTA,height/2);
-                line(DREAPTA-7,height/2+7,DREAPTA,height/2);
+                desenare_axe(A,B);
+
                 }
             }
             else if(car=='s'||car==KEY_DOWN)//ZOOM +
@@ -1441,9 +1466,8 @@ void redesenare_grafic(double A, double B, int width, int height,int limba,int c
                 desenare_grafic_functie(A,B,culoaregrafic);
 
                 setcolor(DARKGRAY);
-                line(STANGA,height/2,DREAPTA, height/2);//axa ox
-                line(DREAPTA-7,height/2-7,DREAPTA,height/2);
-                line(DREAPTA-7,height/2+7,DREAPTA,height/2);
+                desenare_axe(A,B);
+
             }
         }
     while(car!=13);
@@ -1451,78 +1475,76 @@ void redesenare_grafic(double A, double B, int width, int height,int limba,int c
 
 void transformare_functie()
 {
-    int i=0,nr=0;
-    while(i<=(strlen(fun)-1))
+    int i=0,j,nr=0;
+    double numar;
+    while(i<=strlen(fun)-2)
     {
         if(isdigit(fun[i])!=0)
         {
             while(isdigit(fun[i])!=0)
             {
                 vect[nr]=fun[i];
-                i++;
+                i++;j=1;
                 nr++;
             }
         vect[nr]=' ';nr++;
         }
-        else if(strchr("+-*^/)(",fun[i]))
+        else
+            if(strchr("+-*^/)(",fun[i]))
                 {
                     vect[nr]=fun[i];
-                    nr++;i=i+1;
+                    nr++;i=i+1;j=1;
                     vect[nr]=' ';nr++;
                 }
-        else
-            if(fun[i]=='x')
-            {vect[nr]=fun[i];
-            nr++;
-            i++;
-            vect[nr]=' ';nr++;}
-    else
-            {
-                if(strchr("s",fun[i])!=0)
+            else
+                if(fun[i]=='x')
                     {
                     vect[nr]=fun[i];
-                    nr++;i=i+3;
+                    nr++;j=1;
+                    i++;
                     vect[nr]=' ';nr++;
                     }
-                if(strchr("c",fun[i])!=0)
+                else
                     {
-                    vect[nr]=fun[i];
-                    nr++;i=i+3;
-                    vect[nr]=' ';nr++;
-                    }
-                if(strchr("l",fun[i])!=0)
-                    {
-                    vect[nr]=fun[i];
-                    nr++;i=i+2;
-                    vect[nr]=' ';nr++;
-                    }
-                if(strchr("t",fun[i])!=0)
-                    {
-                    vect[nr]=fun[i];
-                    nr++;
-                    }
-                if(strchr("g",fun[i])!=0)
-                    {
-                    vect[nr]=fun[i];
-                    nr++;
-                    }
-                if(strchr("r",fun[i])!=0)
-                    {
-                    vect[nr]=fun[i];
-                    nr++;
-                    }
+                        if('s'==fun[i])
+                            {
+                            vect[nr]=fun[i];
+                            nr++;i=i+3;j=3;
+                            vect[nr]=' ';nr++;
+                            }
+                        else
+                            if('c'==fun[i])
+                                {
+                                vect[nr]=fun[i];
+                                nr++;i=i+3;j=3;
+                                vect[nr]=' ';nr++;
+                                }
+                            else
+                                if('l'==fun[i])
+                                {
+                                vect[nr]=fun[i];
+                                nr++;i=i+2;j=2;
+                                vect[nr]=' ';nr++;
+                                }
+                                else
+                                    if('t'==fun[i])
+                                        {
+                                        vect[nr]=fun[i];
+                                        nr++;j=2;
+                                        }
 
 
-    }
+                    }
 }
+
 for(i=0;i<=strlen(vect)-1;i++)
     if(vect[i]!=' ')
         inserare(infixata,vect[i]);
+
 }
 
 void transformare_din_infix_in_postinfx( )
 {
-    transformare_functie();
     while (esteVidaC(infixata)==0)
     {
         if(infixata->inf=='x')// x=necunoscuta
@@ -1568,7 +1590,6 @@ void transformare_din_infix_in_postinfx( )
 double calculare_f_din_postf(double x)
 {
     double val;
-    transformare_din_infix_in_postinfx();
     while(esteVidaC(postfixata)==0)
     {
         if(postfixata->inf=='x')// x=necunoscuta
@@ -1579,10 +1600,15 @@ double calculare_f_din_postf(double x)
 
         else
             if(isdigit(postfixata->inf))//cifre
-            {   char c=postfixata->inf;
-                val=c-'0';
+            {
+                val=0;
+                while(isdigit(postfixata->inf))
+                      {
+                        char c=postfixata->inf;
+                        val=val*10+(c-'0');
+                        eliminare(postfixata);
+                      }
                 push2(S,val);
-                eliminare(postfixata);
             }
 
         else
@@ -1948,3 +1974,24 @@ void mesaj_evaluator(int width, int height)
         outtextxy(width/2,height/2+100+contorev,t);
         contorev+=27;}
  }
+
+
+//axe
+
+void desenare_axe(double A, double B)
+{
+    if(A<0&&B>0){
+            double dim;
+            dim=B-A;
+            double unitate;
+            unitate=(DREAPTA-STANGA)/dim;
+            cout<<dim<<" "<<unitate;
+            line(STANGA-A*unitate,TOP,STANGA-A*unitate,BOTTOM);//oy
+            line(STANGA-A*unitate-7,TOP+7,STANGA-A*unitate,TOP);//pt oy
+            line(STANGA-A*unitate+7,TOP+7,STANGA-A*unitate,TOP);//pt oy
+        }
+
+    line(STANGA,TOP+(BOTTOM-TOP)/2,DREAPTA,TOP+(BOTTOM-TOP)/2);//ox
+    line(DREAPTA-7,TOP+(BOTTOM-TOP)/2-7,DREAPTA,TOP+(BOTTOM-TOP)/2);//pt ox
+    line(DREAPTA-7,TOP+(BOTTOM-TOP)/2+7,DREAPTA,TOP+(BOTTOM-TOP)/2);//pt ox
+}
