@@ -1985,7 +1985,6 @@ void desenare_axe(double A, double B)
             dim=B-A;
             double unitate;
             unitate=(DREAPTA-STANGA)/dim;
-            cout<<dim<<" "<<unitate;
             line(STANGA-A*unitate,TOP,STANGA-A*unitate,BOTTOM);//oy
             line(STANGA-A*unitate-7,TOP+7,STANGA-A*unitate,TOP);//pt oy
             line(STANGA-A*unitate+7,TOP+7,STANGA-A*unitate,TOP);//pt oy
