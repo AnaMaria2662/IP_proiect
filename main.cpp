@@ -70,7 +70,7 @@ double calculare_integrala_functiei(double A, double B, double(*f)(double));
 bool discontinuitate(double x);
 void aflare_min_si_max();
 void aflare_min_max_din_interval(double A, double B, double &minim, double &maxim);
-void desenare_grafic_functie(double A, double B, int culoarefunctie);
+void desenare_grafic_functie(double A, double B, int culoarefunctie,int culoarerama);
 void redesenare_grafic(double A, double B, int widget,int height,int limba,int culoarerama, int culoaregrafic);
 double operatie (char r, double x, double y);
 double operatie_speciala (char r, double x);
@@ -1158,7 +1158,7 @@ void aflare_min_max_din_interval(double A, double B, double &minim, double &maxi
     }
 }
 
-void desenare_grafic_functie(double A, double B, int culoaregrafic)
+void desenare_grafic_functie(double A, double B, int culoaregrafic, int culoarerama)
 {
     int i;
     double x,y,xecran,yecran,xpunctactual,ypunctactual;
@@ -1181,6 +1181,13 @@ void desenare_grafic_functie(double A, double B, int culoaregrafic)
         {
             setcolor(COLOR(18,18,18));
             line(xecran,TOP+2,xecran,BOTTOM-2);
+
+            if(culoarerama==1)setcolor(RED);
+                        else if(culoarerama==2)setcolor(YELLOW);
+                        else if(culoarerama==3)setcolor(CYAN);
+                        else if(culoarerama==4)setcolor(GREEN);
+
+            rectangle(STANGA,TOP,DREAPTA,BOTTOM);
         }
 
         if(ypunctactual==minim)
@@ -1215,7 +1222,7 @@ void redesenare_grafic(double A, double B, int width, int height,int limba,int c
         else if(culoaregrafic==3)setcolor(CYAN);
         else if(culoaregrafic==4)setcolor(GREEN);
 
-    desenare_grafic_functie(A,B,culoaregrafic);
+    desenare_grafic_functie(A,B,culoaregrafic,culoarerama);
 
     explicatii_grafic(width,height,limba);
 
@@ -1310,7 +1317,7 @@ void redesenare_grafic(double A, double B, int width, int height,int limba,int c
                             outtextxy(width/4+430, height-100,charintegrala);
                             }
 
-                    desenare_grafic_functie(A,B,culoaregrafic);
+                    desenare_grafic_functie(A,B,culoaregrafic,culoarerama);
                     setcolor(DARKGRAY);
                     desenare_axe(A,B);
 
@@ -1366,7 +1373,7 @@ void redesenare_grafic(double A, double B, int width, int height,int limba,int c
                         outtextxy(width/4+430, height-100,charintegrala);
                         }
 
-                desenare_grafic_functie(A,B,culoaregrafic);
+                desenare_grafic_functie(A,B,culoaregrafic,culoarerama);
 
                 setcolor(DARKGRAY);
                 desenare_axe(A,B);
@@ -1426,7 +1433,7 @@ void redesenare_grafic(double A, double B, int width, int height,int limba,int c
                     }
 
 
-                desenare_grafic_functie(A,B,culoaregrafic);
+                desenare_grafic_functie(A,B,culoaregrafic,culoarerama);
 
                 setcolor(DARKGRAY);
                 desenare_axe(A,B);
@@ -1484,7 +1491,7 @@ void redesenare_grafic(double A, double B, int width, int height,int limba,int c
                         outtextxy(width/4+430, height-100,charintegrala);
                     }
 
-                desenare_grafic_functie(A,B,culoaregrafic);
+                desenare_grafic_functie(A,B,culoaregrafic,culoarerama);
 
                 setcolor(DARKGRAY);
                 desenare_axe(A,B);
@@ -2016,6 +2023,8 @@ void desenare_axe(double A, double B)
     line(DREAPTA-7,TOP+(BOTTOM-TOP)/2-7,DREAPTA,TOP+(BOTTOM-TOP)/2);//pt ox
     line(DREAPTA-7,TOP+(BOTTOM-TOP)/2+7,DREAPTA,TOP+(BOTTOM-TOP)/2);//pt ox
 
+    dim=B-A;
+    unitate=(DREAPTA-STANGA)/dim;
     for(i=STANGA+unitate;i<=DREAPTA;i+=unitate)
                 line(i,TOP+(BOTTOM-TOP)/2-2,i,TOP+(BOTTOM-TOP)/2+2);
 }
