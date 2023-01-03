@@ -48,7 +48,7 @@ void fereastra_cu_graficul_desenat(double A, double B,int limba,int culoarerama,
 void fereastra_de_alegeri(int width, int height);
 void fereastra_principala(int width, int height,int ok,int poza,int limba);
 void fereastra_Grafic(int width, int height,int ok,int poza,int limba);
-void fereastra_Contact(int width, int height,int ok,int poza,int limba);
+void fereastra_Informatii(int width, int height,int ok,int poza,int limba);
 void explicatii_grafic(int width,int height,int limba);
 void buton_iesire(int width, int height);
 void buton_inapoi(int width, int height);
@@ -59,7 +59,7 @@ void click(int &coordxclick, int &coordyclick );
 void schimbare_sunet(int ok);
 void schimbare_culoare_buton(int a, int b, int c, int d);
 void click_pe_Grafic(double &A, double &B, int width, int height,int ok,int poza,int limba,int culoarerama, int culoaregrafic, char capatst[256],char capatdr[256]);
-void click_pe_Contact(double A, double B,int width, int height,int ok,int poza,int limba,int culoarerama, int culoaregrafic,char capatst[256],char capatdr[256]);
+void click_pe_Informatii(double A, double B,int width, int height,int ok,int poza,int limba,int culoarerama, int culoaregrafic,char capatst[256],char capatdr[256]);
 void click_pe_fereastra_pr(double A, double B,int ok, int poza,int &limba,int culoarerama, int culoaregrafic,char capatst[256],char capatdr[256]);
 void click_pe_fereastra_de_alegeri(double A, double B, int &ok, int &poza, int &limba, int &culoarerama, int &culoaregrafic,char capatst[256],char capatdr[256]);
 
@@ -386,9 +386,9 @@ void fereastra_principala(int width, int height,int ok, int poza,int limba)
             }
 
     settextstyle(8, HORIZ_DIR, 6);
-    strcpy(t,"Contact");
+    strcpy(t,"Informatii");
     outtextxy(width/2,height/2+150,t);
-    rectangle(width/2-119,height/2+110,width/2+117,height/2+165);//setari a treia linie de text
+    rectangle(width/2-168,height/2+110,width/2+165,height/2+165);//setari a treia linie de text
 
     buton_inapoi(width, height);
     buton_iesire(width, height);
@@ -507,7 +507,7 @@ void fereastra_Grafic(int width, int height,int ok,int poza,int limba)
     buton_iesire(width, height);
 }
 
-void fereastra_Contact(int width, int height,int ok,int poza,int limba)
+void fereastra_Informatii(int width, int height,int ok,int poza,int limba)
 {
     char t[256];
     initwindow(width,height,"Fereastra",-4,-4);
@@ -528,37 +528,57 @@ void fereastra_Contact(int width, int height,int ok,int poza,int limba)
         PlaySound(NULL,0,0);
     }
 
-    settextstyle(8, HORIZ_DIR, 5);
+    settextstyle(8, HORIZ_DIR, 4);
     if(limba==1)
         {
             strcpy(t,"Proiectul a fost realizat de:");
-            outtextxy(width/2-350,height/2-200,t);//text 1
+            outtextxy(width/2-650,height/2-200,t);//text 1
             }
         else  {
                 strcpy(t,"The project was made by:");
-                outtextxy(width/2-350,height/2-200,t);//text 1
+                outtextxy(width/2-650,height/2-200,t);//text 1
         }
 
     settextstyle(8, HORIZ_DIR, 4);
 
     strcpy(t,"Ursache Ana-Maria");
-    outtextxy(width/2-180,height/2-70,t);//text 2
+    outtextxy(width/2-530,height/2-70,t);//text 2
 
     settextstyle(8, HORIZ_DIR, 4);
     if(limba==1)
         {
             strcpy(t,"si");
-            outtextxy(width/2-30,height/2+8,t);//text 3
+            outtextxy(width/2-380,height/2+8,t);//text 3
         }
         else {
                 strcpy(t,"and");
-                outtextxy(width/2-30,height/2+8,t);//text 3
+                outtextxy(width/2-380,height/2+8,t);//text 3
         }
 
     settextstyle(8, HORIZ_DIR, 4);
 
     strcpy(t,"Galatanu Emilia");
-    outtextxy(width/2-160,height/2+80,t);//text 4
+    outtextxy(width/2-510,height/2+80,t);//text 4
+
+    setfillstyle(0,BLACK);
+    bar(width/2,height/2-250,width-100,height-150);
+    setcolor(WHITE);
+    rectangle(width/2,height/2-250,width-100,height-150);
+
+    strcpy(t,"Informatii suplimentare:");
+    outtextxy(width/2+52,height/2-150,t);
+
+    settextstyle(8, HORIZ_DIR, 2);
+    strcpy(t,"-Functiile trigonometrice se vor scrie cu");
+    outtextxy(width/2+32,height/2-70,t);
+    strcpy(t,"paranteze rotunde.");
+    outtextxy(width/2+32,height/2-40,t);
+    strcpy(t,"ex: sin(x), cos(2*x)");
+    outtextxy(width/2+32,height/2-10,t);
+    strcpy(t,"-Singura variabila pe care o puteti");
+    outtextxy(width/2+32,height/2+50,t);
+    strcpy(t,"utiliza este variabila x.");
+    outtextxy(width/2+32,height/2+80,t);
 
     setcolor(WHITE);
     buton_inapoi(width, height);
@@ -802,16 +822,17 @@ void click_pe_fereastra_pr(double A, double B, int ok, int poza, int &limba,int 
                 fereastra_Grafic(width,height,ok,poza,limba);
                 click_pe_Grafic(A,B,width,height,ok,poza,limba,culoarerama,culoaregrafic,capatst,capatdr);
             }
-    else if(coordx>=(width/2-119)&&coordx<=(width/2+117)&&
+
+    else if(coordx>=(width/2-168)&&coordx<=(width/2+165)&&
                 coordy>=(height/2+110)&&coordy<=(height/2+165))
             {
-            //daca se apasa butonul de "Contact"
+            //daca se apasa butonul de "Informatii"
             //se schimba culoare dreptunghiului in galben la click
-                a=width/2-119; b=height/2+110; c=width/2+117; d=height/2+165;
+                a=width/2-168; b=height/2+110; c=width/2+165; d=height/2+165;
                 schimbare_culoare_buton(a,b,c,d);
                 schimbare_sunet(ok);
-                fereastra_Contact(width, height,ok,poza,limba);
-                click_pe_Contact(A,B,width,height,ok,poza,limba,culoarerama,culoaregrafic,capatst,capatdr);
+                fereastra_Informatii(width, height,ok,poza,limba);
+                click_pe_Informatii(A,B,width,height,ok,poza,limba,culoarerama,culoaregrafic,capatst,capatdr);
             }
     else if(coordx>=(width-80)&&coordx<=(width-30)&&
                     coordy>=(height/5-145)&&coordy<=(height/5-115)&&limba==1)//steag-daca se apasa setarea de limba
@@ -1041,7 +1062,7 @@ else if(coordx>=width/16-31&&coordx<=width/10&&coordy>=height/5-145&&coordy<=hei
     }
 }
 
-void click_pe_Contact(double A, double B, int width, int height,int ok,int poza,int limba,int culoarerama, int culoaregrafic,char capatst[256],char capatdr[256])
+void click_pe_Informatii(double A, double B, int width, int height,int ok,int poza,int limba,int culoarerama, int culoaregrafic,char capatst[256],char capatdr[256])
 {
     int coordx, coordy;
     int a,b,c,d;
@@ -1980,17 +2001,21 @@ void mesaj_evaluator(int width, int height)
 
 void desenare_axe(double A, double B)
 {
+    double dim, unitate, i;
     if(A<0&&B>0){
-            double dim;
             dim=B-A;
-            double unitate;
             unitate=(DREAPTA-STANGA)/dim;
             line(STANGA-A*unitate,TOP,STANGA-A*unitate,BOTTOM);//oy
             line(STANGA-A*unitate-7,TOP+7,STANGA-A*unitate,TOP);//pt oy
             line(STANGA-A*unitate+7,TOP+7,STANGA-A*unitate,TOP);//pt oy
+            for(i=TOP+unitate;i<=BOTTOM;i+=unitate)
+                line(STANGA-A*unitate-2,i,STANGA-A*unitate+2,i);
         }
 
     line(STANGA,TOP+(BOTTOM-TOP)/2,DREAPTA,TOP+(BOTTOM-TOP)/2);//ox
     line(DREAPTA-7,TOP+(BOTTOM-TOP)/2-7,DREAPTA,TOP+(BOTTOM-TOP)/2);//pt ox
     line(DREAPTA-7,TOP+(BOTTOM-TOP)/2+7,DREAPTA,TOP+(BOTTOM-TOP)/2);//pt ox
+
+    for(i=STANGA+unitate;i<=DREAPTA;i+=unitate)
+                line(i,TOP+(BOTTOM-TOP)/2-2,i,TOP+(BOTTOM-TOP)/2+2);
 }
