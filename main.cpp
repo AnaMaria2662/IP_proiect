@@ -90,6 +90,10 @@ void mesaj_evaluator(int width, int height);
 void desenare_axe(double A, double B);
 
 
+//asimptote
+double asimptota_orizontala();
+double asimptota_oblica();
+
 int main()
 {
     int height, width;
@@ -2005,7 +2009,6 @@ void mesaj_evaluator(int width, int height)
 
 
 //axe
-
 void desenare_axe(double A, double B)
 {
     double dim, unitate, i;
@@ -2027,4 +2030,262 @@ void desenare_axe(double A, double B)
     unitate=(DREAPTA-STANGA)/dim;
     for(i=STANGA+unitate;i<=DREAPTA;i+=unitate)
                 line(i,TOP+(BOTTOM-TOP)/2-2,i,TOP+(BOTTOM-TOP)/2+2);
+}
+
+//asimptote
+double asimptota_orizontala()
+{
+    double c,a,b,k,l,ok=0;int i,j,ok1=0;
+    if(strchr(t,'/'))
+        {for(i=0;i<=strlen(t)-1;i++)
+            if(t[i]!='/')
+               {if(t[i]=='x'&&ok==0)
+                    {if(t[i+1]=='^')
+                        {k=t[i+2]-'0'; ok=1;}
+                    else
+                        {k=1;ok=1;}
+                     if(t[i-1]=='*')
+                            {a=t[i-2]-'0';}
+                    else
+                            a=1;
+                    }
+               }
+                else
+                    break;
+
+            for(j=i+1;j<=strlen(t)-1;j++)
+                if(t[j]=='x'&&ok1==0)
+                    {if(t[j+1]=='^')
+                    {l=t[j+2]-'0'; ok1=1;}
+                            else
+                            {l=1;ok1=1;}
+                       if(t[j-1]=='*')
+                            b=t[j-2]-'0';
+                        else
+                            b=1;}
+    if(k==l)
+        c=a/b;
+    else
+        if(k<l)
+            c=0;
+        else
+            c=EPSILON;
+    if(c==floor(c))
+        return c;
+    else
+        return INFINIT;
+        }
+}
+
+double asimptota_oblica()
+{
+    double c,a,b,k,l,e,f,n,m,d;int i,j,ok=0,ok1=0;
+    strcpy(t,fun);
+    if(strchr(t,'/'))
+        {for(i=0;i<=strlen(t)-1;i++)
+            if(t[i]!='/')
+               {
+                if(t[i]=='x'&&ok==0)
+                   {if(t[i-1]=='*')
+                        {if(t[i-3]=='+'||t[i-3]=='/')
+                            a=t[i-2]-'0';
+                        else
+                            if(t[i-3]=='-')
+                           {
+                               a=t[i-2]-'0';
+                               a=-a;
+                           }
+                        }
+                    else
+                        if(t[i-1]=='-')
+                            a=-1;
+                        else
+                            if(t[i-1]=='+')
+                                a=1;
+                   if(t[i+1]=='^')
+                        {k=t[i+2]-'0'; ok=1;
+                        if(t[i+3]=='+'&&t[i+5]!='x')
+                            c=t[i+4]-'0';
+                        else
+                            if(t[i+3]=='-'&&t[i+5]!='x')
+                                {
+                                c=t[i+4]-'0';
+                                c=-c;
+                                }
+                            else
+                                if((isdigit(t[i+4])&&t[i+5]=='x')||t[i+4]=='x')
+                                    if(isdigit(t[i+4])&&t[i+5]=='x')
+                                        {if(t[i+3]=='+')
+                                            c=t[i+4]-'0';
+                                        else
+                                            if(t[i+3]=='-')
+                                                {
+                                                c=t[i+4]-'0';
+                                                c=-c;
+                                                }
+                                        if(t[i+6]=='^')
+                                            e=t[i+7]-'0';
+                                            }
+                            else
+                                if(t[i+4]=='x')
+                                {
+                                if(t[i+3]=='+')
+                                            c=1;
+                                else
+                                    if(t[i+3]=='-')
+                                        c=-1;
+                                if(t[i+5]=='^')
+                                   e=t[i+6]-'0';
+                                }
+
+                        }
+
+                    else
+                        {k=1;ok=1;
+                        if(t[i+1]=='+'&&t[i+3]!='x')
+                            c=t[i+2]-'0';
+                        else
+                            if(t[i+1]=='-'&&t[i+3]!='x')
+                                {
+                                c=t[i+2]-'0';
+                                c=-c;
+                                }
+                            else
+                                if((isdigit(t[i+2])&&t[i+3]=='x')||t[i+2]=='x')
+                                    if(isdigit(t[i+2])&&t[i+3]=='x')
+                                        {if(t[i+1]=='+')
+                                            c=t[i+2]-'0';
+                                        else
+                                            if(t[i+1]=='-')
+                                                {
+                                                c=t[i+2]-'0';
+                                                c=-c;
+                                                }
+                                        if(t[i+4]=='^')
+                                            e=t[i+5]-'0';
+                                            }
+                                    else
+                                        if(t[i+2]=='x')
+                                        {
+                                        if(t[i+1]=='+')
+                                            c=1;
+                                        else
+                                            if(t[i+1]=='-')
+                                                c=-1;
+                                        if(t[i+3]=='^')
+                                            e=t[i+4]-'0';
+                                        }
+
+                        }
+
+               }
+               }
+            else
+                break;
+        for(j=i+1;j<=strlen(t)-1;j++)
+            if(t[j]=='x'&&ok1==0)
+                {if(t[j-1]=='*')
+                    {if(isdigit(t[j-2]))
+                        if(t[j-3]=='+'||t[j-3]=='/')
+                            b=t[j-2]-'0';
+                        else
+                            if(t[j-3]=='-')
+                           {
+                               b=t[j-2]-'0';
+                               b=-b;
+                           }
+                        }
+                    else
+                        if(t[j-1]=='-')
+                            b=-1;
+                        else
+                            b=1;
+                   if(t[j+1]=='^')
+                        {l=t[j+2]-'0'; ok1=1;
+                        if(t[j+3]=='+'&&t[j+5]!='x')
+                            d=t[j+4]-'0';
+                        else
+                            if(t[j+3]=='-'&&t[j+5]!='x')
+                                {
+                                d=t[i+4]-'0';
+                                d=-d;
+                                }
+                            else
+                                if((isdigit(t[j+4])&&t[j+5]=='x')||t[j+4]=='x')
+                                    if(isdigit(t[j+4])&&t[j+5]=='x')
+                                        {if(t[j+3]=='+')
+                                            d=t[j+4]-'0';
+                                        else
+                                            if(t[j+3]=='-')
+                                                {
+                                                d=t[j+4]-'0';
+                                                d=-d;
+                                                }
+                                        if(t[j+6]=='^')
+                                            f=t[j+7]-'0';
+                                            }
+                            else
+                                if(t[j+4]=='x')
+                                {
+                                if(t[j+3]=='+')
+                                    d=1;
+                                else
+                                    if(t[j+3]=='-')
+                                        d=-1;
+                                if(t[j+5]=='^')
+                                   f=t[j+6]-'0';
+                                }
+
+                        }
+
+                    else
+                        {l=1;ok1=1;
+                        if(t[j+1]=='+'&&t[j+3]!='x')
+                            d=t[j+2]-'0';
+                        else
+                            if(t[j+1]=='-'&&t[j+3]!='x')
+                                {
+                                d=t[j+2]-'0';
+                                d=-d;
+                                }
+                            else
+                                if((isdigit(t[j+2])&&t[j+3]=='x')||t[j+2]=='x')
+                                    if(isdigit(t[j+2])&&t[j+3]=='x')
+                                        {if(t[j+1]=='+')
+                                            d=t[j+2]-'0';
+                                        else
+                                            if(t[j+1]=='-')
+                                                {
+                                                d=t[j+2]-'0';
+                                                d=-d;
+                                                }
+                                        if(t[j+4]=='^')
+                                            f=t[j+5]-'0';
+                                            }
+                                    else
+                                        if(t[j+2]=='x')
+                                        {
+                                        if(t[j+1]=='+')
+                                            d=1;
+                                        else
+                                            if(t[j+1]=='-')
+                                                d=-1;
+                                        if(t[j+3]=='^')
+                                            f=t[j+4]-'0';
+                                        }
+
+                        }
+
+        }
+
+    if(k>l)//gradul numaratorului e mai mare decat numitorul
+        {l++;//adunam 1 la numitor
+        if(k==l)
+            m=a/b;
+        if(m==floor(m)&&m!=0)
+            n=(c*m-d)/b;
+            if(n==floor(n))
+                y=m-n*x;
+        }
+        }
 }
