@@ -20,6 +20,7 @@ char temp[256];
 int STANGA=250, DREAPTA=1100, TOP=150, BOTTOM=600;
 char vect[256];
 int k,k2,v[50], contorev;
+
 struct nod{
     double info;
     char inf;
@@ -46,7 +47,7 @@ void fullscreen(int &width, int &height);
 
 
 //ferestre:
-void fereastra_cu_graficul_desenat(double A, double B,int limba,int culoarerama, int culoaregrafic);
+void fereastra_cu_graficul_desenat(double A, double B,int ok, int poza,int limba,int culoarerama, int culoaregrafic);
 void fereastra_de_alegeri(int width, int height);
 void fereastra_principala(int width, int height,int ok,int poza,int limba);
 void fereastra_Grafic(int width, int height,int ok,int poza,int limba);
@@ -67,6 +68,7 @@ void caseta_text_functie(int width, int height,int ok);
 void caseta_text_capat_stanga(int width, int height,double &A,int ok);
 void caseta_text_capat_dreapta(int width, int height,double &A,double &B,int ok);
 void click_pe_fereastra_de_alegeri(double A, double B, int &ok, int &poza, int &limba, int &culoarerama, int &culoaregrafic,char capatst[256],char capatdr[256]);
+void click_back_grafic(double A, double B, int width, int height,int ok,int poza,int limba,int culoarerama, int culoaregrafic,char capatst[256],char capatdr[256]);
 
 
 //functie:
@@ -76,7 +78,7 @@ bool discontinuitate(double x);
 void aflare_min_si_max();
 void aflare_min_max_din_interval(double A, double B, double &minim, double &maxim);
 void desenare_grafic_functie(double A, double B, int culoarefunctie,int culoarerama);
-void redesenare_grafic(double A, double B, int widget,int height,int limba,int culoarerama, int culoaregrafic);
+void redesenare_grafic(double A, double B, int widget,int height,int ok,int poza,int limba,int culoarerama, int culoaregrafic,char capatst[256],char capatdr[256]);
 double operatie (char r, double x, double y);
 double operatie_speciala (char r, double x);
 int prioritate_caracter(char a);
@@ -322,13 +324,14 @@ void fereastra_de_alegeri(int width, int height)
     buton_iesire(width, height);
 }
 
-void fereastra_cu_graficul_desenat(double A, double B, int limba,int culoarerama,int culoaregrafic)
+void fereastra_cu_graficul_desenat(double A, double B,int ok, int poza, int limba,int culoarerama,int culoaregrafic,char capatst[256],char capatdr[256])
 {
     int height, width;
+
     height=GetSystemMetrics(SM_CYSCREEN);
     width=GetSystemMetrics(SM_CXSCREEN);
-    initwindow(width,height,"Fereastra",-4,-4);
 
+    initwindow(width,height,"Fereastra",-4,-4);
 
     if(culoarerama==1)setcolor(RED);
         else if(culoarerama==2)setcolor(YELLOW);
@@ -345,7 +348,7 @@ void fereastra_cu_graficul_desenat(double A, double B, int limba,int culoarerama
         else if(culoaregrafic==3)setcolor(CYAN);
         else if(culoaregrafic==4)setcolor(GREEN);
 
-    redesenare_grafic(A,B,width,height,limba,culoarerama,culoaregrafic);//graficul efectiv
+    redesenare_grafic(A,B,width,height,ok,poza,limba,culoarerama,culoaregrafic, capatst, capatdr);//graficul efectiv
 }
 
 void fereastra_principala(int width, int height,int ok, int poza,int limba)
@@ -1068,7 +1071,7 @@ else if(coordx>=width/16-31&&coordx<=width/10&&coordy>=height/5-145&&coordy<=hei
             a=width/2+460; b=height/2-18; c=width/2+540; d=height/2+7;
             schimbare_culoare_buton(a,b,c,d);
             schimbare_sunet(ok);
-            fereastra_cu_graficul_desenat(A,B,limba,culoarerama,culoaregrafic);
+            fereastra_cu_graficul_desenat(A,B,ok,poza,limba,culoarerama,culoaregrafic,capatst, capatdr);
             closegraph();
             }
         }
@@ -1110,6 +1113,28 @@ else if(coordx>=(width/16-31)&&coordx<=(width/16)&&
             }
 
     }
+}
+
+void click_back_grafic(double A, double B, int width, int height,int ok,int poza,int limba,int culoarerama, int culoaregrafic,char capatst[256],char capatdr[256])
+{
+    int coordx, coordy;
+    int a,b,c,d;
+    fullscreen(width, height);
+
+    while(true)
+    {
+    click(coordx,coordy);
+    if(coordx>=width/10-100&&coordx<=width/10-20&&coordy>=height/5-145&&coordy<=height/5-114)//back
+        {
+            a=width/10-100; b=height/5-145; c=width/10-20; d=height/5-114;
+            schimbare_culoare_buton(a,b,c,d);
+            schimbare_sunet(ok);
+            contorev=0;
+            closegraph();
+            fereastra_Grafic(width,height,ok,poza,limba);
+            click_pe_Grafic(A,B,width,height,ok,poza,limba,culoarerama,culoaregrafic,capatst,capatdr);
+        }
+}
 }
 
 
@@ -1228,10 +1253,11 @@ void desenare_grafic_functie(double A, double B, int culoaregrafic, int culoarer
     }
 }
 
-void redesenare_grafic(double A, double B, int width, int height,int limba,int culoarerama, int culoaregrafic)
+void redesenare_grafic(double A, double B, int width, int height,int ok,int poza,int limba,int culoarerama, int culoaregrafic,char capatst[256],char capatdr[256])
 {
     char t[256];
     double valoareintegrala;
+
     if(culoaregrafic==1)setcolor(RED);
         else if(culoaregrafic==2)setcolor(YELLOW);
         else if(culoaregrafic==3)setcolor(CYAN);
@@ -1282,7 +1308,7 @@ void redesenare_grafic(double A, double B, int width, int height,int limba,int c
                 sprintf(charintegrala," %lf",valoareintegrala);
                 outtextxy(width/4+430, height-100,charintegrala);
             }
-
+    click_back_grafic(A,B,width,height,ok,poza,limba,culoarerama,culoaregrafic,capatst,capatdr); //daca lasi asta aici, nu iti mai ia do while ul
     char car;
     do
         {
@@ -1299,6 +1325,12 @@ void redesenare_grafic(double A, double B, int width, int height,int limba,int c
                         else if(culoarerama==4)setcolor(GREEN);
 
                     rectangle(STANGA,TOP,DREAPTA,BOTTOM);
+
+                    settextstyle(8, HORIZ_DIR, 4 );
+                    settextjustify(CENTER_TEXT,CENTER_TEXT);
+                    strcpy(t,"Back");
+                    outtextxy(width/10-60,height/5-120,t);//setari pentru formare buton back
+                    rectangle(width/10-100,height/5-145,width/10-20,height/5-114);
 
                     explicatii_grafic(width,height,limba);
 
@@ -1342,6 +1374,7 @@ void redesenare_grafic(double A, double B, int width, int height,int limba,int c
                     setcolor(DARKGRAY);
                     desenare_axe(A,B);
                     desenare_asimptote(A,B);
+                    click_back_grafic(A,B,width,height,ok,poza,limba,culoarerama,culoaregrafic,capatst,capatdr);
                 }
             else if(car==KEY_LEFT||car=='a')//st
             {
@@ -1355,6 +1388,12 @@ void redesenare_grafic(double A, double B, int width, int height,int limba,int c
                     else if(culoarerama==4)setcolor(GREEN);
 
                 rectangle(STANGA,TOP,DREAPTA,BOTTOM);
+
+                settextstyle(8, HORIZ_DIR, 4 );
+                settextjustify(CENTER_TEXT,CENTER_TEXT);
+                strcpy(t,"Back");
+                outtextxy(width/10-60,height/5-120,t);//setari pentru formare buton back
+                rectangle(width/10-100,height/5-145,width/10-20,height/5-114);
 
                 explicatii_grafic(width,height,limba);
 
@@ -1395,10 +1434,10 @@ void redesenare_grafic(double A, double B, int width, int height,int limba,int c
                         }
 
                 desenare_grafic_functie(A,B,culoaregrafic,culoarerama);
-
                 setcolor(DARKGRAY);
                 desenare_axe(A,B);
                 desenare_asimptote(A,B);
+                click_back_grafic(A,B,width,height,ok,poza,limba,culoarerama,culoaregrafic,capatst,capatdr);
                 }
             else if(car=='w'||car==KEY_UP)//ZOOM -
             {
@@ -1415,6 +1454,12 @@ void redesenare_grafic(double A, double B, int width, int height,int limba,int c
 
                 rectangle(STANGA,TOP,DREAPTA,BOTTOM);
 
+                settextstyle(8, HORIZ_DIR, 4 );
+                settextjustify(CENTER_TEXT,CENTER_TEXT);
+                strcpy(t,"Back");
+                outtextxy(width/10-60,height/5-120,t);//setari pentru formare buton back
+                rectangle(width/10-100,height/5-145,width/10-20,height/5-114);
+
                 explicatii_grafic(width,height,limba);
 
                 setcolor(WHITE);
@@ -1455,10 +1500,10 @@ void redesenare_grafic(double A, double B, int width, int height,int limba,int c
 
 
                 desenare_grafic_functie(A,B,culoaregrafic,culoarerama);
-
                 setcolor(DARKGRAY);
                 desenare_axe(A,B);
                 desenare_asimptote(A,B);
+                click_back_grafic(A,B,width,height,ok,poza,limba,culoarerama,culoaregrafic,capatst,capatdr);
                 }
             }
             else if(car=='s'||car==KEY_DOWN)//ZOOM +
@@ -1474,6 +1519,12 @@ void redesenare_grafic(double A, double B, int width, int height,int limba,int c
 
                 rectangle(STANGA,TOP,DREAPTA,BOTTOM);
 
+                settextstyle(8, HORIZ_DIR, 4 );
+                settextjustify(CENTER_TEXT,CENTER_TEXT);
+                strcpy(t,"Back");
+                outtextxy(width/10-60,height/5-120,t);//setari pentru formare buton back
+                rectangle(width/10-100,height/5-145,width/10-20,height/5-114);
+
                 explicatii_grafic(width,height,limba);
 
                 setcolor(WHITE);
@@ -1513,11 +1564,10 @@ void redesenare_grafic(double A, double B, int width, int height,int limba,int c
                     }
 
                 desenare_grafic_functie(A,B,culoaregrafic,culoarerama);
-
                 setcolor(DARKGRAY);
                 desenare_axe(A,B);
                 desenare_asimptote(A,B);
-
+                click_back_grafic(A,B,width,height,ok,poza,limba,culoarerama,culoaregrafic,capatst,capatdr);
             }
         }
     while(car!=13);
