@@ -1245,6 +1245,12 @@ void redesenare_grafic(double A, double B, int width, int height,int limba,int c
     settextstyle(8, HORIZ_DIR, 4 );
     settextjustify(CENTER_TEXT,CENTER_TEXT);
 
+    settextstyle(8, HORIZ_DIR, 4 );
+    settextjustify(CENTER_TEXT,CENTER_TEXT);
+    strcpy(t,"Back");
+    outtextxy(width/10-60,height/5-120,t);//setari pentru formare buton back
+    rectangle(width/10-100,height/5-145,width/10-20,height/5-114);
+
     if(limba==1)
     {
         strcpy(t,"Reprezentarea functiei:");
