@@ -111,6 +111,7 @@ int main()
     int culoarerama=1;
     int culoaregrafic=1;
     double A,B;
+    fun[0]='\0';
     A=B=0;
     fullscreen(width, height);
     fereastra_de_alegeri(width,height);
@@ -877,10 +878,10 @@ void caseta_text_functie(int width, int height,int ok)
     int x;
     fun[0]='\0';
     a=width/2-320; b=height/3+70; c=width/4+655; d=height/3+130;
-            schimbare_culoare_buton(a,b,c,d);
-            schimbare_sunet(ok);
-            x=a+30;
-            i=0;
+    schimbare_culoare_buton(a,b,c,d);
+    schimbare_sunet(ok);
+    x=a+30;
+    i=0;
             do
             {
             car = getch();
@@ -1043,6 +1044,7 @@ else if(coordx>=width/16-31&&coordx<=width/10&&coordy>=height/5-145&&coordy<=hei
         {
             //daca se apasa caseta cu "Introduceti functia aici:"
             //se schimba culoare dreptunghiului in galben la click
+
             caseta_text_functie(width,height,ok);
             strcpy(temp,fun);
             click_pe_Grafic(A,B,width,height,ok,poza,limba,culoarerama,culoaregrafic,capatst,capatdr);
