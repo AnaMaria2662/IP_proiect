@@ -1308,7 +1308,7 @@ void redesenare_grafic(double A, double B, int width, int height,int ok,int poza
                 sprintf(charintegrala," %lf",valoareintegrala);
                 outtextxy(width/4+430, height-100,charintegrala);
             }
-    click_back_grafic(A,B,width,height,ok,poza,limba,culoarerama,culoaregrafic,capatst,capatdr); //daca lasi asta aici, nu iti mai ia do while ul
+    //click_back_grafic(A,B,width,height,ok,poza,limba,culoarerama,culoaregrafic,capatst,capatdr); //daca lasi asta aici, nu iti mai ia do while ul
     char car;
     do
         {
@@ -1374,7 +1374,7 @@ void redesenare_grafic(double A, double B, int width, int height,int ok,int poza
                     setcolor(DARKGRAY);
                     desenare_axe(A,B);
                     desenare_asimptote(A,B);
-                    click_back_grafic(A,B,width,height,ok,poza,limba,culoarerama,culoaregrafic,capatst,capatdr);
+                    //click_back_grafic(A,B,width,height,ok,poza,limba,culoarerama,culoaregrafic,capatst,capatdr);
                 }
             else if(car==KEY_LEFT||car=='a')//st
             {
@@ -1437,7 +1437,7 @@ void redesenare_grafic(double A, double B, int width, int height,int ok,int poza
                 setcolor(DARKGRAY);
                 desenare_axe(A,B);
                 desenare_asimptote(A,B);
-                click_back_grafic(A,B,width,height,ok,poza,limba,culoarerama,culoaregrafic,capatst,capatdr);
+                //click_back_grafic(A,B,width,height,ok,poza,limba,culoarerama,culoaregrafic,capatst,capatdr);
                 }
             else if(car=='w'||car==KEY_UP)//ZOOM -
             {
@@ -1503,7 +1503,7 @@ void redesenare_grafic(double A, double B, int width, int height,int ok,int poza
                 setcolor(DARKGRAY);
                 desenare_axe(A,B);
                 desenare_asimptote(A,B);
-                click_back_grafic(A,B,width,height,ok,poza,limba,culoarerama,culoaregrafic,capatst,capatdr);
+                //click_back_grafic(A,B,width,height,ok,poza,limba,culoarerama,culoaregrafic,capatst,capatdr);
                 }
             }
             else if(car=='s'||car==KEY_DOWN)//ZOOM +
@@ -1567,7 +1567,7 @@ void redesenare_grafic(double A, double B, int width, int height,int ok,int poza
                 setcolor(DARKGRAY);
                 desenare_axe(A,B);
                 desenare_asimptote(A,B);
-                click_back_grafic(A,B,width,height,ok,poza,limba,culoarerama,culoaregrafic,capatst,capatdr);
+                //click_back_grafic(A,B,width,height,ok,poza,limba,culoarerama,culoaregrafic,capatst,capatdr);
             }
         }
     while(car!=13);
