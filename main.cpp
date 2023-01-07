@@ -7,6 +7,7 @@
 #include<string.h>
 #include<math.h>
 
+#define INFINIT 100000
 #define NMAX 200
 #define EPSILON 0.0001
 
@@ -15,6 +16,7 @@ using namespace std;
 double MIN,MAX;
 double minim, maxim;
 char fun[256];
+char temp[256];
 int STANGA=250, DREAPTA=1100, TOP=150, BOTTOM=600;
 char vect[256];
 int k,k2,v[50], contorev;
@@ -61,6 +63,9 @@ void schimbare_culoare_buton(int a, int b, int c, int d);
 void click_pe_Grafic(double &A, double &B, int width, int height,int ok,int poza,int limba,int culoarerama, int culoaregrafic, char capatst[256],char capatdr[256]);
 void click_pe_Informatii(double A, double B,int width, int height,int ok,int poza,int limba,int culoarerama, int culoaregrafic,char capatst[256],char capatdr[256]);
 void click_pe_fereastra_pr(double A, double B,int ok, int poza,int &limba,int culoarerama, int culoaregrafic,char capatst[256],char capatdr[256]);
+void caseta_text_functie(int width, int height,int ok);
+void caseta_text_capat_stanga(int width, int height,double &A,int ok);
+void caseta_text_capat_dreapta(int width, int height,double &A,double &B,int ok);
 void click_pe_fereastra_de_alegeri(double A, double B, int &ok, int &poza, int &limba, int &culoarerama, int &culoaregrafic,char capatst[256],char capatdr[256]);
 
 
@@ -93,6 +98,8 @@ void desenare_axe(double A, double B);
 //asimptote
 double asimptota_orizontala();
 double asimptota_oblica();
+double asimptota_verticala();
+void desenare_asimptote(double A, double B);
 
 int main()
 {
@@ -112,6 +119,7 @@ int main()
     closegraph();
     return 0;
 }
+
 //stive
 void push(nod *&varf, char element)
 {
@@ -863,12 +871,12 @@ void click_pe_fereastra_pr(double A, double B, int ok, int poza, int &limba,int 
 
 void caseta_text_functie(int width, int height,int ok)
 {
-int a,b,c,d;
-int i;
-char car, sir[256];
-int x;
-fun[0]='\0';
-a=width/2-320; b=height/3+70; c=width/4+655; d=height/3+130;
+    int a,b,c,d;
+    int i;
+    char car, sir[256];
+    int x;
+    fun[0]='\0';
+    a=width/2-320; b=height/3+70; c=width/4+655; d=height/3+130;
             schimbare_culoare_buton(a,b,c,d);
             schimbare_sunet(ok);
             x=a+30;
@@ -909,7 +917,6 @@ a=width/2-320; b=height/3+70; c=width/4+655; d=height/3+130;
                 }
 
         }
-
 
 void caseta_text_capat_stanga(int width, int height,double &A,int ok)
 {
@@ -1000,6 +1007,7 @@ void caseta_text_capat_dreapta(int width, int height,double &A,double &B,int ok)
                     evaluare_interval(width,height,A,B);
                 }
 }
+
 void click_pe_Grafic(double &A, double &B, int width, int height,int ok,int poza, int limba, int culoarerama, int culoaregrafic,char capatst[256],char capatdr[256])
 {
     int coordx, coordy;
@@ -1036,6 +1044,7 @@ else if(coordx>=width/16-31&&coordx<=width/10&&coordy>=height/5-145&&coordy<=hei
             //daca se apasa caseta cu "Introduceti functia aici:"
             //se schimba culoare dreptunghiului in galben la click
             caseta_text_functie(width,height,ok);
+            strcpy(temp,fun);
             click_pe_Grafic(A,B,width,height,ok,poza,limba,culoarerama,culoaregrafic,capatst,capatdr);
         }
 
@@ -1227,7 +1236,7 @@ void redesenare_grafic(double A, double B, int width, int height,int limba,int c
         else if(culoaregrafic==4)setcolor(GREEN);
 
     desenare_grafic_functie(A,B,culoaregrafic,culoarerama);
-
+    desenare_asimptote(A,B);
     explicatii_grafic(width,height,limba);
 
     setcolor(WHITE);
@@ -1324,7 +1333,7 @@ void redesenare_grafic(double A, double B, int width, int height,int limba,int c
                     desenare_grafic_functie(A,B,culoaregrafic,culoarerama);
                     setcolor(DARKGRAY);
                     desenare_axe(A,B);
-
+                    desenare_asimptote(A,B);
                 }
             else if(car==KEY_LEFT||car=='a')//st
             {
@@ -1381,7 +1390,7 @@ void redesenare_grafic(double A, double B, int width, int height,int limba,int c
 
                 setcolor(DARKGRAY);
                 desenare_axe(A,B);
-
+                desenare_asimptote(A,B);
                 }
             else if(car=='w'||car==KEY_UP)//ZOOM -
             {
@@ -1441,7 +1450,7 @@ void redesenare_grafic(double A, double B, int width, int height,int limba,int c
 
                 setcolor(DARKGRAY);
                 desenare_axe(A,B);
-
+                desenare_asimptote(A,B);
                 }
             }
             else if(car=='s'||car==KEY_DOWN)//ZOOM +
@@ -1499,6 +1508,7 @@ void redesenare_grafic(double A, double B, int width, int height,int limba,int c
 
                 setcolor(DARKGRAY);
                 desenare_axe(A,B);
+                desenare_asimptote(A,B);
 
             }
         }
@@ -2036,16 +2046,16 @@ void desenare_axe(double A, double B)
 double asimptota_orizontala()
 {
     double c,a,b,k,l,ok=0;int i,j,ok1=0;
-    if(strchr(t,'/'))
-        {for(i=0;i<=strlen(t)-1;i++)
-            if(t[i]!='/')
-               {if(t[i]=='x'&&ok==0)
-                    {if(t[i+1]=='^')
-                        {k=t[i+2]-'0'; ok=1;}
+    if(strchr(temp,'/'))
+        {for(i=0;i<=strlen(temp)-1;i++)
+            if(temp[i]!='/')
+               {if(temp[i]=='x'&&ok==0)
+                    {if(temp[i+1]=='^')
+                        {k=temp[i+2]-'0'; ok=1;}
                     else
                         {k=1;ok=1;}
-                     if(t[i-1]=='*')
-                            {a=t[i-2]-'0';}
+                     if(temp[i-1]=='*')
+                            {a=temp[i-2]-'0';}
                     else
                             a=1;
                     }
@@ -2053,14 +2063,14 @@ double asimptota_orizontala()
                 else
                     break;
 
-            for(j=i+1;j<=strlen(t)-1;j++)
-                if(t[j]=='x'&&ok1==0)
-                    {if(t[j+1]=='^')
-                    {l=t[j+2]-'0'; ok1=1;}
+            for(j=i+1;j<=strlen(temp)-1;j++)
+                if(temp[j]=='x'&&ok1==0)
+                    {if(temp[j+1]=='^')
+                    {l=temp[j+2]-'0'; ok1=1;}
                             else
                             {l=1;ok1=1;}
-                       if(t[j-1]=='*')
-                            b=t[j-2]-'0';
+                       if(temp[j-1]=='*')
+                            b=temp[j-2]-'0';
                         else
                             b=1;}
     if(k==l)
@@ -2080,100 +2090,99 @@ double asimptota_orizontala()
 double asimptota_oblica()
 {
     double c,a,b,k,l,e,f,n,m,d;int i,j,ok=0,ok1=0;
-    strcpy(t,fun);
-    if(strchr(t,'/'))
-        {for(i=0;i<=strlen(t)-1;i++)
-            if(t[i]!='/')
+    if(strchr(temp,'/'))
+        {for(i=0;i<=strlen(temp)-1;i++)
+            if(temp[i]!='/')
                {
-                if(t[i]=='x'&&ok==0)
-                   {if(t[i-1]=='*')
-                        {if(t[i-3]=='+'||t[i-3]=='/')
-                            a=t[i-2]-'0';
+                if(temp[i]=='x'&&ok==0)
+                   {if(temp[i-1]=='*')
+                        {if(temp[i-3]=='+'||temp[i-3]=='/')
+                            a=temp[i-2]-'0';
                         else
-                            if(t[i-3]=='-')
+                            if(temp[i-3]=='-')
                            {
-                               a=t[i-2]-'0';
+                               a=temp[i-2]-'0';
                                a=-a;
                            }
                         }
                     else
-                        if(t[i-1]=='-')
+                        if(temp[i-1]=='-')
                             a=-1;
                         else
-                            if(t[i-1]=='+')
+                            if(temp[i-1]=='+')
                                 a=1;
-                   if(t[i+1]=='^')
-                        {k=t[i+2]-'0'; ok=1;
-                        if(t[i+3]=='+'&&t[i+5]!='x')
-                            c=t[i+4]-'0';
+                   if(temp[i+1]=='^')
+                        {k=temp[i+2]-'0'; ok=1;
+                        if(temp[i+3]=='+'&&temp[i+5]!='x')
+                            c=temp[i+4]-'0';
                         else
-                            if(t[i+3]=='-'&&t[i+5]!='x')
+                            if(temp[i+3]=='-'&&temp[i+5]!='x')
                                 {
-                                c=t[i+4]-'0';
+                                c=temp[i+4]-'0';
                                 c=-c;
                                 }
                             else
-                                if((isdigit(t[i+4])&&t[i+5]=='x')||t[i+4]=='x')
-                                    if(isdigit(t[i+4])&&t[i+5]=='x')
-                                        {if(t[i+3]=='+')
-                                            c=t[i+4]-'0';
+                                if((isdigit(temp[i+4])&&temp[i+5]=='x')||temp[i+4]=='x')
+                                    if(isdigit(temp[i+4])&&temp[i+5]=='x')
+                                        {if(temp[i+3]=='+')
+                                            c=temp[i+4]-'0';
                                         else
-                                            if(t[i+3]=='-')
+                                            if(temp[i+3]=='-')
                                                 {
-                                                c=t[i+4]-'0';
+                                                c=temp[i+4]-'0';
                                                 c=-c;
                                                 }
-                                        if(t[i+6]=='^')
-                                            e=t[i+7]-'0';
+                                        if(temp[i+6]=='^')
+                                            e=temp[i+7]-'0';
                                             }
                             else
-                                if(t[i+4]=='x')
+                                if(temp[i+4]=='x')
                                 {
-                                if(t[i+3]=='+')
+                                if(temp[i+3]=='+')
                                             c=1;
                                 else
-                                    if(t[i+3]=='-')
+                                    if(temp[i+3]=='-')
                                         c=-1;
-                                if(t[i+5]=='^')
-                                   e=t[i+6]-'0';
+                                if(temp[i+5]=='^')
+                                   e=temp[i+6]-'0';
                                 }
 
                         }
 
                     else
                         {k=1;ok=1;
-                        if(t[i+1]=='+'&&t[i+3]!='x')
-                            c=t[i+2]-'0';
+                        if(temp[i+1]=='+'&&temp[i+3]!='x')
+                            c=temp[i+2]-'0';
                         else
-                            if(t[i+1]=='-'&&t[i+3]!='x')
+                            if(temp[i+1]=='-'&&temp[i+3]!='x')
                                 {
-                                c=t[i+2]-'0';
+                                c=temp[i+2]-'0';
                                 c=-c;
                                 }
                             else
-                                if((isdigit(t[i+2])&&t[i+3]=='x')||t[i+2]=='x')
-                                    if(isdigit(t[i+2])&&t[i+3]=='x')
-                                        {if(t[i+1]=='+')
-                                            c=t[i+2]-'0';
+                                if((isdigit(temp[i+2])&&temp[i+3]=='x')||temp[i+2]=='x')
+                                    if(isdigit(temp[i+2])&&temp[i+3]=='x')
+                                        {if(temp[i+1]=='+')
+                                            c=temp[i+2]-'0';
                                         else
-                                            if(t[i+1]=='-')
+                                            if(temp[i+1]=='-')
                                                 {
-                                                c=t[i+2]-'0';
+                                                c=temp[i+2]-'0';
                                                 c=-c;
                                                 }
-                                        if(t[i+4]=='^')
-                                            e=t[i+5]-'0';
+                                        if(temp[i+4]=='^')
+                                            e=temp[i+5]-'0';
                                             }
                                     else
-                                        if(t[i+2]=='x')
+                                        if(temp[i+2]=='x')
                                         {
-                                        if(t[i+1]=='+')
+                                        if(temp[i+1]=='+')
                                             c=1;
                                         else
-                                            if(t[i+1]=='-')
+                                            if(temp[i+1]=='-')
                                                 c=-1;
-                                        if(t[i+3]=='^')
-                                            e=t[i+4]-'0';
+                                        if(temp[i+3]=='^')
+                                            e=temp[i+4]-'0';
                                         }
 
                         }
@@ -2182,96 +2191,96 @@ double asimptota_oblica()
                }
             else
                 break;
-        for(j=i+1;j<=strlen(t)-1;j++)
-            if(t[j]=='x'&&ok1==0)
-                {if(t[j-1]=='*')
-                    {if(isdigit(t[j-2]))
-                        if(t[j-3]=='+'||t[j-3]=='/')
-                            b=t[j-2]-'0';
+        for(j=i+1;j<=strlen(temp)-1;j++)
+            if(temp[j]=='x'&&ok1==0)
+                {if(temp[j-1]=='*')
+                    {if(isdigit(temp[j-2]))
+                        if(temp[j-3]=='+'||temp[j-3]=='/')
+                            b=temp[j-2]-'0';
                         else
-                            if(t[j-3]=='-')
+                            if(temp[j-3]=='-')
                            {
-                               b=t[j-2]-'0';
+                               b=temp[j-2]-'0';
                                b=-b;
                            }
                         }
                     else
-                        if(t[j-1]=='-')
+                        if(temp[j-1]=='-')
                             b=-1;
                         else
                             b=1;
-                   if(t[j+1]=='^')
-                        {l=t[j+2]-'0'; ok1=1;
-                        if(t[j+3]=='+'&&t[j+5]!='x')
-                            d=t[j+4]-'0';
+                   if(temp[j+1]=='^')
+                        {l=temp[j+2]-'0'; ok1=1;
+                        if(temp[j+3]=='+'&&temp[j+5]!='x')
+                            d=temp[j+4]-'0';
                         else
-                            if(t[j+3]=='-'&&t[j+5]!='x')
+                            if(temp[j+3]=='-'&&temp[j+5]!='x')
                                 {
-                                d=t[i+4]-'0';
+                                d=temp[i+4]-'0';
                                 d=-d;
                                 }
                             else
-                                if((isdigit(t[j+4])&&t[j+5]=='x')||t[j+4]=='x')
-                                    if(isdigit(t[j+4])&&t[j+5]=='x')
-                                        {if(t[j+3]=='+')
-                                            d=t[j+4]-'0';
+                                if((isdigit(temp[j+4])&&temp[j+5]=='x')||temp[j+4]=='x')
+                                    if(isdigit(temp[j+4])&&temp[j+5]=='x')
+                                        {if(temp[j+3]=='+')
+                                            d=temp[j+4]-'0';
                                         else
-                                            if(t[j+3]=='-')
+                                            if(temp[j+3]=='-')
                                                 {
-                                                d=t[j+4]-'0';
+                                                d=temp[j+4]-'0';
                                                 d=-d;
                                                 }
-                                        if(t[j+6]=='^')
-                                            f=t[j+7]-'0';
+                                        if(temp[j+6]=='^')
+                                            f=temp[j+7]-'0';
                                             }
                             else
-                                if(t[j+4]=='x')
+                                if(temp[j+4]=='x')
                                 {
-                                if(t[j+3]=='+')
+                                if(temp[j+3]=='+')
                                     d=1;
                                 else
-                                    if(t[j+3]=='-')
+                                    if(temp[j+3]=='-')
                                         d=-1;
-                                if(t[j+5]=='^')
-                                   f=t[j+6]-'0';
+                                if(temp[j+5]=='^')
+                                   f=temp[j+6]-'0';
                                 }
 
                         }
 
                     else
                         {l=1;ok1=1;
-                        if(t[j+1]=='+'&&t[j+3]!='x')
-                            d=t[j+2]-'0';
+                        if(temp[j+1]=='+'&&temp[j+3]!='x')
+                            d=temp[j+2]-'0';
                         else
-                            if(t[j+1]=='-'&&t[j+3]!='x')
+                            if(temp[j+1]=='-'&&temp[j+3]!='x')
                                 {
-                                d=t[j+2]-'0';
+                                d=temp[j+2]-'0';
                                 d=-d;
                                 }
                             else
-                                if((isdigit(t[j+2])&&t[j+3]=='x')||t[j+2]=='x')
-                                    if(isdigit(t[j+2])&&t[j+3]=='x')
-                                        {if(t[j+1]=='+')
-                                            d=t[j+2]-'0';
+                                if((isdigit(temp[j+2])&&temp[j+3]=='x')||temp[j+2]=='x')
+                                    if(isdigit(temp[j+2])&&temp[j+3]=='x')
+                                        {if(temp[j+1]=='+')
+                                            d=temp[j+2]-'0';
                                         else
-                                            if(t[j+1]=='-')
+                                            if(temp[j+1]=='-')
                                                 {
-                                                d=t[j+2]-'0';
+                                                d=temp[j+2]-'0';
                                                 d=-d;
                                                 }
-                                        if(t[j+4]=='^')
-                                            f=t[j+5]-'0';
+                                        if(temp[j+4]=='^')
+                                            f=temp[j+5]-'0';
                                             }
                                     else
-                                        if(t[j+2]=='x')
+                                        if(temp[j+2]=='x')
                                         {
-                                        if(t[j+1]=='+')
+                                        if(temp[j+1]=='+')
                                             d=1;
                                         else
-                                            if(t[j+1]=='-')
+                                            if(temp[j+1]=='-')
                                                 d=-1;
-                                        if(t[j+3]=='^')
-                                            f=t[j+4]-'0';
+                                        if(temp[j+3]=='^')
+                                            f=temp[j+4]-'0';
                                         }
 
                         }
@@ -2285,7 +2294,82 @@ double asimptota_oblica()
         if(m==floor(m)&&m!=0)
             n=(c*m-d)/b;
             if(n==floor(n))
-                y=m-n*x;
+               return 0;// y=m-n*x;
         }
+        }
+}
+
+double asimptota_verticala()
+{
+    double c,a=0,b=0;int i,j,ok1=0;
+    if(strchr(temp,'/'))
+        {for(i=0;i<=strlen(temp)-1;i++)
+            if(temp[i]=='/')
+                    break;
+            for(j=strlen(temp)-1;j>=i+1;j--)
+                if(isdigit(temp[j])&&temp[j-1]!='^'&&ok1==0)
+                    {if(temp[j-1]=='-')
+                            {a=temp[j]-'0';
+                            a=-a;
+                            ok1++;}
+                    else
+                        {a=temp[j]-'0'; ok1++;}
+                    }
+                else
+                    if(temp[j]=='x'&&temp[j-1]!='*'&&ok1==0)
+                        {if(temp[j-1]=='+')
+                            {a=1; ok1++;}
+                        else
+                            if(temp[j-1]=='-')
+                                {a=-1; ok1++;}}
+                else
+                    if(isdigit(temp[j])&&temp[j-1]!='^'&&ok1==1)
+                    {
+                        if(temp[j-1]=='-')
+                            {b=temp[j]-'0';
+                            b=-b;
+                            ok1++;}
+                        else
+                            {b=temp[j]-'0'; ok1++;}
+                        }
+                    else
+                        if(temp[j]=='x'&&temp[j-1]!='*'&&ok1==1)
+                            {
+                            if(temp[j-1]=='-')
+                                {b=-1; ok1++;}
+                            else
+                                {b=1;ok1++;}
+                            }
+
+    if(b!=0)
+        c=(-a)/b;
+    else
+        c=-a;
+    return c;
+
+        }
+}
+
+void desenare_asimptote(double A, double B)
+{
+    double dim,unitate,unitate1,punctmijloc1,punctmijloc;
+    dim=B-A;
+    unitate=(TOP+BOTTOM)/dim;
+    punctmijloc=(TOP+BOTTOM)/2;
+    int c=asimptota_orizontala();
+    c=c*unitate;
+    if(c!=EPSILON&&c!=INFINIT)
+        {
+            setcolor(MAGENTA);
+            line(STANGA,punctmijloc-c,DREAPTA,punctmijloc-c);
+        }
+    if(c!=0||c==INFINIT)
+    {
+        unitate1=(STANGA+DREAPTA)/dim;
+        punctmijloc1=(STANGA+DREAPTA)/2;
+        int a=asimptota_verticala();
+        a=a*unitate;
+        setcolor(BLUE);
+        line(punctmijloc-a,TOP,punctmijloc-a,BOTTOM);
         }
 }
