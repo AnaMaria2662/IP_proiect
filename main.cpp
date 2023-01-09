@@ -91,8 +91,8 @@ double calculare_f_din_postf(double x);
 
 //evaluator:
 void evaluator();
-void evaluare_interval(int width, int height,double A, double B);
-void mesaj_evaluator(int width, int height);
+void evaluare_interval(int width, int height,double A, double B,int limba);
+void mesaj_evaluator(int width, int height,int limba);
 
 
 //axe
@@ -295,8 +295,9 @@ void fereastra_de_alegeri(int width, int height)
     strcpy(t,"grafic");
     outtextxy(width/10+760,height/3+250,t);
 
-    bar(width/10+660,height/3,width/10+860,height/3+200);//culori rama
+    bar(width/10+660,height/3,width/10+860,height/3+200);
 
+    //culori rama
     setfillstyle(1,RED);
     bar(width/10+680,height/3+40,width/10+750,height/3+90);
     setfillstyle(1,YELLOW);
@@ -313,8 +314,9 @@ void fereastra_de_alegeri(int width, int height)
     outtextxy(width/10+980,height/3+230,t);
 
     setfillstyle(1,BLACK);
-    bar(width/10+880,height/3,width/10+1080,height/3+200);//culori grafic
+    bar(width/10+880,height/3,width/10+1080,height/3+200);
 
+    //culori grafic
     setfillstyle(1,RED);
     bar(width/10+900,height/3+40,width/10+970,height/3+90);
     setfillstyle(1,YELLOW);
@@ -351,7 +353,6 @@ void fereastra_cu_graficul_desenat(double A, double B,int ok, int poza, int limb
         else if(culoaregrafic==3)setcolor(CYAN);
         else if(culoaregrafic==4)setcolor(GREEN);
 
-
     redesenare_grafic(A,B,width,height,ok,poza,limba,culoarerama,culoaregrafic);//graficul efectiv
 }
 
@@ -374,9 +375,6 @@ void fereastra_principala(int width, int height,int ok, int poza,int limba)
         readimagefile("sunetinchis1.jpeg",width/16-31,height/5-100,width/16,height/5-70);
         PlaySound(NULL,0,0);
     }
-    if(limba==1)
-        readimagefile("romana.jpg",width-80,height/5-145,width-30,(height/5-115));//steag->romana
-    else   readimagefile("engleza.jpg",width-80,(height/5-145),width-30,(height/5-115));
 
     setcolor(WHITE);
     settextstyle(8, HORIZ_DIR, 8 );
@@ -405,12 +403,20 @@ void fereastra_principala(int width, int height,int ok, int poza,int limba)
                 rectangle(width/2-119,height/2-40,width/2+118,height/2+12);//setari a doua linie de text
             }
 
-    settextstyle(8, HORIZ_DIR, 6);
-    strcpy(t,"Informatii");
-    outtextxy(width/2,height/2+150,t);
-    rectangle(width/2-168,height/2+110,width/2+165,height/2+165);//setari a treia linie de text
+    if(limba==1)
+        {
+            settextstyle(8, HORIZ_DIR, 6);
+            strcpy(t,"Informatii");
+            outtextxy(width/2,height/2+150,t);
+            rectangle(width/2-168,height/2+110,width/2+165,height/2+165);
+        }
+        else {
+                settextstyle(8, HORIZ_DIR, 6);
+                strcpy(t,"Information");
+                outtextxy(width/2,height/2+150,t);
+                rectangle(width/2-185,height/2+110,width/2+183,height/2+165);
+        }
 
-    buton_inapoi(width, height);
     buton_iesire(width, height);
 }
 
@@ -449,8 +455,9 @@ void fereastra_Grafic(int width, int height,int ok,int poza,int limba)
                 }
 
     setfillstyle(0,BLACK);
-    bar(width/2-320,height/4-10,width/4+320,height/4+50);//text 1
-    bar(width/4+340,height/4-10,width/4+655,height/4+50);
+    bar(width/2-320,height/4-10,width/4+320,height/4+50);//stanga
+    bar(width/4+340,height/4-10,width/4+655,height/4+50);//dreapta
+
     setcolor(WHITE);
     settextstyle(8, HORIZ_DIR, 4 );
     settextjustify(CENTER_TEXT,CENTER_TEXT);
@@ -477,8 +484,8 @@ void fereastra_Grafic(int width, int height,int ok,int poza,int limba)
                 outtextxy(width/2+400,height/4+33,t);
             }
 
-    rectangle(width/2-320,height/4-10,width/4+320,height/4+50);//st
-    rectangle(width/4+340,height/4-10,width/4+655,height/4+50);//dr
+    rectangle(width/2-320,height/4-10,width/4+320,height/4+50);//stanga
+    rectangle(width/4+340,height/4-10,width/4+655,height/4+50);//dreapta
 
     settextstyle(8, HORIZ_DIR, 4 );
     settextjustify(CENTER_TEXT,CENTER_TEXT);
@@ -493,9 +500,9 @@ void fereastra_Grafic(int width, int height,int ok,int poza,int limba)
                 }
 
     setfillstyle(0,BLACK);
-    bar(width/2-320,height/3+70,width/4+655,height/3+130);//text 2
+    bar(width/2-320,height/3+70,width/4+655,height/3+130);//introducere functie
     setcolor(WHITE);
-    rectangle(width/2-320,height/3+70,width/4+655,height/3+130);//text 2
+    rectangle(width/2-320,height/3+70,width/4+655,height/3+130);//introducere functie
 
     settextstyle(8, HORIZ_DIR, 4);
     settextjustify(CENTER_TEXT,CENTER_TEXT);
@@ -510,10 +517,9 @@ void fereastra_Grafic(int width, int height,int ok,int poza,int limba)
             }
 
     setfillstyle(0,BLACK);
-    bar(width/2-550,height/2+70,width/2+550,height/2+250);//text 3
+    bar(width/2-550,height/2+70,width/2+550,height/2+250);//evaluator
     setcolor(WHITE);
-    rectangle(width/2-550,height/2+70,width/2+550,height/2+250);//text 3
-
+    rectangle(width/2-550,height/2+70,width/2+550,height/2+250);//evaluator
     settextstyle(8, HORIZ_DIR, 3);
     settextjustify(CENTER_TEXT,CENTER_TEXT);
 
@@ -552,11 +558,11 @@ void fereastra_Informatii(int width, int height,int ok,int poza,int limba)
     if(limba==1)
         {
             strcpy(t,"Proiectul a fost realizat de:");
-            outtextxy(width/2-650,height/2-200,t);//text 1
+            outtextxy(width/2-600,height/2-200,t);//text 1
             }
         else  {
                 strcpy(t,"The project was made by:");
-                outtextxy(width/2-650,height/2-200,t);//text 1
+                outtextxy(width/2-600,height/2-200,t);//text 1
         }
 
     settextstyle(8, HORIZ_DIR, 4);
@@ -581,34 +587,80 @@ void fereastra_Informatii(int width, int height,int ok,int poza,int limba)
     outtextxy(width/2-510,height/2+80,t);//text 4
 
     setfillstyle(0,BLACK);
-    bar(width/2,height/2-250,width-100,height-150);
+    bar(width/2,height/2-200,width-100,height-150);
     setcolor(WHITE);
-    rectangle(width/2,height/2-250,width-100,height-150);
+    rectangle(width/2,height/2-200,width-100,height-150);
 
-    strcpy(t,"Informatii suplimentare:");
-    outtextxy(width/2+52,height/2-150,t);
+    if(limba==1)
+                {
+                    strcpy(t,"Informatii suplimentare:");
+                    outtextxy(width/2+52,height/2-150,t);
+                }
+            else {
+                    strcpy(t,"More information:");
+                    outtextxy(width/2+52,height/2-150,t);
+                }
 
-    settextstyle(8, HORIZ_DIR, 2);
-    strcpy(t,"-Functiile trigonometrice se vor scrie cu");
-    outtextxy(width/2+32,height/2-80,t);
-
-    strcpy(t,"paranteze rotunde.");
-    outtextxy(width/2+32,height/2-50,t);
+    if(limba==1)
+                {
+                    settextstyle(8, HORIZ_DIR, 2);
+                    strcpy(t,"-Functiile trigonometrice se vor scrie cu");
+                    outtextxy(width/2+32,height/2-80,t);
+                    }
+            else {
+                    settextstyle(8, HORIZ_DIR, 2);
+                    strcpy(t,"-Trigonometric functions will be written");
+                    outtextxy(width/2+32,height/2-80,t);
+            }
+    if(limba==1)
+                {
+                    strcpy(t,"cu paranteze rotunde.");
+                    outtextxy(width/2+32,height/2-50,t);
+                    }
+            else {
+                    strcpy(t,"with round brackets.");
+                    outtextxy(width/2+32,height/2-50,t);
+            }
 
     strcpy(t,"ex: sin(x), cos(2*x).");
     outtextxy(width/2+32,height/2-20,t);
 
-    strcpy(t,"-Singura variabila pe care o puteti");
-    outtextxy(width/2+32,height/2+40,t);
-
-    strcpy(t,"utiliza este variabila x.");
-    outtextxy(width/2+32,height/2+70,t);
-
-    strcpy(t,"-Se pot folosi doar functiile:");
-    outtextxy(width/2+32,height/2+130,t);
-
-    strcpy(t,"sin, cos, log, tg, rad.");
-    outtextxy(width/2+32,height/2+160,t);
+    if(limba==1)
+                {
+                    strcpy(t,"-Singura variabila pe care o puteti");
+                    outtextxy(width/2+32,height/2+40,t);
+                    }
+            else {
+                    strcpy(t,"-The only variable you can");
+                    outtextxy(width/2+32,height/2+40,t);
+            }
+    if(limba==1)
+                {
+                    strcpy(t,"utiliza este variabila x.");
+                    outtextxy(width/2+32,height/2+70,t);
+                    }
+            else {
+                    strcpy(t,"use is variable x.");
+                    outtextxy(width/2+32,height/2+70,t);
+            }
+    if(limba==1)
+                {
+                    strcpy(t,"-Se pot folosi doar functiile:");
+                    outtextxy(width/2+32,height/2+130,t);
+                    }
+            else {
+                    strcpy(t,"-Only the following functions that can");
+                    outtextxy(width/2+32,height/2+130,t);
+            }
+    if(limba==1)
+                {
+                    strcpy(t,"sin, cos, log, tg, rad.");
+                    outtextxy(width/2+32,height/2+160,t);
+                    }
+            else {
+                    strcpy(t,"be used: sin, cos, log, tg, rad.");
+                    outtextxy(width/2+32,height/2+160,t);
+            }
 
     setcolor(WHITE);
     buton_inapoi(width, height);
@@ -724,8 +776,8 @@ void click_pe_fereastra_de_alegeri(double A, double B, int &ok, int &poza,int &l
             schimbare_sunet(ok);
             exit(1);
         }
-    else if(coordx>=(width/10+245)&&coordx<=(width/10+400)&&coordy>=(height/3+40)&&coordy<=(height/3+70))
-        {//sunet inchis
+    else if(coordx>=(width/10+245)&&coordx<=(width/10+400)&&coordy>=(height/3+40)&&coordy<=(height/3+70))//sunet inchis
+        {
             a=width/10+245; b=height/3+40; c=width/10+400; d=height/3+70;
             schimbare_culoare_buton(a,b,c,d);
             rectangle(a,b,c,d);
@@ -733,8 +785,8 @@ void click_pe_fereastra_de_alegeri(double A, double B, int &ok, int &poza,int &l
             PlaySound(NULL,0,0);
             ok=0;
         }
-     else if(coordx>=(width/10+240)&&coordx<=(width/10+400)&&coordy>=(height/3+120)&&coordy<=(height/3+150))
-        {//sunet deschis
+     else if(coordx>=(width/10+240)&&coordx<=(width/10+400)&&coordy>=(height/3+120)&&coordy<=(height/3+150))//sunet deschis
+        {
             a=width/10+240; b=height/3+120; c=width/10+400; d=height/3+150;
             schimbare_culoare_buton(a,b,c,d);
             rectangle(a,b,c,d);
@@ -854,7 +906,7 @@ void click_pe_fereastra_pr(double A, double B, int ok, int poza, int &limba,int 
             }
 
     else if(coordx>=(width/2-168)&&coordx<=(width/2+165)&&
-                coordy>=(height/2+110)&&coordy<=(height/2+165))
+                coordy>=(height/2+110)&&coordy<=(height/2+165)&&limba==1)
             {
             //daca se apasa butonul de "Informatii"
             //se schimba culoare dreptunghiului in galben la click
@@ -864,20 +916,20 @@ void click_pe_fereastra_pr(double A, double B, int ok, int poza, int &limba,int 
                 fereastra_Informatii(width, height,ok,poza,limba);
                 click_pe_Informatii(A,B,width,height,ok,poza,limba,culoarerama,culoaregrafic);
             }
-    else if(coordx>=(width-80)&&coordx<=(width-30)&&
-                    coordy>=(height/5-145)&&coordy<=(height/5-115)&&limba==1)//steag-daca se apasa setarea de limba
+    else if(coordx>=(width/2-185)&&coordx<=(width/2+183)&&
+                coordy>=(height/2+110)&&coordy<=(height/2+165)&&limba==0)
             {
+            //daca se apasa butonul de "Information"
+            //se schimba culoare dreptunghiului in galben la click
+
+                a=width/2-185; b=height/2+110; c=width/2+183; d=height/2+165;
+                schimbare_culoare_buton(a,b,c,d);
                 schimbare_sunet(ok);
-                readimagefile("engleza.jpg",width-80,(height/5-145),width-30,(height/5-115));
-                limba=0;//se schimba imaginea->engleza
+                fereastra_Informatii(width, height,ok,poza,limba);
+                click_pe_Informatii(A,B,width,height,ok,poza,limba,culoarerama,culoaregrafic);
             }
-    else if(coordx>=(width-80)&&coordx<=(width-30)&&
-                    coordy>=(height/5-145)&&coordy<=(height/5-115)&&limba==0)//steag-daca se apasa setarea de limba
-            {
-                schimbare_sunet(ok);
-                readimagefile("romana.jpg",width-80,height/5-145,width-30,(height/5-115));//steag->romana
-                limba=1;//se schimba imaginea->romana
-            }
+
+
     else if(coordx>=(width/16-31)&&coordx<=(width/16)&&
                     coordy>=(height/5-100)&&coordy<=(height/5-70))
             {
@@ -887,7 +939,7 @@ void click_pe_fereastra_pr(double A, double B, int ok, int poza, int &limba,int 
     }
 }
 
-void caseta_text_functie(int width, int height,int ok)
+void caseta_text_functie(int width, int height,int ok,int limba)
 {
         int a, b, c, d;
         char car;
@@ -902,12 +954,15 @@ void caseta_text_functie(int width, int height,int ok)
                         fun[pozitiei]=car;
                         fun[pozitiei+1]='\0';
                         pozitiei++;
+
                         settextstyle(8, HORIZ_DIR, 4 );
                         setfillstyle(0,BLACK);
                         bar(width/2-320,height/3+70,width/4+655,height/3+130);
+
                         setcolor(WHITE);
                         rectangle(width/2-320,height/3+70,width/4+655,height/3+130);
                         settextjustify(LEFT_TEXT, CENTER_TEXT);
+
                         outtextxy(a+30,b+30,fun);
                     }
                 else if(car==8)
@@ -915,10 +970,13 @@ void caseta_text_functie(int width, int height,int ok)
                         setcolor(WHITE);
                         setfillstyle(0,BLACK);
                         bar(width/2-320,height/3+70,width/4+655,height/3+130);
+
                         setcolor(WHITE);
                         rectangle(width/2-320,height/3+70,width/4+655,height/3+130);
+
                         settextstyle(8, HORIZ_DIR, 4 );
                         fun[pozitiei-1]='\0';
+
                         settextjustify(LEFT_TEXT, CENTER_TEXT);
                         outtextxy(a+30,b+30,fun);
                         pozitiei--;
@@ -930,12 +988,12 @@ void caseta_text_functie(int width, int height,int ok)
                 {
                     a=width/2-550; b=height/2+70; c=width/2+550; d=height/2+250;
                     setfillstyle(0,BLACK);
-                    bar(width/2-550,height/2+70,width/2+550,height/2+250);//text 3
+                    bar(width/2-550,height/2+70,width/2+550,height/2+250);//evaluator
                     setcolor(WHITE);
                     rectangle(width/2-550,height/2+70,width/2+550,height/2+250);
                     schimbare_culoare_buton(a,b,c,d);
                     schimbare_sunet(ok);
-                    mesaj_evaluator(width,height);
+                    mesaj_evaluator(width,height,limba);
                 }
 
         }
@@ -957,12 +1015,15 @@ void caseta_text_capat_stanga(int width, int height,double &A,int ok)
                         capatst[pozitiest]=car;
                         capatst[pozitiest+1]='\0';
                         pozitiest++;
+
                         settextstyle(8, HORIZ_DIR, 4 );
                         setfillstyle(0,BLACK);
                         bar(width/2-320,height/4-10,width/4+320,height/4+50);
+
                         setcolor(WHITE);
                         rectangle(width/2-320,height/4-10,width/4+320,height/4+50);
                         settextjustify(LEFT_TEXT, CENTER_TEXT);
+
                         outtextxy(a+30,b+30,capatst);
                     }
                 else if(car==8)
@@ -970,12 +1031,15 @@ void caseta_text_capat_stanga(int width, int height,double &A,int ok)
                         setcolor(WHITE);
                         setfillstyle(0,BLACK);
                         bar(width/2-320,height/4-10,width/4+320,height/4+50);
+
                         setcolor(WHITE);
                         rectangle(width/2-320,height/4-10,width/4+320,height/4+50);
                         settextstyle(8, HORIZ_DIR, 4 );
+
                         capatst[pozitiest-1]='\0';
                         settextjustify(LEFT_TEXT, CENTER_TEXT);
                         outtextxy(a+30,b+30,capatst);
+
                         pozitiest--;
                     }
             }
@@ -984,7 +1048,7 @@ void caseta_text_capat_stanga(int width, int height,double &A,int ok)
         }
 
 
-void caseta_text_capat_dreapta(int width, int height,double &A,double &B,int ok)
+void caseta_text_capat_dreapta(int width, int height,double &A,double &B,int ok, int limba)
 {
         int a, b, c, d;
         char car;
@@ -999,12 +1063,15 @@ void caseta_text_capat_dreapta(int width, int height,double &A,double &B,int ok)
                         capatdr[pozitiedr]=car;
                         capatdr[pozitiedr+1]='\0';
                         pozitiedr++;
+
                         settextstyle(8, HORIZ_DIR, 4 );
                         setfillstyle(0,BLACK);
                         bar(width/4+340,height/4-10,width/4+655,height/4+50);
+
                         setcolor(WHITE);
                         rectangle(width/4+340,height/4-10,width/4+655,height/4+50);
                         settextjustify(LEFT_TEXT, CENTER_TEXT);
+
                         outtextxy(a+30,b+30,capatdr);
                     }
                 else if(car==8)
@@ -1012,28 +1079,30 @@ void caseta_text_capat_dreapta(int width, int height,double &A,double &B,int ok)
                         setcolor(WHITE);
                         setfillstyle(0,BLACK);
                         bar(width/4+340,height/4-10,width/4+655,height/4+50);
+
                         setcolor(WHITE);
                         rectangle(width/4+340,height/4-10,width/4+655,height/4+50);
                         settextstyle(8, HORIZ_DIR, 4 );
                         capatdr[pozitiedr-1]='\0';
                         settextjustify(LEFT_TEXT, CENTER_TEXT);
                         outtextxy(a+30,b+30,capatdr);
+
                         pozitiedr--;
                     }
                 }
                 while(car!=13);
-
                 B=atof((char*)capatdr);
+
                 if(car==13)
                     {
                         a=width/2-550; b=height/2+70; c=width/2+550; d=height/2+250;
                         setfillstyle(0,BLACK);
-                        bar(width/2-550,height/2+70,width/2+550,height/2+250);//text 3
+                        bar(width/2-550,height/2+70,width/2+550,height/2+250);//evaluator
                         setcolor(WHITE);
                         rectangle(width/2-550,height/2+70,width/2+550,height/2+250);
                         schimbare_culoare_buton(a,b,c,d);
                         schimbare_sunet(ok);
-                        evaluare_interval(width,height,A,B);
+                        evaluare_interval(width,height,A,B,limba);
                     }
         }
 
@@ -1065,7 +1134,7 @@ else if(coordx>=width/16-31&&coordx<=width/10&&coordy>=height/5-145&&coordy<=hei
             exit(1);
         }
     else if(coordx>=(width/16-31)&&coordx<=(width/16)&&
-                    coordy>=(height/5-100)&&coordy<=(height/5-70))
+                    coordy>=(height/5-100)&&coordy<=(height/5-70))//sunet inchis
             {
                 readimagefile("sunetinchis1.jpeg",width/16-31,height/5-100,width/16,height/5-70);
                 PlaySound(NULL,0,0);
@@ -1075,7 +1144,7 @@ else if(coordx>=width/16-31&&coordx<=width/10&&coordy>=height/5-145&&coordy<=hei
             //daca se apasa caseta cu "Introduceti functia aici:"
             //se schimba culoare dreptunghiului in galben la click
 
-            caseta_text_functie(width,height,ok);
+            caseta_text_functie(width,height,ok,limba);
             strcpy(temp,fun);
             click_pe_Grafic(A,B,width,height,ok,poza,limba,culoarerama,culoaregrafic);
         }
@@ -1088,7 +1157,7 @@ else if(coordx>=width/16-31&&coordx<=width/10&&coordy>=height/5-145&&coordy<=hei
         }
     else if(coordx>=(width/4+340)&&coordx<=(width/4+655)&&coordy>=(height/4-10)&&coordy<=(height/4+50))//dreapta
         {
-         caseta_text_capat_dreapta(width,height,A,B,ok);
+         caseta_text_capat_dreapta(width,height,A,B,ok,limba);
         click_pe_Grafic(A,B,width,height,ok,poza,limba,culoarerama,culoaregrafic);
         }
     else if(coordx>=(width/2+460)&&coordx<=(width/2+540)&&coordy>=(height/2-18)&&coordy<=(height/2+7))//buton spre functie
@@ -1130,7 +1199,7 @@ void click_pe_Informatii(double A, double B, int width, int height,int ok,int po
                 exit(1);
             }
     else if(coordx>=(width/16-31)&&coordx<=(width/16)&&
-                        coordy>=(height/5-100)&&coordy<=(height/5-70))
+                        coordy>=(height/5-100)&&coordy<=(height/5-70))//sunet inchis
                 {
                     readimagefile("sunetinchis1.jpeg",width/16-31,height/5-100,width/16,height/5-70);
                     PlaySound(NULL,0,0);
@@ -1147,8 +1216,10 @@ void click_back_grafic(double A, double B, int width, int height,int ok,int poza
     fun[0]='/0';
     capatdr[0]='/0';
     capatst[0]='/0';
+
     pozitiei=0;
-    pozitiest=0;pozitiedr=0;
+    pozitiest=0;
+    pozitiedr=0;
 
     while(true)
     {
@@ -1596,7 +1667,6 @@ void redesenare_grafic(double A, double B, int width, int height,int ok,int poza
             }
         }
     while(car!=13);
-
     click_back_grafic(A,B,width,height,ok,poza,limba,culoarerama,culoaregrafic);
 
 }
@@ -1658,7 +1728,7 @@ void transformare_functie()
                                     if('t'==fun[i])
                                         {
                                             vect[nr]=fun[i];
-                                            nr++;j=2;
+                                            nr++;i=i+2;j=2;
                                         }
 
 
@@ -1897,6 +1967,8 @@ void evaluator()
             {ok=44; v[++k]=ok;}
         if(fun[i]=='t'&&fun[i+1]!='g')
             {ok=45; v[++k]=ok;}
+        if(strchr("+/-*^",fun[i])&&fun[i+1]==')')
+            {ok=50;v[++k]=ok;}
     }
     if(strchr("-*/^",fun[0]))
         {ok=46; v[++k]=ok;}
@@ -1907,11 +1979,10 @@ void evaluator()
     if(nr!=nr1)
         {ok=48; v[++k]=ok;}
 
-    if(k==0)
-        ok=49;
+    if(k==0)ok=49;
 }
 
-void evaluare_interval(int width, int height,double A, double B)
+void evaluare_interval(int width, int height,double A, double B,int limba)
 {
     k2=0;contorev=0;
     char t[256];
@@ -1920,7 +1991,8 @@ void evaluare_interval(int width, int height,double A, double B)
                 settextstyle(8, HORIZ_DIR, 3);
                 settextjustify(CENTER_TEXT,contorev);
                 setcolor(WHITE);
-                strcpy(t,"Intervalul nu este bine ales");
+                if(limba==1)strcpy(t,"Intervalul nu este bine ales");
+                    else strcpy(t,"The range is not well chosen");
                 outtextxy(width/2,height/2+100+contorev,t);
                 k2=0;
                 contorev+=27;
@@ -1930,7 +2002,8 @@ void evaluare_interval(int width, int height,double A, double B)
             settextstyle(8, HORIZ_DIR, 3);
             settextjustify(CENTER_TEXT,contorev);
             setcolor(WHITE);
-            strcpy(t,"Intervalul e bine ales");
+            if(limba==1)strcpy(t,"Intervalul este bine ales");
+                else strcpy(t,"The range is well chosen");
             outtextxy(width/2,height/2+100+contorev,t);
             k2=1;
             contorev+=27;
@@ -1938,18 +2011,20 @@ void evaluare_interval(int width, int height,double A, double B)
 
 }
 
-void mesaj_evaluator(int width, int height)
+void mesaj_evaluator(int width, int height, int limba)
  {
-     k=0;contorev=0;
+    k=0;contorev=0;
     char t[256];
     settextstyle(8, HORIZ_DIR, 3);
     int i;
     evaluator();
+
     settextjustify(CENTER_TEXT,contorev);
     setcolor(WHITE);
 
  for(i=0;i<=k;i++)
     {
+    if(limba==1){
     if(v[i]==1){
         strcpy(t,"Nu poate aparea o paranteza deschisa urmata de o paranteza inchisa");
         if(contorev<=135){outtextxy(width/2,height/2+100+contorev,t);
@@ -1975,7 +2050,7 @@ void mesaj_evaluator(int width, int height)
         if(contorev<=135){outtextxy(width/2,height/2+100+contorev,t);
                         contorev+=27;}}
     else if(v[i]==7){
-        strcpy(t,"Nu poate aparea o paranteza deschisa urmata de o paranteza inchisa");
+        strcpy(t,"Nu poate aparea o paranteza inchisa urmata de o paranteza deschisa");
         if(contorev<=135){outtextxy(width/2,height/2+100+contorev,t);
                         contorev+=27;}}
     else if(v[i]==8){
@@ -2142,12 +2217,218 @@ void mesaj_evaluator(int width, int height)
         strcpy(t,"Numarul de paranteze deschise nu coincide cu nr. de paranteze inchise");
         if(contorev<=135){outtextxy(width/2,height/2+100+contorev,t);
                         contorev+=27;}}
+    else if(v[i]==50){
+        strcpy(t,"Nu pot fi lipite 2 astfel de semne");
+        if(contorev<=135){outtextxy(width/2,height/2+100+contorev,t);
+                        contorev+=27;}}
     }
+    else{
+        if(v[i]==1){
+        strcpy(t,"An open parenthesis followed by a closed one cannot appear");
+        if(contorev<=135){outtextxy(width/2,height/2+100+contorev,t);
+                        contorev+=27;}}
+    else if(v[i]==2){
+        strcpy(t,"An open parenthesis followed by + cannot appear");
+        if(contorev<=135){outtextxy(width/2,height/2+100+contorev,t);
+                        contorev+=27;}}
+    else if(v[i]==3){
+        strcpy(t,"An open parenthesis followed by - cannot appear");
+        if(contorev<=135){outtextxy(width/2,height/2+100+contorev,t);
+                        contorev+=27;}}
+    else if(v[i]==4){
+        strcpy(t,"An open parenthesis followed by * cannot appear");
+        if(contorev<=135){outtextxy(width/2,height/2+100+contorev,t);
+                        contorev+=27;}}
+    else if(v[i]==5){
+        strcpy(t,"An open parenthesis followed by / cannot appear");
+        if(contorev<=135){outtextxy(width/2,height/2+100+contorev,t);
+                        contorev+=27;}}
+    else if(v[i]==6){
+        strcpy(t,"An open parenthesis followed by ^ cannot appear");
+        if(contorev<=135){outtextxy(width/2,height/2+100+contorev,t);
+                        contorev+=27;}}
+    else if(v[i]==7){
+        strcpy(t,"An closed parenthesis followed by a open one cannot appear");
+        if(contorev<=135){outtextxy(width/2,height/2+100+contorev,t);
+                        contorev+=27;}}
+    else if(v[i]==8){
+        strcpy(t,"A  '(' followed by the sin function cannot appear");
+        if(contorev<=135){outtextxy(width/2,height/2+100+contorev,t);
+                        contorev+=27;}}
+    else if(v[i]==9){
+        strcpy(t,"A  ')' followed by the cosine function cannot appear");
+        if(contorev<=135){outtextxy(width/2,height/2+100+contorev,t);
+                        contorev+=27;}}
+    else if(v[i]==10){
+        strcpy(t,"A ')' followed by the logarithmic function cannot appear");
+        if(contorev<=135){outtextxy(width/2,height/2+100+contorev,t);
+                        contorev+=27;}}
+    else if(v[i]==11){
+        strcpy(t,"A ')' followed by the radical function cannot appear");
+        if(contorev<=135){outtextxy(width/2,height/2+100+contorev,t);
+                        contorev+=27;}}
+    else if(v[i]==12){
+        strcpy(t,"A ')' followed by the tangent function cannot appear");
+        if(contorev<=135){outtextxy(width/2,height/2+100+contorev,t);
+                        contorev+=27;}}
+    else if(v[i]==13){
+        strcpy(t,"A ')' followed by the constant x cannot appear");
+        if(contorev<=135){outtextxy(width/2,height/2+100+contorev,t);
+                        contorev+=27;}}
+    else if(v[i]==14){
+        strcpy(t,"A ')' followed by a number cannot appear");
+        if(contorev<=135){outtextxy(width/2,height/2+100+contorev,t);
+                        contorev+=27;}}
+    else if(v[i]==15){
+        strcpy(t,"The + symbol followed by the + symbol cannot appear");
+        if(contorev<=135){outtextxy(width/2,height/2+100+contorev,t);
+                        contorev+=27;}}
+    else if(v[i]==16){
+        strcpy(t,"The + symbol followed by the - symbol cannot appear");
+        if(contorev<=135){outtextxy(width/2,height/2+100+contorev,t);
+                        contorev+=27;}}
+    else if(v[i]==17){
+        strcpy(t,"The + symbol followed by the * symbol cannot appear");
+        if(contorev<=135){outtextxy(width/2,height/2+100+contorev,t);
+                        contorev+=27;}}
+    else if(v[i]==18){
+        strcpy(t,"The + symbol followed by the / symbol cannot appear");
+        if(contorev<=135){outtextxy(width/2,height/2+100+contorev,t);
+                        contorev+=27;}}
+    else if(v[i]==19){
+        strcpy(t,"The + symbol followed by the ^ symbol cannot appear");
+        if(contorev<=135){outtextxy(width/2,height/2+100+contorev,t);
+                        contorev+=27;}}
+    else if(v[i]==20){
+        strcpy(t,"The - symbol cannot appear followed by the + symbol");
+        if(contorev<=135){outtextxy(width/2,height/2+100+contorev,t);
+                        contorev+=27;}}
+    else if(v[i]==21){
+        strcpy(t,"The - symbol cannot appear followed by the - symbol");
+        if(contorev<=135){outtextxy(width/2,height/2+100+contorev,t);
+                        contorev+=27;}}
+    else if(v[i]==22){
+        strcpy(t,"The - symbol cannot appear followed by the * symbol");
+        if(contorev<=135){outtextxy(width/2,height/2+100+contorev,t);
+                        contorev+=27;}}
+    else if(v[i]==23){
+        strcpy(t,"The - symbol cannot appear followed by the / symbol");
+        if(contorev<=135){outtextxy(width/2,height/2+100+contorev,t);
+                        contorev+=27;}}
+    else if(v[i]==24){
+        strcpy(t,"The - symbol cannot appear followed by the ^ symbol");
+        if(contorev<=135){outtextxy(width/2,height/2+100+contorev,t);
+                        contorev+=27;}}
+    else if(v[i]==25){
+        strcpy(t,"The * symbol followed by the + symbol cannot appear");
+        if(contorev<=135){outtextxy(width/2,height/2+100+contorev,t);
+                        contorev+=27;}}
+    else if(v[i]==26){
+        strcpy(t,"The symbol * followed by the symbol - cannot appear");
+        if(contorev<=135){outtextxy(width/2,height/2+100+contorev,t);
+                        contorev+=27;}}
+    else if(v[i]==27){
+        strcpy(t,"The * symbol cannot appear followed by the * symbol");
+        if(contorev<=135){outtextxy(width/2,height/2+100+contorev,t);
+                        contorev+=27;}}
+    else if(v[i]==28){
+        strcpy(t,"The symbol * followed by the symbol / cannot appear");
+        if(contorev<=135){outtextxy(width/2,height/2+100+contorev,t);
+                        contorev+=27;}}
+    else if(v[i]==29){
+        strcpy(t,"The * symbol followed by the ^ symbol cannot appear");
+        if(contorev<=135){outtextxy(width/2,height/2+100+contorev,t);
+                        contorev+=27;}}
+    else if(v[i]==30){
+        strcpy(t,"The / symbol followed by the + symbol cannot appear");
+        if(contorev<=135){outtextxy(width/2,height/2+100+contorev,t);
+                        contorev+=27;}}
+    else if(v[i]==31){
+        strcpy(t,"The / symbol cannot appear followed by the - symbol");
+        if(contorev<=135){outtextxy(width/2,height/2+100+contorev,t);
+                        contorev+=27;}}
+    else if(v[i]==32){
+        strcpy(t,"The / symbol cannot appear followed by the * symbol");
+        if(contorev<=135){outtextxy(width/2,height/2+100+contorev,t);
+                        contorev+=27;}}
+    else if(v[i]==33){
+        strcpy(t,"The / symbol cannot appear followed by the / symbol");
+        if(contorev<=135){outtextxy(width/2,height/2+100+contorev,t);
+                        contorev+=27;}}
+    else if(v[i]==34){
+        strcpy(t,"The symbol / followed by the symbol ^ cannot appear");
+        if(contorev<=135){outtextxy(width/2,height/2+100+contorev,t);
+                        contorev+=27;}}
+    else if(v[i]==35){
+        strcpy(t,"The ^ symbol followed by the + symbol cannot appear");
+        if(contorev<=135){outtextxy(width/2,height/2+100+contorev,t);
+                        contorev+=27;}}
+    else if(v[i]==36){
+        strcpy(t,"The symbol ^ followed by the symbol - cannot appear");
+        if(contorev<=135){outtextxy(width/2,height/2+100+contorev,t);
+                        contorev+=27;}}
+    else if(v[i]==37){
+        strcpy(t,"The symbol ^ followed by the symbol * cannot appear");
+        if(contorev<=135){outtextxy(width/2,height/2+100+contorev,t);
+                        contorev+=27;}}
+    else if(v[i]==38){
+        strcpy(t,"The symbol ^ followed by the symbol / cannot appear");
+        if(contorev<=135){outtextxy(width/2,height/2+100+contorev,t);
+                        contorev+=27;}}
+    else if(v[i]==39){
+        strcpy(t,"The ^ symbol cannot appear followed by the ^ symbol");
+        if(contorev<=135){outtextxy(width/2,height/2+100+contorev,t);
+                        contorev+=27;}}
+    else if(v[i]==40){
+        strcpy(t,"Two such symbols stuck together cannot be used");
+        if(contorev<=135){outtextxy(width/2,height/2+100+contorev,t);
+                        contorev+=27;}}
+    else if(v[i]==41){
+        strcpy(t,"The sin function is not well written");
+        if(contorev<=135){outtextxy(width/2,height/2+100+contorev,t);
+                        contorev+=27;}}
+    else if(v[i]==42){
+        strcpy(t,"The cos function is not well written");
+        if(contorev<=135){outtextxy(width/2,height/2+100+contorev,t);
+                        contorev+=27;}}
+    else if(v[i]==43){
+        strcpy(t,"The rad function is not well written");
+        if(contorev<=135){outtextxy(width/2,height/2+100+contorev,t);
+                        contorev+=27;}}
+    else if(v[i]==44){
+        strcpy(t,"The ln function is not well written");
+        if(contorev<=135){outtextxy(width/2,height/2+100+contorev,t);
+                        contorev+=27;}}
+    else if(v[i]==45){
+        strcpy(t,"The tg function is not well written");
+        if(contorev<=135){outtextxy(width/2,height/2+100+contorev,t);
+                        contorev+=27;}}
+    else if(v[i]==46){
+        strcpy(t,"The beginning of the function is not well written");
+        if(contorev<=135){outtextxy(width/2,height/2+100+contorev,t);
+                        contorev+=27;}}
+    else if(v[i]==47){
+        strcpy(t,"The end of the function is not written correctly");
+        if(contorev<=135){outtextxy(width/2,height/2+100+contorev,t);
+                        contorev+=27;}}
+    else if(v[i]==48){
+        strcpy(t,"The number of '(' does not coincide with the nr. of ')'");
+        if(contorev<=135){outtextxy(width/2,height/2+100+contorev,t);
+                        contorev+=27;}}
+    else if(v[i]==50){
+        strcpy(t,"Two such signs cannot be pasted");
+        if(contorev<=135){outtextxy(width/2,height/2+100+contorev,t);
+                        contorev+=27;}}
 
+    }
+    }
     if(k==0){
-        strcpy(t,"Functia e bine scrisa");
+        if(limba==1)strcpy(t,"Functia e bine scrisa");
+        else strcpy(t,"The function is well written");
         outtextxy(width/2,height/2+100+contorev,t);
         contorev+=27;}
+
+
  }
 
 
@@ -2160,15 +2441,16 @@ void desenare_axe(double A, double B)
             dim=B-A;
             unitate=(DREAPTA-STANGA)/dim;
             line(STANGA-A*unitate,TOP,STANGA-A*unitate,BOTTOM);//oy
-            line(STANGA-A*unitate-7,TOP+7,STANGA-A*unitate,TOP);//pt oy
-            line(STANGA-A*unitate+7,TOP+7,STANGA-A*unitate,TOP);//pt oy
+            line(STANGA-A*unitate-7,TOP+7,STANGA-A*unitate,TOP);//sagetele pt oy
+            line(STANGA-A*unitate+7,TOP+7,STANGA-A*unitate,TOP);//sagetele pt oy
+
             for(i=TOP+unitate;i<=BOTTOM;i+=unitate)
                 line(STANGA-A*unitate-2,i,STANGA-A*unitate+2,i);
         }
 
     line(STANGA,TOP+(BOTTOM-TOP)/2,DREAPTA,TOP+(BOTTOM-TOP)/2);//ox
-    line(DREAPTA-7,TOP+(BOTTOM-TOP)/2-7,DREAPTA,TOP+(BOTTOM-TOP)/2);//pt ox
-    line(DREAPTA-7,TOP+(BOTTOM-TOP)/2+7,DREAPTA,TOP+(BOTTOM-TOP)/2);//pt ox
+    line(DREAPTA-7,TOP+(BOTTOM-TOP)/2-7,DREAPTA,TOP+(BOTTOM-TOP)/2);//sagetele pt ox
+    line(DREAPTA-7,TOP+(BOTTOM-TOP)/2+7,DREAPTA,TOP+(BOTTOM-TOP)/2);//sagetele pt ox
 
     dim=B-A;
     unitate=(DREAPTA-STANGA)/dim;
