@@ -16,10 +16,12 @@ using namespace std;
 double MIN,MAX;
 double minim, maxim;
 char fun[256];
+char capatst[256];
+char capatdr[256];
 char temp[256];
 int STANGA=250, DREAPTA=1100, TOP=150, BOTTOM=600;
 char vect[256];
-int k,k2,v[50], contorev;
+int k,k2,v[50], contorev,pozitiei=0, pozitiest=0, pozitiedr=0;
 
 struct nod{
     double info;
@@ -61,14 +63,14 @@ void buton_inapoi(int width, int height);
 void click(int &coordxclick, int &coordyclick );
 void schimbare_sunet(int ok);
 void schimbare_culoare_buton(int a, int b, int c, int d);
-void click_pe_Grafic(double &A, double &B, int width, int height,int ok,int poza,int limba,int culoarerama, int culoaregrafic, char capatst[256],char capatdr[256]);
-void click_pe_Informatii(double A, double B,int width, int height,int ok,int poza,int limba,int culoarerama, int culoaregrafic,char capatst[256],char capatdr[256]);
-void click_pe_fereastra_pr(double A, double B,int ok, int poza,int &limba,int culoarerama, int culoaregrafic,char capatst[256],char capatdr[256]);
+void click_pe_Grafic(double &A, double &B, int width, int height,int ok,int poza,int limba,int culoarerama, int culoaregrafic);
+void click_pe_Informatii(double A, double B,int width, int height,int ok,int poza,int limba,int culoarerama, int culoaregrafic);
+void click_pe_fereastra_pr(double A, double B,int ok, int poza,int &limba,int culoarerama, int culoaregrafic);
 void caseta_text_functie(int width, int height,int ok);
 void caseta_text_capat_stanga(int width, int height,double &A,int ok);
 void caseta_text_capat_dreapta(int width, int height,double &A,double &B,int ok);
-void click_pe_fereastra_de_alegeri(double A, double B, int &ok, int &poza, int &limba, int &culoarerama, int &culoaregrafic,char capatst[256],char capatdr[256]);
-void click_back_grafic(double A, double B, int width, int height,int ok,int poza,int limba,int culoarerama, int culoaregrafic,char capatst[256],char capatdr[256]);
+void click_pe_fereastra_de_alegeri(double A, double B, int &ok, int &poza, int &limba, int &culoarerama, int &culoaregrafic);
+void click_back_grafic(double A, double B, int width, int height,int ok,int poza,int limba,int culoarerama, int culoaregrafic);
 
 
 //functie:
@@ -78,7 +80,7 @@ bool discontinuitate(double x);
 void aflare_min_si_max();
 void aflare_min_max_din_interval(double A, double B, double &minim, double &maxim);
 void desenare_grafic_functie(double A, double B, int culoarefunctie,int culoarerama);
-void redesenare_grafic(double A, double B, int widget,int height,int ok,int poza,int limba,int culoarerama, int culoaregrafic,char capatst[256],char capatdr[256]);
+void redesenare_grafic(double A, double B, int widget,int height,int ok,int poza,int limba,int culoarerama, int culoaregrafic);
 double operatie (char r, double x, double y);
 double operatie_speciala (char r, double x);
 int prioritate_caracter(char a);
@@ -99,7 +101,6 @@ void desenare_axe(double A, double B);
 
 //asimptote
 double asimptota_orizontala();
-double asimptota_oblica();
 double asimptota_verticala();
 void desenare_asimptote(double A, double B);
 
@@ -114,10 +115,12 @@ int main()
     int culoaregrafic=1;
     double A,B;
     fun[0]='\0';
+    capatst[0]='\0';
+    capatst[0]='\0';
     A=B=0;
     fullscreen(width, height);
     fereastra_de_alegeri(width,height);
-    click_pe_fereastra_de_alegeri(A,B,ok,poza,limba,culoarerama,culoaregrafic,capatst,capatdr);
+    click_pe_fereastra_de_alegeri(A,B,ok,poza,limba,culoarerama,culoaregrafic);
     getch();
     closegraph();
     return 0;
@@ -324,7 +327,7 @@ void fereastra_de_alegeri(int width, int height)
     buton_iesire(width, height);
 }
 
-void fereastra_cu_graficul_desenat(double A, double B,int ok, int poza, int limba,int culoarerama,int culoaregrafic,char capatst[256],char capatdr[256])
+void fereastra_cu_graficul_desenat(double A, double B,int ok, int poza, int limba,int culoarerama,int culoaregrafic)
 {
     int height, width;
 
@@ -348,7 +351,8 @@ void fereastra_cu_graficul_desenat(double A, double B,int ok, int poza, int limb
         else if(culoaregrafic==3)setcolor(CYAN);
         else if(culoaregrafic==4)setcolor(GREEN);
 
-    redesenare_grafic(A,B,width,height,ok,poza,limba,culoarerama,culoaregrafic, capatst, capatdr);//graficul efectiv
+
+    redesenare_grafic(A,B,width,height,ok,poza,limba,culoarerama,culoaregrafic);//graficul efectiv
 }
 
 void fereastra_principala(int width, int height,int ok, int poza,int limba)
@@ -586,15 +590,25 @@ void fereastra_Informatii(int width, int height,int ok,int poza,int limba)
 
     settextstyle(8, HORIZ_DIR, 2);
     strcpy(t,"-Functiile trigonometrice se vor scrie cu");
-    outtextxy(width/2+32,height/2-70,t);
+    outtextxy(width/2+32,height/2-80,t);
+
     strcpy(t,"paranteze rotunde.");
-    outtextxy(width/2+32,height/2-40,t);
-    strcpy(t,"ex: sin(x), cos(2*x)");
-    outtextxy(width/2+32,height/2-10,t);
+    outtextxy(width/2+32,height/2-50,t);
+
+    strcpy(t,"ex: sin(x), cos(2*x).");
+    outtextxy(width/2+32,height/2-20,t);
+
     strcpy(t,"-Singura variabila pe care o puteti");
-    outtextxy(width/2+32,height/2+50,t);
+    outtextxy(width/2+32,height/2+40,t);
+
     strcpy(t,"utiliza este variabila x.");
-    outtextxy(width/2+32,height/2+80,t);
+    outtextxy(width/2+32,height/2+70,t);
+
+    strcpy(t,"-Se pot folosi doar functiile:");
+    outtextxy(width/2+32,height/2+130,t);
+
+    strcpy(t,"sin, cos, log, tg, rad.");
+    outtextxy(width/2+32,height/2+160,t);
 
     setcolor(WHITE);
     buton_inapoi(width, height);
@@ -680,7 +694,7 @@ void schimbare_culoare_buton(int a, int b, int c, int d)
     rectangle(a,b,c,d);
 }
 
-void click_pe_fereastra_de_alegeri(double A, double B, int &ok, int &poza,int &limba, int &culoarerama, int &culoaregrafic,char capatst[256],char capatdr[256])
+void click_pe_fereastra_de_alegeri(double A, double B, int &ok, int &poza,int &limba, int &culoarerama, int &culoaregrafic)
 {
     int coordx, coordy;
     int a,b,c,d;
@@ -700,7 +714,7 @@ void click_pe_fereastra_de_alegeri(double A, double B, int &ok, int &poza,int &l
             schimbare_sunet(ok);
             closegraph();
             fereastra_principala(width,height,ok,poza,limba);
-            click_pe_fereastra_pr(A,B,ok,poza,limba,culoarerama,culoaregrafic,capatst,capatdr);
+            click_pe_fereastra_pr(A,B,ok,poza,limba,culoarerama,culoaregrafic);
         }
     else if(coordx>=width/16-31&&coordx<=width/10&&coordy>=height/5-145&&coordy<=height/5-114)//click pe exit
         {
@@ -801,7 +815,7 @@ void click_pe_fereastra_de_alegeri(double A, double B, int &ok, int &poza,int &l
     }
 }
 
-void click_pe_fereastra_pr(double A, double B, int ok, int poza, int &limba,int culoarerama, int culoaregrafic,char capatst[256],char capatdr[256])
+void click_pe_fereastra_pr(double A, double B, int ok, int poza, int &limba,int culoarerama, int culoaregrafic)
 {
     int coordx, coordy;
     int a,b,c,d;
@@ -827,7 +841,7 @@ void click_pe_fereastra_pr(double A, double B, int ok, int poza, int &limba,int 
                 schimbare_sunet(ok);
                 clearmouseclick(WM_LBUTTONUP);
                 fereastra_Grafic(width,height,ok,poza,limba);
-                click_pe_Grafic(A,B,width,height,ok,poza,limba,culoarerama,culoaregrafic,capatst,capatdr);
+                click_pe_Grafic(A,B,width,height,ok,poza,limba,culoarerama,culoaregrafic);
             }
     else if(coordx>=(width/2-119)&&coordx<=(width/2+118)&&coordy>=(height/2-40)&&coordy<=(height/2+12)&&limba==0)
             {//daca se face click pe "Graph"
@@ -836,7 +850,7 @@ void click_pe_fereastra_pr(double A, double B, int ok, int poza, int &limba,int 
                 schimbare_sunet(ok);
                 clearmouseclick(WM_LBUTTONUP);
                 fereastra_Grafic(width,height,ok,poza,limba);
-                click_pe_Grafic(A,B,width,height,ok,poza,limba,culoarerama,culoaregrafic,capatst,capatdr);
+                click_pe_Grafic(A,B,width,height,ok,poza,limba,culoarerama,culoaregrafic);
             }
 
     else if(coordx>=(width/2-168)&&coordx<=(width/2+165)&&
@@ -848,7 +862,7 @@ void click_pe_fereastra_pr(double A, double B, int ok, int poza, int &limba,int 
                 schimbare_culoare_buton(a,b,c,d);
                 schimbare_sunet(ok);
                 fereastra_Informatii(width, height,ok,poza,limba);
-                click_pe_Informatii(A,B,width,height,ok,poza,limba,culoarerama,culoaregrafic,capatst,capatdr);
+                click_pe_Informatii(A,B,width,height,ok,poza,limba,culoarerama,culoaregrafic);
             }
     else if(coordx>=(width-80)&&coordx<=(width-30)&&
                     coordy>=(height/5-145)&&coordy<=(height/5-115)&&limba==1)//steag-daca se apasa setarea de limba
@@ -875,46 +889,50 @@ void click_pe_fereastra_pr(double A, double B, int ok, int poza, int &limba,int 
 
 void caseta_text_functie(int width, int height,int ok)
 {
-    int a,b,c,d;
-    int i;
-    char car, sir[256];
-    int x;
-    fun[0]='\0';
-    a=width/2-320; b=height/3+70; c=width/4+655; d=height/3+130;
-    schimbare_culoare_buton(a,b,c,d);
-    schimbare_sunet(ok);
-    x=a+30;
-    i=0;
+        int a, b, c, d;
+        char car;
+        a=width/2-320; b=height/3+70; c=width/4+655; d=height/3+130;
+        schimbare_culoare_buton(a,b,c,d);
+        schimbare_sunet(ok);
             do
             {
-            car = getch();
-            if(car!=8)
-                {
-                sir[0]=car;
-                sir[1]='\0';
-                settextstyle(8, HORIZ_DIR, 4 );
-                outtextxy(x,b+30,sir);
-                x+=textwidth(sir);
-                fun[i]=sir[0];
-                fun[i+1]='\0';
-                i++;
-                }
-            else if(car==8)
-                {
-                setcolor(BLACK);
-                settextstyle(8, HORIZ_DIR, 4 );
-                outtextxy(x,b+30,sir);
-                x-=textwidth(sir);
-                i--;
-                setcolor(WHITE);
-                }
+                car = getch();
+                if(car!=8 && car !=13)
+                    {
+                        fun[pozitiei]=car;
+                        fun[pozitiei+1]='\0';
+                        pozitiei++;
+                        settextstyle(8, HORIZ_DIR, 4 );
+                        setfillstyle(0,BLACK);
+                        bar(width/2-320,height/3+70,width/4+655,height/3+130);
+                        setcolor(WHITE);
+                        rectangle(width/2-320,height/3+70,width/4+655,height/3+130);
+                        settextjustify(LEFT_TEXT, CENTER_TEXT);
+                        outtextxy(a+30,b+30,fun);
+                    }
+                else if(car==8)
+                    {
+                        setcolor(WHITE);
+                        setfillstyle(0,BLACK);
+                        bar(width/2-320,height/3+70,width/4+655,height/3+130);
+                        setcolor(WHITE);
+                        rectangle(width/2-320,height/3+70,width/4+655,height/3+130);
+                        settextstyle(8, HORIZ_DIR, 4 );
+                        fun[pozitiei-1]='\0';
+                        settextjustify(LEFT_TEXT, CENTER_TEXT);
+                        outtextxy(a+30,b+30,fun);
+                        pozitiei--;
+                    }
             }
             while(car!=13);
 
             if(car==13)
-                if(k==0)
                 {
                     a=width/2-550; b=height/2+70; c=width/2+550; d=height/2+250;
+                    setfillstyle(0,BLACK);
+                    bar(width/2-550,height/2+70,width/2+550,height/2+250);//text 3
+                    setcolor(WHITE);
+                    rectangle(width/2-550,height/2+70,width/2+550,height/2+250);
                     schimbare_culoare_buton(a,b,c,d);
                     schimbare_sunet(ok);
                     mesaj_evaluator(width,height);
@@ -922,97 +940,105 @@ void caseta_text_functie(int width, int height,int ok)
 
         }
 
+
+
 void caseta_text_capat_stanga(int width, int height,double &A,int ok)
 {
-    int a,b,c,d;
-    int i;
-    char capatst[256];
-    char car, sir[256];
-    int x;
-    capatst[0]='\0';
-    a=width/2-320; b=height/4-10; c=width/4+320; d=height/4+50;
-    schimbare_culoare_buton(a,b,c,d);
-    schimbare_sunet(ok);
-    x=a+30;
-    i=0;
-    do
-        {
-        car = getch();
-            if(car!=8)
-                {
-                sir[0]=car;
-                sir[1]='\0';
-                settextstyle(8, HORIZ_DIR, 4 );
-                outtextxy(x,b+30,sir);
-                x+=textwidth(sir);
-                capatst[i]=sir[0];
-                capatst[i+1]='\0';
-                i++;
-                }
-            else if(car==8)
-                {
-                setcolor(BLACK);
-                settextstyle(8, HORIZ_DIR, 4 );
-                outtextxy(x,b+30,sir);
-                x-=textwidth(sir);
-                i--;
-                setcolor(WHITE);
-                }
+        int a, b, c, d;
+        char car;
+        a=width/2-320; b=height/4-10; c=width/4+320; d=height/4+50;
+        schimbare_culoare_buton(a,b,c,d);
+        schimbare_sunet(ok);
+            do
+            {
+                car = getch();
+                if(car!=8 && car !=13)
+                    {
+                        capatst[pozitiest]=car;
+                        capatst[pozitiest+1]='\0';
+                        pozitiest++;
+                        settextstyle(8, HORIZ_DIR, 4 );
+                        setfillstyle(0,BLACK);
+                        bar(width/2-320,height/4-10,width/4+320,height/4+50);
+                        setcolor(WHITE);
+                        rectangle(width/2-320,height/4-10,width/4+320,height/4+50);
+                        settextjustify(LEFT_TEXT, CENTER_TEXT);
+                        outtextxy(a+30,b+30,capatst);
+                    }
+                else if(car==8)
+                    {
+                        setcolor(WHITE);
+                        setfillstyle(0,BLACK);
+                        bar(width/2-320,height/4-10,width/4+320,height/4+50);
+                        setcolor(WHITE);
+                        rectangle(width/2-320,height/4-10,width/4+320,height/4+50);
+                        settextstyle(8, HORIZ_DIR, 4 );
+                        capatst[pozitiest-1]='\0';
+                        settextjustify(LEFT_TEXT, CENTER_TEXT);
+                        outtextxy(a+30,b+30,capatst);
+                        pozitiest--;
+                    }
+            }
+            while(car!=13);
+            A=atof((char*)capatst);
         }
-        while(car!=13);
-        A=atof((char*)capatst);
-}
+
 
 void caseta_text_capat_dreapta(int width, int height,double &A,double &B,int ok)
 {
-  int a,b,c,d;
-    int i;
-    char capatdr[256];
-    char car, sir[256];
-    int x;
-    capatdr[0]='\0';
-    a=width/4+340; b=height/4-10; c=width/4+655; d=height/4+50;
-    schimbare_culoare_buton(a,b,c,d);
-    schimbare_sunet(ok);
-    x=a+30;
-    i=0;
-    do
-        {
-            car = getch();
-            if(car!=8)
-                {
-                sir[0]=car;
-                sir[1]='\0';
-                settextstyle(8, HORIZ_DIR, 4 );
-                outtextxy(x,b+30,sir);
-                x+=textwidth(sir);
-                capatdr[i]=sir[0];
-                capatdr[i+1]='\0';
-                i++;
+        int a, b, c, d;
+        char car;
+        a=width/4+340; b=height/4-10; c=width/4+655; d=height/4+50;
+        schimbare_culoare_buton(a,b,c,d);
+        schimbare_sunet(ok);
+            do
+            {
+                car = getch();
+                if(car!=8 && car !=13)
+                    {
+                        capatdr[pozitiedr]=car;
+                        capatdr[pozitiedr+1]='\0';
+                        pozitiedr++;
+                        settextstyle(8, HORIZ_DIR, 4 );
+                        setfillstyle(0,BLACK);
+                        bar(width/4+340,height/4-10,width/4+655,height/4+50);
+                        setcolor(WHITE);
+                        rectangle(width/4+340,height/4-10,width/4+655,height/4+50);
+                        settextjustify(LEFT_TEXT, CENTER_TEXT);
+                        outtextxy(a+30,b+30,capatdr);
+                    }
+                else if(car==8)
+                    {
+                        setcolor(WHITE);
+                        setfillstyle(0,BLACK);
+                        bar(width/4+340,height/4-10,width/4+655,height/4+50);
+                        setcolor(WHITE);
+                        rectangle(width/4+340,height/4-10,width/4+655,height/4+50);
+                        settextstyle(8, HORIZ_DIR, 4 );
+                        capatdr[pozitiedr-1]='\0';
+                        settextjustify(LEFT_TEXT, CENTER_TEXT);
+                        outtextxy(a+30,b+30,capatdr);
+                        pozitiedr--;
+                    }
                 }
-            else if(car==8)
-                {
-                setcolor(BLACK);
-                settextstyle(8, HORIZ_DIR, 4 );
-                outtextxy(x,b+30,sir);
-                x-=textwidth(sir);
-                i--;
-                setcolor(WHITE);
-                }
+                while(car!=13);
+
+                B=atof((char*)capatdr);
+                if(car==13)
+                    {
+                        a=width/2-550; b=height/2+70; c=width/2+550; d=height/2+250;
+                        setfillstyle(0,BLACK);
+                        bar(width/2-550,height/2+70,width/2+550,height/2+250);//text 3
+                        setcolor(WHITE);
+                        rectangle(width/2-550,height/2+70,width/2+550,height/2+250);
+                        schimbare_culoare_buton(a,b,c,d);
+                        schimbare_sunet(ok);
+                        evaluare_interval(width,height,A,B);
+                    }
         }
-        while(car!=13);
 
-        B=atof((char*)capatdr);
-        if(car==13)
-                {
-                    a=width/2-550; b=height/2+70; c=width/2+550; d=height/2+250;
-                    schimbare_culoare_buton(a,b,c,d);
-                    schimbare_sunet(ok);
-                    evaluare_interval(width,height,A,B);
-                }
-}
 
-void click_pe_Grafic(double &A, double &B, int width, int height,int ok,int poza, int limba, int culoarerama, int culoaregrafic,char capatst[256],char capatdr[256])
+void click_pe_Grafic(double &A, double &B, int width, int height,int ok,int poza, int limba, int culoarerama, int culoaregrafic)
 {
     int coordx, coordy;
     int a,b,c,d;
@@ -1028,7 +1054,8 @@ void click_pe_Grafic(double &A, double &B, int width, int height,int ok,int poza
             schimbare_sunet(ok);
             closegraph();
             fereastra_principala(width, height,ok,poza,limba);
-            click_pe_fereastra_pr(A,B,ok,poza,limba,culoarerama, culoaregrafic,capatst,capatdr);
+            click_pe_fereastra_pr(A,B,ok,poza,limba,culoarerama, culoaregrafic);
+
         }
 else if(coordx>=width/16-31&&coordx<=width/10&&coordy>=height/5-145&&coordy<=height/5-114)//exit
         {
@@ -1050,19 +1077,19 @@ else if(coordx>=width/16-31&&coordx<=width/10&&coordy>=height/5-145&&coordy<=hei
 
             caseta_text_functie(width,height,ok);
             strcpy(temp,fun);
-            click_pe_Grafic(A,B,width,height,ok,poza,limba,culoarerama,culoaregrafic,capatst,capatdr);
+            click_pe_Grafic(A,B,width,height,ok,poza,limba,culoarerama,culoaregrafic);
         }
 
     else if(coordx>=(width/2-320)&&coordx<=(width/4+320)&&coordy>=(height/4-10)&&coordy<=(height/4+50))//stanga
         {
 
         caseta_text_capat_stanga(width,height,A,ok);
-        click_pe_Grafic(A,B,width,height,ok,poza,limba,culoarerama,culoaregrafic,capatst,capatdr);
+        click_pe_Grafic(A,B,width,height,ok,poza,limba,culoarerama,culoaregrafic);
         }
     else if(coordx>=(width/4+340)&&coordx<=(width/4+655)&&coordy>=(height/4-10)&&coordy<=(height/4+50))//dreapta
         {
          caseta_text_capat_dreapta(width,height,A,B,ok);
-        click_pe_Grafic(A,B,width,height,ok,poza,limba,culoarerama,culoaregrafic,capatst,capatdr);
+        click_pe_Grafic(A,B,width,height,ok,poza,limba,culoarerama,culoaregrafic);
         }
     else if(coordx>=(width/2+460)&&coordx<=(width/2+540)&&coordy>=(height/2-18)&&coordy<=(height/2+7))//buton spre functie
         {
@@ -1071,70 +1098,72 @@ else if(coordx>=width/16-31&&coordx<=width/10&&coordy>=height/5-145&&coordy<=hei
             a=width/2+460; b=height/2-18; c=width/2+540; d=height/2+7;
             schimbare_culoare_buton(a,b,c,d);
             schimbare_sunet(ok);
-            fereastra_cu_graficul_desenat(A,B,ok,poza,limba,culoarerama,culoaregrafic,capatst, capatdr);
+            fereastra_cu_graficul_desenat(A,B,ok,poza,limba,culoarerama,culoaregrafic);
             closegraph();
             }
         }
-
-
     }
 }
 
-void click_pe_Informatii(double A, double B, int width, int height,int ok,int poza,int limba,int culoarerama, int culoaregrafic,char capatst[256],char capatdr[256])
+void click_pe_Informatii(double A, double B, int width, int height,int ok,int poza,int limba,int culoarerama, int culoaregrafic)
 {
     int coordx, coordy;
     int a,b,c,d;
     fullscreen(width, height);
     while(true)
     {
-
-    click(coordx,coordy);
-    if(coordx>=width/10+10&&coordx<=width/10+90&&coordy>=height/5-145&&coordy<=height/5-114)//back
-        {
-            a=width/10+10; b=height/5-145; c=width/10+90; d=height/5-114;
-            schimbare_culoare_buton(a,b,c,d);
-            schimbare_sunet(ok);
-            closegraph();
-            fereastra_principala(width, height,ok,poza,limba);
-            click_pe_fereastra_pr(A,B,ok,poza,limba,culoarerama,culoaregrafic,capatst,capatdr);
-        }
-else if(coordx>=width/16-31&&coordx<=width/10&&coordy>=height/5-145&&coordy<=height/5-114)//exit
-        {
-            a=width/16-31; b=height/5-145; c=width/10; d=height/5-114;
-            schimbare_culoare_buton(a,b,c,d);
-            schimbare_sunet(ok);
-            exit(1);
-        }
-else if(coordx>=(width/16-31)&&coordx<=(width/16)&&
-                    coordy>=(height/5-100)&&coordy<=(height/5-70))
+        click(coordx,coordy);
+        if(coordx>=width/10+10&&coordx<=width/10+90&&coordy>=height/5-145&&coordy<=height/5-114)//back
             {
-                readimagefile("sunetinchis1.jpeg",width/16-31,height/5-100,width/16,height/5-70);
-                PlaySound(NULL,0,0);
+                a=width/10+10; b=height/5-145; c=width/10+90; d=height/5-114;
+                schimbare_culoare_buton(a,b,c,d);
+                schimbare_sunet(ok);
+                closegraph();
+                fereastra_principala(width, height,ok,poza,limba);
+                click_pe_fereastra_pr(A,B,ok,poza,limba,culoarerama,culoaregrafic);
             }
+    else if(coordx>=width/16-31&&coordx<=width/10&&coordy>=height/5-145&&coordy<=height/5-114)//exit
+            {
+                a=width/16-31; b=height/5-145; c=width/10; d=height/5-114;
+                schimbare_culoare_buton(a,b,c,d);
+                schimbare_sunet(ok);
+                exit(1);
+            }
+    else if(coordx>=(width/16-31)&&coordx<=(width/16)&&
+                        coordy>=(height/5-100)&&coordy<=(height/5-70))
+                {
+                    readimagefile("sunetinchis1.jpeg",width/16-31,height/5-100,width/16,height/5-70);
+                    PlaySound(NULL,0,0);
+                }
 
-    }
+        }
 }
 
-void click_back_grafic(double A, double B, int width, int height,int ok,int poza,int limba,int culoarerama, int culoaregrafic,char capatst[256],char capatdr[256])
+void click_back_grafic(double A, double B, int width, int height,int ok,int poza,int limba,int culoarerama, int culoaregrafic)
 {
     int coordx, coordy;
     int a,b,c,d;
     fullscreen(width, height);
+    fun[0]='/0';
+    capatdr[0]='/0';
+    capatst[0]='/0';
+    pozitiei=0;
+    pozitiest=0;pozitiedr=0;
 
     while(true)
     {
-    click(coordx,coordy);
-    if(coordx>=width/10-100&&coordx<=width/10-20&&coordy>=height/5-145&&coordy<=height/5-114)//back
-        {
-            a=width/10-100; b=height/5-145; c=width/10-20; d=height/5-114;
-            schimbare_culoare_buton(a,b,c,d);
-            schimbare_sunet(ok);
-            contorev=0;
-            closegraph();
-            fereastra_Grafic(width,height,ok,poza,limba);
-            click_pe_Grafic(A,B,width,height,ok,poza,limba,culoarerama,culoaregrafic,capatst,capatdr);
-        }
-}
+        click(coordx,coordy);
+        if(coordx>=width/10-100&&coordx<=width/10-20&&coordy>=height/5-145&&coordy<=height/5-114)//back
+            {
+                a=width/10-100; b=height/5-145; c=width/10-20; d=height/5-114;
+                schimbare_culoare_buton(a,b,c,d);
+                schimbare_sunet(ok);
+                contorev=0;
+                closegraph();
+                fereastra_Grafic(width,height,ok,poza,limba);
+                click_pe_Grafic(A,B,width,height,ok,poza,limba,culoarerama,culoaregrafic);
+            }
+    }
 }
 
 
@@ -1155,7 +1184,7 @@ double calculare_integrala_functiei(double A, double B, double(*f)(double))
             double punctint;
             punctint=(A+B)/2.0;
             return calculare_integrala_functiei(A,punctint,f)+calculare_integrala_functiei(punctint,B,f);
-            }
+        }
 }
 
 bool discontinuitate(double x)
@@ -1241,19 +1270,19 @@ void desenare_grafic_functie(double A, double B, int culoaregrafic, int culoarer
             line(xecran,yecran,xpunctactual,ypunctactual);
         }
    else {
-        if(culoaregrafic==1)setcolor(RED);
-            else if(culoaregrafic==2)setcolor(YELLOW);
-            else if(culoaregrafic==3)setcolor(CYAN);
-            else if(culoaregrafic==4)setcolor(GREEN);
+            if(culoaregrafic==1)setcolor(RED);
+                else if(culoaregrafic==2)setcolor(YELLOW);
+                else if(culoaregrafic==3)setcolor(CYAN);
+                else if(culoaregrafic==4)setcolor(GREEN);
 
-        line(xecran,yecran,xpunctactual,ypunctactual);
+            line(xecran,yecran,xpunctactual,ypunctactual);
         }
         xecran=xpunctactual;
         yecran=ypunctactual;
     }
 }
 
-void redesenare_grafic(double A, double B, int width, int height,int ok,int poza,int limba,int culoarerama, int culoaregrafic,char capatst[256],char capatdr[256])
+void redesenare_grafic(double A, double B, int width, int height,int ok,int poza,int limba,int culoarerama, int culoaregrafic)
 {
     char t[256];
     double valoareintegrala;
@@ -1270,9 +1299,6 @@ void redesenare_grafic(double A, double B, int width, int height,int ok,int poza
     setcolor(WHITE);
     settextstyle(8, HORIZ_DIR, 4 );
     settextjustify(CENTER_TEXT,CENTER_TEXT);
-
-    settextstyle(8, HORIZ_DIR, 4 );
-    settextjustify(CENTER_TEXT,CENTER_TEXT);
     strcpy(t,"Back");
     outtextxy(width/10-60,height/5-120,t);//setari pentru formare buton back
     rectangle(width/10-100,height/5-145,width/10-20,height/5-114);
@@ -1280,11 +1306,11 @@ void redesenare_grafic(double A, double B, int width, int height,int ok,int poza
     if(limba==1)
     {
         strcpy(t,"Reprezentarea functiei:");
-        outtextxy(width/2,height/4-50,t);
+        outtextxy(width/2,height/4-70,t);
     }
         else  {
                 strcpy(t,"Graph reprezentation:");
-                outtextxy(width/2,height/4-50,t);
+                outtextxy(width/2,height/4-70,t);
                 }
 
     setcolor(WHITE);
@@ -1308,12 +1334,11 @@ void redesenare_grafic(double A, double B, int width, int height,int ok,int poza
                 sprintf(charintegrala," %lf",valoareintegrala);
                 outtextxy(width/4+430, height-100,charintegrala);
             }
-    //click_back_grafic(A,B,width,height,ok,poza,limba,culoarerama,culoaregrafic,capatst,capatdr); //daca lasi asta aici, nu iti mai ia do while ul
     char car;
     do
         {
             car = getch();
-            if(car==KEY_RIGHT||car=='d')//dr
+            if((car==KEY_RIGHT||car=='d')&&car!=13)//dr
                 {
                     cleardevice();
                     A+=2;
@@ -1326,6 +1351,7 @@ void redesenare_grafic(double A, double B, int width, int height,int ok,int poza
 
                     rectangle(STANGA,TOP,DREAPTA,BOTTOM);
 
+                    setcolor(WHITE);
                     settextstyle(8, HORIZ_DIR, 4 );
                     settextjustify(CENTER_TEXT,CENTER_TEXT);
                     strcpy(t,"Back");
@@ -1341,11 +1367,11 @@ void redesenare_grafic(double A, double B, int width, int height,int ok,int poza
                     if(limba==1)
                     {
                         strcpy(t,"Reprezentarea functiei:");
-                        outtextxy(width/2,height/4-50,t);
+                        outtextxy(width/2,height/4-70,t);
                     }
                     else  {
                             strcpy(t,"Graph reprezentation:");
-                            outtextxy(width/2,height/4-50,t);
+                            outtextxy(width/2,height/4-70,t);
                             }
 
                     setcolor(WHITE);
@@ -1374,9 +1400,8 @@ void redesenare_grafic(double A, double B, int width, int height,int ok,int poza
                     setcolor(DARKGRAY);
                     desenare_axe(A,B);
                     desenare_asimptote(A,B);
-                    //click_back_grafic(A,B,width,height,ok,poza,limba,culoarerama,culoaregrafic,capatst,capatdr);
                 }
-            else if(car==KEY_LEFT||car=='a')//st
+            else if((car==KEY_LEFT||car=='a')&&car!=13)//st
             {
                 cleardevice();
                 A-=2;
@@ -1389,6 +1414,7 @@ void redesenare_grafic(double A, double B, int width, int height,int ok,int poza
 
                 rectangle(STANGA,TOP,DREAPTA,BOTTOM);
 
+                setcolor(WHITE);
                 settextstyle(8, HORIZ_DIR, 4 );
                 settextjustify(CENTER_TEXT,CENTER_TEXT);
                 strcpy(t,"Back");
@@ -1404,11 +1430,11 @@ void redesenare_grafic(double A, double B, int width, int height,int ok,int poza
                 if(limba==1)
                     {
                         strcpy(t,"Reprezentarea functiei:");
-                        outtextxy(width/2,height/4-50,t);
+                        outtextxy(width/2,height/4-70,t);
                     }
                     else  {
                             strcpy(t,"Graph reprezentation:");
-                            outtextxy(width/2,height/4-50,t);
+                            outtextxy(width/2,height/4-70,t);
                             }
 
                 setcolor(WHITE);
@@ -1437,9 +1463,8 @@ void redesenare_grafic(double A, double B, int width, int height,int ok,int poza
                 setcolor(DARKGRAY);
                 desenare_axe(A,B);
                 desenare_asimptote(A,B);
-                //click_back_grafic(A,B,width,height,ok,poza,limba,culoarerama,culoaregrafic,capatst,capatdr);
                 }
-            else if(car=='w'||car==KEY_UP)//ZOOM -
+            else if((car=='w'||car==KEY_UP)&&car!=13)//ZOOM -
             {
                 if((A+2)<(B-2))
                 {
@@ -1454,6 +1479,7 @@ void redesenare_grafic(double A, double B, int width, int height,int ok,int poza
 
                 rectangle(STANGA,TOP,DREAPTA,BOTTOM);
 
+                setcolor(WHITE);
                 settextstyle(8, HORIZ_DIR, 4 );
                 settextjustify(CENTER_TEXT,CENTER_TEXT);
                 strcpy(t,"Back");
@@ -1469,11 +1495,11 @@ void redesenare_grafic(double A, double B, int width, int height,int ok,int poza
                 if(limba==1)
                     {
                         strcpy(t,"Reprezentarea functiei:");
-                        outtextxy(width/2,height/4-50,t);
+                        outtextxy(width/2,height/4-70,t);
                     }
                     else  {
                             strcpy(t,"Graph reprezentation:");
-                            outtextxy(width/2,height/4-50,t);
+                            outtextxy(width/2,height/4-70,t);
                             }
 
                 setcolor(WHITE);
@@ -1503,10 +1529,9 @@ void redesenare_grafic(double A, double B, int width, int height,int ok,int poza
                 setcolor(DARKGRAY);
                 desenare_axe(A,B);
                 desenare_asimptote(A,B);
-                //click_back_grafic(A,B,width,height,ok,poza,limba,culoarerama,culoaregrafic,capatst,capatdr);
                 }
             }
-            else if(car=='s'||car==KEY_DOWN)//ZOOM +
+            else if((car=='s'||car==KEY_DOWN)&&car!=13)//ZOOM +
             {
                 cleardevice();
                 A-=2;
@@ -1519,6 +1544,7 @@ void redesenare_grafic(double A, double B, int width, int height,int ok,int poza
 
                 rectangle(STANGA,TOP,DREAPTA,BOTTOM);
 
+                setcolor(WHITE);
                 settextstyle(8, HORIZ_DIR, 4 );
                 settextjustify(CENTER_TEXT,CENTER_TEXT);
                 strcpy(t,"Back");
@@ -1534,11 +1560,11 @@ void redesenare_grafic(double A, double B, int width, int height,int ok,int poza
                 if(limba==1)
                     {
                         strcpy(t,"Reprezentarea functiei:");
-                        outtextxy(width/2,height/4-50,t);
+                        outtextxy(width/2,height/4-70,t);
                     }
                     else  {
                             strcpy(t,"Graph reprezentation:");
-                            outtextxy(width/2,height/4-50,t);
+                            outtextxy(width/2,height/4-70,t);
                             }
 
                 setcolor(WHITE);
@@ -1567,17 +1593,19 @@ void redesenare_grafic(double A, double B, int width, int height,int ok,int poza
                 setcolor(DARKGRAY);
                 desenare_axe(A,B);
                 desenare_asimptote(A,B);
-                //click_back_grafic(A,B,width,height,ok,poza,limba,culoarerama,culoaregrafic,capatst,capatdr);
             }
         }
     while(car!=13);
+
+    click_back_grafic(A,B,width,height,ok,poza,limba,culoarerama,culoaregrafic);
+
 }
 
 void transformare_functie()
 {
     int i=0,j,nr=0;
     double numar;
-    while(i<=strlen(fun)-2)
+    while(i<=strlen(fun)-1)
     {
         if(isdigit(fun[i])!=0)
         {
@@ -1599,38 +1627,38 @@ void transformare_functie()
             else
                 if(fun[i]=='x')
                     {
-                    vect[nr]=fun[i];
-                    nr++;j=1;
-                    i++;
-                    vect[nr]=' ';nr++;
+                        vect[nr]=fun[i];
+                        nr++;j=1;
+                        i++;
+                        vect[nr]=' ';nr++;
                     }
                 else
                     {
                         if('s'==fun[i])
                             {
-                            vect[nr]=fun[i];
-                            nr++;i=i+3;j=3;
-                            vect[nr]=' ';nr++;
+                                vect[nr]=fun[i];
+                                nr++;i=i+3;j=3;
+                                vect[nr]=' ';nr++;
                             }
                         else
                             if('c'==fun[i])
                                 {
-                                vect[nr]=fun[i];
-                                nr++;i=i+3;j=3;
-                                vect[nr]=' ';nr++;
+                                    vect[nr]=fun[i];
+                                    nr++;i=i+3;j=3;
+                                    vect[nr]=' ';nr++;
                                 }
                             else
                                 if('l'==fun[i])
                                 {
-                                vect[nr]=fun[i];
-                                nr++;i=i+2;j=2;
-                                vect[nr]=' ';nr++;
+                                    vect[nr]=fun[i];
+                                    nr++;i=i+2;j=2;
+                                    vect[nr]=' ';nr++;
                                 }
                                 else
                                     if('t'==fun[i])
                                         {
-                                        vect[nr]=fun[i];
-                                        nr++;j=2;
+                                            vect[nr]=fun[i];
+                                            nr++;j=2;
                                         }
 
 
@@ -1664,8 +1692,8 @@ void transformare_din_infix_in_postinfx( )
                         {
                             while(S->inf!='(')
                                 {
-                                inserare(postfixata,S->inf);
-                                pop(S);
+                                    inserare(postfixata,S->inf);
+                                    pop(S);
                                 }
                         pop(S); eliminare(infixata);
                         }
@@ -1673,8 +1701,8 @@ void transformare_din_infix_in_postinfx( )
                         {
                             while (esteVidaS(S)==0&&S->inf!='('&&prioritate_caracter(S->inf)>= prioritate_caracter(infixata->inf))
                             {
-                            inserare(postfixata,S->inf);
-                            pop(S);
+                                inserare(postfixata,S->inf);
+                                pop(S);
                             }
                         push(S,infixata->inf);
                         eliminare(infixata);
@@ -1682,8 +1710,8 @@ void transformare_din_infix_in_postinfx( )
     }
     while (esteVidaS(S)==0)
     {
-    inserare(postfixata,S->inf);
-    pop(S);
+        inserare(postfixata,S->inf);
+        pop(S);
     }
 }
 
@@ -1713,26 +1741,27 @@ double calculare_f_din_postf(double x)
 
         else
             if(strchr("+-/^*",postfixata->inf)!=0)
-                        {double valoare1, valoare2,answ;
-                        valoare1=S->info;
-                        pop(S);
-                        valoare2=S->info;
-                        pop(S);
-                        char operator1=postfixata->inf;
-                        answ=operatie(operator1, valoare2, valoare1);
-                        eliminare(postfixata);
-                        push2(S,answ);
+                        {
+                            double valoare1, valoare2,answ;
+                            valoare1=S->info;
+                            pop(S);
+                            valoare2=S->info;
+                            pop(S);
+                            char operator1=postfixata->inf;
+                            answ=operatie(operator1, valoare2, valoare1);
+                            eliminare(postfixata);
+                            push2(S,answ);
                         }
             else
                 if(strchr("sclrt",postfixata->inf)!=0)
                     {
-                    double valoare1,answ;
-                    valoare1=S->info;
-                    pop(S);
-                    char operator1=postfixata->inf;
-                    answ=operatie_speciala(operator1,valoare1);
-                    eliminare(postfixata);
-                    push2(S,answ);
+                        double valoare1,answ;
+                        valoare1=S->info;
+                        pop(S);
+                        char operator1=postfixata->inf;
+                        answ=operatie_speciala(operator1,valoare1);
+                        eliminare(postfixata);
+                        push2(S,answ);
                     }
                 }
 
@@ -1767,130 +1796,156 @@ int prioritate_caracter(char a)
                                 else if(strchr("(",a)||strchr(")",a))return 5;
 }
 
+
 //evaluator:
 void evaluator()
 {
     int nr=0,ok=0,nr1=0,i;
     for(i=0; i<=strlen(fun)-1; i++)
     {
-    if(fun[i]=='(')
-        nr++;
-    if(fun[i]==')')
-        nr1++;
-    if(fun[i]=='('&&fun[i+1]==')')
-        {ok=1;v[++k]=ok;}
-    if(fun[i]=='('&&fun[i+1]=='+')
-        {ok=2;v[++k]=ok;}
-    if(fun[i]=='('&&fun[i+1]=='-')
-        {ok=3;v[++k]=ok;}
-    if(fun[i]=='('&&fun[i+1]=='*')
-        {ok=4;v[++k]=ok;}
-    if(fun[i]=='('&&fun[i+1]=='/')
-        {ok=5;v[++k]=ok;}
-    if(fun[i]=='('&&fun[i+1]=='^')
-        {ok=6;v[++k]=ok;}
-    if(fun[i]==')'&&fun[i]=='(')
-        {ok=7;v[++k]=ok;}
-    if(fun[i]==')'&&fun[i+1]=='s')
-        {ok=8;v[++k]=ok;}
-    if(fun[i]==')'&&fun[i+1]=='c')
-        {ok=9;v[++k]=ok;}
-    if(fun[i]==')'&&fun[i+1]=='l')
-        {ok=10;v[++k]=ok;}
-    if(fun[i]==')'&&fun[i+1]=='r')
-        {ok=11;v[++k]=ok;}
-    if(fun[i]==')'&&fun[i+1]=='t')
-        {ok=12;v[++k]=ok;}
-    if(fun[i]==')'&&fun[i+1]=='x')
-        {ok=13;v[++k]=ok;}
-    if(fun[i]==')'&&isdigit(fun[i+1]))
-        {ok=14;v[++k]=ok;}
-    if(fun[i]=='+'&&fun[i+1]=='+')
-        {ok=15;v[++k]=ok;}
-    if(fun[i]=='+'&&fun[i+1]=='-')
-        {ok=16;v[++k]=ok;}
-    if(fun[i]=='+'&&fun[i+1]=='*')
-        {ok=17;v[++k]=ok;}
-    if(fun[i]=='+'&&fun[i+1]=='/')
-        {ok=18;v[++k]=ok;}
-    if(fun[i]=='+'&&fun[i+1]=='^')
-        {ok=19;v[++k]=ok;}
-    if(fun[i]=='-'&&fun[i+1]=='+')
-        {ok=20;v[++k]=ok;}
-    if(fun[i]=='-'&&fun[i+1]=='-')
-        {ok=21;v[++k]=ok;}
-    if(fun[i]=='-'&&fun[i+1]=='*')
-        {ok=22;v[++k]=ok;}
-    if(fun[i]=='-'&&fun[i+1]=='/')
-        {ok=23; v[++k]=ok;}
-    if(fun[i]=='-'&&fun[i+1]=='^')
-        {ok=24;v[++k]=ok;}
-    if(fun[i]=='*'&&fun[i+1]=='+')
-        {ok=25; v[++k]=ok;}
-    if(fun[i]=='*'&&fun[i+1]=='-')
-        {ok=26; v[++k]=ok;}
-    if(fun[i]=='*'&&fun[i+1]=='*')
-        {ok=27; v[++k]=ok;}
-    if(fun[i]=='*'&&fun[i+1]=='/')
-        {ok=28; v[++k]=ok;}
-    if(fun[i]=='*'&&fun[i+1]=='^')
-        {ok=29; v[++k]=ok;}
-    if(fun[i]=='/'&&fun[i+1]=='+')
-        {ok=30; v[++k]=ok;}
-    if(fun[i]=='/'&&fun[i+1]=='-')
-        {ok=31; v[++k]=ok;}
-    if(fun[i]=='/'&&fun[i+1]=='*')
-        {ok=32; v[++k]=ok;}
-    if(fun[i]=='/'&&fun[i+1]=='/')
-        {ok=33; v[++k]=ok;}
-    if(fun[i]=='/'&&fun[i+1]=='^')
-        {ok=34; v[++k]=ok;}
-    if(fun[i]=='^'&&fun[i+1]=='+')
-        {ok=35; v[++k]=ok;}
-    if(fun[i]=='^'&&fun[i+1]=='-')
-        {ok=36; v[++k]=ok;}
-    if(fun[i]=='^'&&fun[i+1]=='*')
-        {ok=37; v[++k]=ok;}
-    if(fun[i]=='^'&&fun[i+1]=='/')
-        {ok=38; v[++k]=ok;}
-    if(fun[i]=='^'&&fun[i+1]=='^')
-        {ok=39; v[++k]=ok;}
-    if(strchr("sctlr",fun[i])&&strchr("sctlr",fun[i+1]))
-        {ok=40; v[++k]=ok;}
+        if(fun[i]=='(')
+            nr++;
+        if(fun[i]==')')
+            nr1++;
+        if(fun[i]=='('&&fun[i+1]==')')
+            {ok=1;v[++k]=ok;}
+        if(fun[i]=='('&&fun[i+1]=='+')
+            {ok=2;v[++k]=ok;}
+        if(fun[i]=='('&&fun[i+1]=='-')
+            {ok=3;v[++k]=ok;}
+        if(fun[i]=='('&&fun[i+1]=='*')
+            {ok=4;v[++k]=ok;}
+        if(fun[i]=='('&&fun[i+1]=='/')
+            {ok=5;v[++k]=ok;}
+        if(fun[i]=='('&&fun[i+1]=='^')
+            {ok=6;v[++k]=ok;}
+        if(fun[i]==')'&&fun[i]=='(')
+            {ok=7;v[++k]=ok;}
+        if(fun[i]==')'&&fun[i+1]=='s')
+            {ok=8;v[++k]=ok;}
+        if(fun[i]==')'&&fun[i+1]=='c')
+            {ok=9;v[++k]=ok;}
+        if(fun[i]==')'&&fun[i+1]=='l')
+            {ok=10;v[++k]=ok;}
+        if(fun[i]==')'&&fun[i+1]=='r')
+            {ok=11;v[++k]=ok;}
+        if(fun[i]==')'&&fun[i+1]=='t')
+            {ok=12;v[++k]=ok;}
+        if(fun[i]==')'&&fun[i+1]=='x')
+            {ok=13;v[++k]=ok;}
+        if(fun[i]==')'&&isdigit(fun[i+1]))
+            {ok=14;v[++k]=ok;}
+        if(fun[i]=='+'&&fun[i+1]=='+')
+            {ok=15;v[++k]=ok;}
+        if(fun[i]=='+'&&fun[i+1]=='-')
+            {ok=16;v[++k]=ok;}
+        if(fun[i]=='+'&&fun[i+1]=='*')
+            {ok=17;v[++k]=ok;}
+        if(fun[i]=='+'&&fun[i+1]=='/')
+            {ok=18;v[++k]=ok;}
+        if(fun[i]=='+'&&fun[i+1]=='^')
+            {ok=19;v[++k]=ok;}
+        if(fun[i]=='-'&&fun[i+1]=='+')
+            {ok=20;v[++k]=ok;}
+        if(fun[i]=='-'&&fun[i+1]=='-')
+            {ok=21;v[++k]=ok;}
+        if(fun[i]=='-'&&fun[i+1]=='*')
+            {ok=22;v[++k]=ok;}
+        if(fun[i]=='-'&&fun[i+1]=='/')
+            {ok=23; v[++k]=ok;}
+        if(fun[i]=='-'&&fun[i+1]=='^')
+            {ok=24;v[++k]=ok;}
+        if(fun[i]=='*'&&fun[i+1]=='+')
+            {ok=25; v[++k]=ok;}
+        if(fun[i]=='*'&&fun[i+1]=='-')
+            {ok=26; v[++k]=ok;}
+        if(fun[i]=='*'&&fun[i+1]=='*')
+            {ok=27; v[++k]=ok;}
+        if(fun[i]=='*'&&fun[i+1]=='/')
+            {ok=28; v[++k]=ok;}
+        if(fun[i]=='*'&&fun[i+1]=='^')
+            {ok=29; v[++k]=ok;}
+        if(fun[i]=='/'&&fun[i+1]=='+')
+            {ok=30; v[++k]=ok;}
+        if(fun[i]=='/'&&fun[i+1]=='-')
+            {ok=31; v[++k]=ok;}
+        if(fun[i]=='/'&&fun[i+1]=='*')
+            {ok=32; v[++k]=ok;}
+        if(fun[i]=='/'&&fun[i+1]=='/')
+            {ok=33; v[++k]=ok;}
+        if(fun[i]=='/'&&fun[i+1]=='^')
+            {ok=34; v[++k]=ok;}
+        if(fun[i]=='^'&&fun[i+1]=='+')
+            {ok=35; v[++k]=ok;}
+        if(fun[i]=='^'&&fun[i+1]=='-')
+            {ok=36; v[++k]=ok;}
+        if(fun[i]=='^'&&fun[i+1]=='*')
+            {ok=37; v[++k]=ok;}
+        if(fun[i]=='^'&&fun[i+1]=='/')
+            {ok=38; v[++k]=ok;}
+        if(fun[i]=='^'&&fun[i+1]=='^')
+            {ok=39; v[++k]=ok;}
+        if(strchr("sctlr",fun[i])&&strchr("sctlr",fun[i+1]))
+            {ok=40; v[++k]=ok;}
+        if(fun[i]=='s'&&(fun[i+1]!='i'||fun[i+2]!='n'))
+            {ok=41; v[++k]=ok;}
+        if(fun[i]=='c'&&(fun[i+1]!='o'||fun[i+2]!='s'))
+            {ok=42; v[++k]=ok;}
+        if(fun[i]=='r'&&(fun[i+1]!='a'||fun[i+2]!='d'))
+            {ok=43; v[++k]=ok;}
+        if(fun[i]=='l'&&fun[i+1]!='n')
+            {ok=44; v[++k]=ok;}
+        if(fun[i]=='t'&&fun[i+1]!='g')
+            {ok=45; v[++k]=ok;}
     }
     if(strchr("-*/^",fun[0]))
-        {ok=41; v[++k]=ok;}
+        {ok=46; v[++k]=ok;}
 
-    if(strchr("+-*/^",fun[strlen(fun)-2]))
-        {ok=42; v[++k]=ok;}
+    if(strchr("+-*/^",fun[strlen(fun)-1]))
+        {ok=47; v[++k]=ok;}
 
     if(nr!=nr1)
-        {ok=43; v[++k]=ok;}
+        {ok=48; v[++k]=ok;}
 
     if(k==0)
-        ok=44;
+        ok=49;
 }
 
 void evaluare_interval(int width, int height,double A, double B)
 {
+    k2=0;contorev=0;
     char t[256];
     if(A>=B)//intervalul nu e bun
+            {
+                settextstyle(8, HORIZ_DIR, 3);
+                settextjustify(CENTER_TEXT,contorev);
+                setcolor(WHITE);
+                strcpy(t,"Intervalul nu este bine ales");
+                outtextxy(width/2,height/2+100+contorev,t);
+                k2=0;
+                contorev+=27;
+            }
+        else
         {
             settextstyle(8, HORIZ_DIR, 3);
-            strcpy(t,"Intervalul nu este bine ales");
+            settextjustify(CENTER_TEXT,contorev);
+            setcolor(WHITE);
+            strcpy(t,"Intervalul e bine ales");
             outtextxy(width/2,height/2+100+contorev,t);
-            k2=0;
+            k2=1;
             contorev+=27;
         }
-        else k2=1;
+
 }
 
 void mesaj_evaluator(int width, int height)
  {
+     k=0;contorev=0;
     char t[256];
     settextstyle(8, HORIZ_DIR, 3);
     int i;
     evaluator();
+    settextjustify(CENTER_TEXT,contorev);
     setcolor(WHITE);
 
  for(i=0;i<=k;i++)
@@ -2056,14 +2111,34 @@ void mesaj_evaluator(int width, int height)
         if(contorev<=135){outtextxy(width/2,height/2+100+contorev,t);
                         contorev+=27;}}
     else if(v[i]==41){
-        strcpy(t,"Inceputul functiei nu este corect scris");
+        strcpy(t,"Functia sin nu este bine scrisa");
         if(contorev<=135){outtextxy(width/2,height/2+100+contorev,t);
                         contorev+=27;}}
     else if(v[i]==42){
-        strcpy(t,"Finalul functiei nu este corect scris");
+        strcpy(t,"Functia cos nu este bine scrisa");
         if(contorev<=135){outtextxy(width/2,height/2+100+contorev,t);
                         contorev+=27;}}
     else if(v[i]==43){
+        strcpy(t,"Functia rad nu este bine scrisa");
+        if(contorev<=135){outtextxy(width/2,height/2+100+contorev,t);
+                        contorev+=27;}}
+    else if(v[i]==44){
+        strcpy(t,"Functia ln nu este bine scrisa");
+        if(contorev<=135){outtextxy(width/2,height/2+100+contorev,t);
+                        contorev+=27;}}
+    else if(v[i]==45){
+        strcpy(t,"Functia tg nu este bine scrisa");
+        if(contorev<=135){outtextxy(width/2,height/2+100+contorev,t);
+                        contorev+=27;}}
+    else if(v[i]==46){
+        strcpy(t,"Inceputul functiei nu este corect scris");
+        if(contorev<=135){outtextxy(width/2,height/2+100+contorev,t);
+                        contorev+=27;}}
+    else if(v[i]==47){
+        strcpy(t,"Finalul functiei nu este corect scris");
+        if(contorev<=135){outtextxy(width/2,height/2+100+contorev,t);
+                        contorev+=27;}}
+    else if(v[i]==48){
         strcpy(t,"Numarul de paranteze deschise nu coincide cu nr. de paranteze inchise");
         if(contorev<=135){outtextxy(width/2,height/2+100+contorev,t);
                         contorev+=27;}}
@@ -2080,7 +2155,8 @@ void mesaj_evaluator(int width, int height)
 void desenare_axe(double A, double B)
 {
     double dim, unitate, i;
-    if(A<0&&B>0){
+    if(A<0&&B>0)
+        {
             dim=B-A;
             unitate=(DREAPTA-STANGA)/dim;
             line(STANGA-A*unitate,TOP,STANGA-A*unitate,BOTTOM);//oy
@@ -2104,7 +2180,7 @@ void desenare_axe(double A, double B)
 double asimptota_orizontala()
 {
     double c,a,b,k,l,ok=0;int i,j,ok1=0;
-    if(strchr(temp,'/'))
+    if(strchr(temp,'/')&&!strchr(temp,'s')&&!strchr(temp,'c')&&!strchr(temp,'l')&&!strchr(temp,'r')&&!strchr(temp,'t'))
         {for(i=0;i<=strlen(temp)-1;i++)
             if(temp[i]!='/')
                {if(temp[i]=='x'&&ok==0)
@@ -2145,222 +2221,11 @@ double asimptota_orizontala()
         }
 }
 
-double asimptota_oblica()
-{
-    double c,a,b,k,l,e,f,n,m,d;int i,j,ok=0,ok1=0;
-    if(strchr(temp,'/'))
-        {for(i=0;i<=strlen(temp)-1;i++)
-            if(temp[i]!='/')
-               {
-                if(temp[i]=='x'&&ok==0)
-                   {if(temp[i-1]=='*')
-                        {if(temp[i-3]=='+'||temp[i-3]=='/')
-                            a=temp[i-2]-'0';
-                        else
-                            if(temp[i-3]=='-')
-                           {
-                               a=temp[i-2]-'0';
-                               a=-a;
-                           }
-                        }
-                    else
-                        if(temp[i-1]=='-')
-                            a=-1;
-                        else
-                            if(temp[i-1]=='+')
-                                a=1;
-                   if(temp[i+1]=='^')
-                        {k=temp[i+2]-'0'; ok=1;
-                        if(temp[i+3]=='+'&&temp[i+5]!='x')
-                            c=temp[i+4]-'0';
-                        else
-                            if(temp[i+3]=='-'&&temp[i+5]!='x')
-                                {
-                                c=temp[i+4]-'0';
-                                c=-c;
-                                }
-                            else
-                                if((isdigit(temp[i+4])&&temp[i+5]=='x')||temp[i+4]=='x')
-                                    if(isdigit(temp[i+4])&&temp[i+5]=='x')
-                                        {if(temp[i+3]=='+')
-                                            c=temp[i+4]-'0';
-                                        else
-                                            if(temp[i+3]=='-')
-                                                {
-                                                c=temp[i+4]-'0';
-                                                c=-c;
-                                                }
-                                        if(temp[i+6]=='^')
-                                            e=temp[i+7]-'0';
-                                            }
-                            else
-                                if(temp[i+4]=='x')
-                                {
-                                if(temp[i+3]=='+')
-                                            c=1;
-                                else
-                                    if(temp[i+3]=='-')
-                                        c=-1;
-                                if(temp[i+5]=='^')
-                                   e=temp[i+6]-'0';
-                                }
-
-                        }
-
-                    else
-                        {k=1;ok=1;
-                        if(temp[i+1]=='+'&&temp[i+3]!='x')
-                            c=temp[i+2]-'0';
-                        else
-                            if(temp[i+1]=='-'&&temp[i+3]!='x')
-                                {
-                                c=temp[i+2]-'0';
-                                c=-c;
-                                }
-                            else
-                                if((isdigit(temp[i+2])&&temp[i+3]=='x')||temp[i+2]=='x')
-                                    if(isdigit(temp[i+2])&&temp[i+3]=='x')
-                                        {if(temp[i+1]=='+')
-                                            c=temp[i+2]-'0';
-                                        else
-                                            if(temp[i+1]=='-')
-                                                {
-                                                c=temp[i+2]-'0';
-                                                c=-c;
-                                                }
-                                        if(temp[i+4]=='^')
-                                            e=temp[i+5]-'0';
-                                            }
-                                    else
-                                        if(temp[i+2]=='x')
-                                        {
-                                        if(temp[i+1]=='+')
-                                            c=1;
-                                        else
-                                            if(temp[i+1]=='-')
-                                                c=-1;
-                                        if(temp[i+3]=='^')
-                                            e=temp[i+4]-'0';
-                                        }
-
-                        }
-
-               }
-               }
-            else
-                break;
-        for(j=i+1;j<=strlen(temp)-1;j++)
-            if(temp[j]=='x'&&ok1==0)
-                {if(temp[j-1]=='*')
-                    {if(isdigit(temp[j-2]))
-                        if(temp[j-3]=='+'||temp[j-3]=='/')
-                            b=temp[j-2]-'0';
-                        else
-                            if(temp[j-3]=='-')
-                           {
-                               b=temp[j-2]-'0';
-                               b=-b;
-                           }
-                        }
-                    else
-                        if(temp[j-1]=='-')
-                            b=-1;
-                        else
-                            b=1;
-                   if(temp[j+1]=='^')
-                        {l=temp[j+2]-'0'; ok1=1;
-                        if(temp[j+3]=='+'&&temp[j+5]!='x')
-                            d=temp[j+4]-'0';
-                        else
-                            if(temp[j+3]=='-'&&temp[j+5]!='x')
-                                {
-                                d=temp[i+4]-'0';
-                                d=-d;
-                                }
-                            else
-                                if((isdigit(temp[j+4])&&temp[j+5]=='x')||temp[j+4]=='x')
-                                    if(isdigit(temp[j+4])&&temp[j+5]=='x')
-                                        {if(temp[j+3]=='+')
-                                            d=temp[j+4]-'0';
-                                        else
-                                            if(temp[j+3]=='-')
-                                                {
-                                                d=temp[j+4]-'0';
-                                                d=-d;
-                                                }
-                                        if(temp[j+6]=='^')
-                                            f=temp[j+7]-'0';
-                                            }
-                            else
-                                if(temp[j+4]=='x')
-                                {
-                                if(temp[j+3]=='+')
-                                    d=1;
-                                else
-                                    if(temp[j+3]=='-')
-                                        d=-1;
-                                if(temp[j+5]=='^')
-                                   f=temp[j+6]-'0';
-                                }
-
-                        }
-
-                    else
-                        {l=1;ok1=1;
-                        if(temp[j+1]=='+'&&temp[j+3]!='x')
-                            d=temp[j+2]-'0';
-                        else
-                            if(temp[j+1]=='-'&&temp[j+3]!='x')
-                                {
-                                d=temp[j+2]-'0';
-                                d=-d;
-                                }
-                            else
-                                if((isdigit(temp[j+2])&&temp[j+3]=='x')||temp[j+2]=='x')
-                                    if(isdigit(temp[j+2])&&temp[j+3]=='x')
-                                        {if(temp[j+1]=='+')
-                                            d=temp[j+2]-'0';
-                                        else
-                                            if(temp[j+1]=='-')
-                                                {
-                                                d=temp[j+2]-'0';
-                                                d=-d;
-                                                }
-                                        if(temp[j+4]=='^')
-                                            f=temp[j+5]-'0';
-                                            }
-                                    else
-                                        if(temp[j+2]=='x')
-                                        {
-                                        if(temp[j+1]=='+')
-                                            d=1;
-                                        else
-                                            if(temp[j+1]=='-')
-                                                d=-1;
-                                        if(temp[j+3]=='^')
-                                            f=temp[j+4]-'0';
-                                        }
-
-                        }
-
-        }
-
-    if(k>l)//gradul numaratorului e mai mare decat numitorul
-        {l++;//adunam 1 la numitor
-        if(k==l)
-            m=a/b;
-        if(m==floor(m)&&m!=0)
-            n=(c*m-d)/b;
-            if(n==floor(n))
-               return 0;// y=m-n*x;
-        }
-        }
-}
 
 double asimptota_verticala()
 {
     double c,a=0,b=0;int i,j,ok1=0;
-    if(strchr(temp,'/'))
+    if(strchr(temp,'/')&&!strchr(temp,'s')&&!strchr(temp,'c')&&!strchr(temp,'l')&&!strchr(temp,'r')&&!strchr(temp,'t'))
         {for(i=0;i<=strlen(temp)-1;i++)
             if(temp[i]=='/')
                     break;
@@ -2421,13 +2286,17 @@ void desenare_asimptote(double A, double B)
             setcolor(MAGENTA);
             line(STANGA,punctmijloc-c,DREAPTA,punctmijloc-c);
         }
-    if(c!=0||c==INFINIT)
-    {
-        unitate1=(STANGA+DREAPTA)/dim;
-        punctmijloc1=(STANGA+DREAPTA)/2;
-        int a=asimptota_verticala();
-        a=a*unitate;
-        setcolor(BLUE);
-        line(punctmijloc-a,TOP,punctmijloc-a,BOTTOM);
+    if(A<0&&B>0)
+        {
+        dim=B-A;
+        if(c!=0||c==INFINIT)
+            {
+                unitate1=(STANGA+DREAPTA)/dim;
+                punctmijloc1=(STANGA+DREAPTA)/2;
+                int a=asimptota_verticala();
+                a=a*unitate;
+                setcolor(BLUE);
+                line(punctmijloc-a,TOP,punctmijloc-a,BOTTOM);
+           }
         }
 }
